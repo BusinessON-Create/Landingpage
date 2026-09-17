@@ -219,61 +219,63 @@
 
   <!-- Volcanoes of Ometepe illustration, blended into black -->
   <div class="absolute inset-0 z-0 pointer-events-none select-none" aria-hidden="true">
-    <svg viewBox="0 0 1440 760" preserveAspectRatio="xMaxYMax slice" class="w-full h-full">
-      <defs>
-        <radialGradient id="sunGlow" cx="72%" cy="72%" r="42%">
-          <stop offset="0%" stop-color="#f0b429" stop-opacity="0.32"/>
-          <stop offset="45%" stop-color="#c8891a" stop-opacity="0.14"/>
-          <stop offset="100%" stop-color="#c8891a" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="skyGlow" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-color="#2b1608" stop-opacity="0.55"/>
-          <stop offset="55%" stop-color="#2b1608" stop-opacity="0.12"/>
-          <stop offset="100%" stop-color="#2b1608" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#120e08" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#08080a" stop-opacity="1"/>
-        </linearGradient>
-        <linearGradient id="volcanoFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#171410"/>
-          <stop offset="100%" stop-color="#0a0908"/>
-        </linearGradient>
-        <linearGradient id="rimLight" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#ffd966" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#ffd966" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="fadeTop" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0%" stop-color="#08080a" stop-opacity="0"/>
-          <stop offset="60%" stop-color="#08080a" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#08080a" stop-opacity="1"/>
-        </linearGradient>
-        <linearGradient id="fadeLeft" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#08080a" stop-opacity="1"/>
-          <stop offset="42%" stop-color="#08080a" stop-opacity="0.65"/>
-          <stop offset="100%" stop-color="#08080a" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
+<svg viewBox="0 0 1440 760" preserveAspectRatio="xMaxYMax slice" class="w-full h-full">
+  <defs>
+    <radialGradient id="sunGlow" cx="76%" cy="78%" r="55%">
+      <stop offset="0%" stop-color="#ffb020" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#c8891a" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#c8891a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="horizonWash" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#5a3414" stop-opacity="0.55"/>
+      <stop offset="30%" stop-color="#5a3414" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#5a3414" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a2210" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#08080a" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="volcanoFill" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#3a2c1c"/>
+      <stop offset="55%" stop-color="#221a12"/>
+      <stop offset="100%" stop-color="#120d08"/>
+    </linearGradient>
+    <radialGradient id="peakGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd966" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#ffd966" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rimStroke" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%" stop-color="#ffe9ad" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ffe9ad" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fadeTop" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#08080a" stop-opacity="0"/>
+      <stop offset="78%" stop-color="#08080a" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#08080a" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
 
-      <rect x="0" y="0" width="1440" height="760" fill="url(#skyGlow)"/>
-      <circle cx="1038" cy="548" r="330" fill="url(#sunGlow)"/>
+  <rect x="0" y="0" width="1440" height="760" fill="url(#horizonWash)"/>
+  <circle cx="1094" cy="593" r="420" fill="url(#sunGlow)"/>
 
-      <!-- Maderas (rounder, further) -->
-      <path d="M60,640 C120,520 250,430 430,428 C610,430 700,510 760,640 Z" fill="url(#volcanoFill)" opacity="0.85"/>
+  <!-- Maderas (rounder, further) -->
+  <path d="M60,640 C120,520 250,430 430,428 C610,430 700,510 760,640 Z" fill="url(#volcanoFill)" opacity="0.92"/>
 
-      <!-- Concepción (sharper cone, foreground) -->
-      <path d="M560,640 C610,520 700,360 830,258 C862,235 872,235 902,258 C1010,352 1080,500 1120,640 Z" fill="url(#volcanoFill)"/>
-      <path d="M830,258 C862,235 872,235 902,258 C930,280 952,308 972,338 L905,300 Z" fill="url(#rimLight)" opacity="0.6"/>
+  <!-- Concepción (sharper cone, foreground) -->
+  <path d="M560,640 C610,520 700,360 830,258 C862,235 872,235 902,258 C1010,352 1080,500 1120,640 Z" fill="url(#volcanoFill)"/>
 
-      <!-- lake -->
-      <rect x="0" y="632" width="1440" height="128" fill="url(#waterGrad)"/>
-      <rect x="700" y="648" width="420" height="2.5" fill="#ffd966" opacity="0.10"/>
-      <rect x="760" y="662" width="340" height="2" fill="#ffd966" opacity="0.08"/>
-      <rect x="640" y="678" width="480" height="2" fill="#ffd966" opacity="0.06"/>
+  <!-- soft sunlight kiss on the peak -->
+  <ellipse cx="878" cy="272" rx="70" ry="46" fill="url(#peakGlow)"/>
+  <path d="M832,260 C858,240 872,238 894,253" stroke="url(#rimStroke)" stroke-width="4" fill="none" stroke-linecap="round"/>
 
-      <rect x="0" y="0" width="1440" height="760" fill="url(#fadeTop)"/>
-      <rect x="0" y="0" width="1440" height="760" fill="url(#fadeLeft)"/>
-    </svg>
+  <!-- lake -->
+  <rect x="0" y="632" width="1440" height="128" fill="url(#waterGrad)"/>
+  <rect x="700" y="648" width="420" height="2.5" fill="#ffd966" opacity="0.22"/>
+  <rect x="760" y="662" width="340" height="2" fill="#ffd966" opacity="0.16"/>
+  <rect x="640" y="678" width="480" height="2" fill="#ffd966" opacity="0.12"/>
+
+  <rect x="0" y="0" width="1440" height="760" fill="url(#fadeTop)"/>
+</svg>
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-24 md:pb-32 grid md:grid-cols-[1.05fr_0.95fr] gap-14 md:gap-10 items-center">

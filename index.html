@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nica English Club — El club privado para dominar el inglés</title>
+<meta name="description" content="Aplica a tu cupo en Nica English Club: coach personal por WhatsApp, retos diarios, encuentros en vivo y una comunidad que te sostiene hasta que hables inglés con confianza.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: '#08080a',
+          card: '#121214',
+          card2: '#16161a',
+          line: '#212127',
+          line2: '#2c2c34',
+          gold: '#f0b429',
+          golddeep: '#c8891a',
+          goldlight: '#ffd966',
+          ink: '#e8e8f2',
+          muted: '#8a8a97',
+          wa: '#25D366',
+        },
+        fontFamily: {
+          serif: ["'Playfair Display'", 'serif'],
+          sans: ["'DM Sans'", 'sans-serif'],
+          mono: ["'DM Mono'", 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root{ color-scheme: dark; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:#08080a;
+    background-image:
+      radial-gradient(120% 60% at 50% -10%, rgba(240,180,41,0.10) 0%, rgba(8,8,10,0) 55%),
+      radial-gradient(80% 50% at 100% 0%, rgba(240,180,41,0.05) 0%, rgba(8,8,10,0) 60%);
+    background-repeat:no-repeat;
+  }
+  ::selection{ background:#f0b429; color:#08080a; }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#08080a; }
+  ::-webkit-scrollbar-thumb{ background:#212127; border-radius:99px; border:2px solid #08080a; }
+  ::-webkit-scrollbar-thumb:hover{ background:#2c2c34; }
+
+  .text-gradient-gold{
+    background:linear-gradient(100deg,#c8891a 0%, #ffd966 40%, #f0b429 65%, #ffd966 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:220% auto; animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer{ 0%{background-position:0% center;} 100%{background-position:220% center;} }
+
+  .grain{ position:absolute; inset:0; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+
+  .card-hover{ transition: transform .35s cubic-bezier(.16,1,.3,1), border-color .35s ease, box-shadow .35s ease; }
+  .card-hover:hover{ transform: translateY(-4px); border-color:#2c2c34; box-shadow: 0 24px 60px -20px rgba(0,0,0,.6); }
+
+  .btn-gold{ background:linear-gradient(135deg,#ffd966,#c8891a); box-shadow:0 4px 0 #7a5410, 0 10px 24px rgba(240,180,41,.18); transition:transform .12s ease, box-shadow .12s ease, filter .15s ease; }
+  .btn-gold:hover{ filter:brightness(1.05); transform:translateY(-1px); box-shadow:0 5px 0 #7a5410, 0 14px 30px rgba(240,180,41,.28); }
+  .btn-gold:active{ transform:translateY(3px); box-shadow:0 1px 0 #7a5410, 0 4px 10px rgba(0,0,0,.2); }
+
+  .btn-ghost{ border:1px solid #2c2c34; transition:border-color .2s ease, background .2s ease, color .2s ease; }
+  .btn-ghost:hover{ border-color:#f0b429; background:rgba(240,180,41,.06); color:#ffd966; }
+
+  .btn-wa{ background:linear-gradient(135deg,#34e07a,#1fb85f); box-shadow:0 4px 0 #128a3e; transition:transform .12s ease, box-shadow .12s ease; }
+  .btn-wa:hover{ transform:translateY(-1px); }
+  .btn-wa:active{ transform:translateY(3px); box-shadow:0 0 0 #128a3e; }
+
+  .membership-card{ transform:rotate(-4deg); transition:transform .5s cubic-bezier(.16,1,.3,1); }
+  .membership-card:hover{ transform:rotate(-1deg) translateY(-6px); }
+  .chat-bubble{ animation:float 5s ease-in-out infinite; }
+  .chat-bubble.delay{ animation-delay:1.4s; }
+  @keyframes float{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-8px);} }
+
+  .flame{ background: radial-gradient(circle at 38% 32%, #fff6c8 0%, #ffd966 18%, #ffb020 42%, #ff6a1a 66%, #d92c0e 88%); box-shadow: 0 0 22px 6px rgba(255,110,20,.45); }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .divider-gold{ height:1px; background:linear-gradient(90deg, transparent, #2c2c34 20%, #2c2c34 80%, transparent); }
+
+  .modal-backdrop{ backdrop-filter: blur(6px); }
+  .modal-panel{ transform:scale(.94) translateY(12px); opacity:0; transition:transform .3s cubic-bezier(.16,1,.3,1), opacity .3s ease; }
+  .modal-open .modal-panel{ transform:scale(1) translateY(0); opacity:1; }
+
+  .step-line{ background:linear-gradient(180deg, #2c2c34, #f0b429 50%, #2c2c34); }
+  @media(min-width:768px){ .step-line-h{ background:linear-gradient(90deg, #2c2c34, #f0b429 50%, #2c2c34); } }
+
+  .marquee-track{ animation: marquee 28s linear infinite; }
+  .marquee-track:hover{ animation-play-state: paused; }
+  @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  .quote-mark{ font-family:'Playfair Display',serif; line-height:0.6; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---- Testimonials carousel ---- */
+  .t-wrap{ position:relative; width:100%; overflow:hidden; }
+  .t-wrap::before, .t-wrap::after{
+    content:""; position:absolute; top:0; width:9%; min-width:32px; height:100%; z-index:5; pointer-events:none;
+  }
+  .t-wrap::before{ left:0; background:linear-gradient(to right, #08080a, transparent); }
+  .t-wrap::after{ right:0; background:linear-gradient(to left, #08080a, transparent); }
+
+  .t-slider{ display:flex; gap:18px; overflow-x:auto; padding:34px 6px 10px; scrollbar-width:none; -ms-overflow-style:none; -webkit-overflow-scrolling:touch; }
+  .t-slider::-webkit-scrollbar{ display:none; }
+
+  .t-card{
+    background:linear-gradient(180deg, #16161a 0%, #101012 100%);
+    border:1px solid #212127; border-radius:22px; padding:26px 20px;
+    min-width:230px; max-width:230px; min-height:270px;
+    text-align:center; flex-shrink:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    transform:scale(.86); opacity:.35;
+    transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .45s cubic-bezier(.4,0,.2,1), border-color .45s ease, box-shadow .45s ease;
+  }
+  .t-card.active{
+    transform:scale(1.04); opacity:1; border-color:#f0b429;
+    box-shadow:0 20px 44px -12px rgba(0,0,0,.6), 0 0 20px rgba(240,180,41,.12);
+  }
+
+  .t-avatar{
+    width:64px; height:64px; border-radius:50%; flex-shrink:0;
+    border:1.5px solid #2c2c34; background:#1a1a1a;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display', serif; font-size:1.2rem; color:#f0b429;
+    margin-bottom:14px; transition:border-color .35s ease, box-shadow .35s ease;
+  }
+  .t-card.active .t-avatar{ border-color:#f0b429; box-shadow:0 0 14px rgba(240,180,41,.22); }
+
+  .t-badge{
+    display:inline-flex; align-items:center; gap:5px;
+    background:rgba(240,180,41,.08); border:1px solid rgba(240,180,41,.35);
+    padding:3px 11px; border-radius:99px; margin-bottom:10px;
+    opacity:0; transform:translateY(4px); transition:opacity .3s ease .1s, transform .3s ease .1s;
+  }
+  .t-card.active .t-badge{ opacity:1; transform:translateY(0); }
+  .t-badge span{ color:#f0b429; font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.06em; text-transform:uppercase; }
+
+  .t-name{ color:#fff; font-weight:600; font-size:.92rem; margin-bottom:6px; }
+  .t-quote{ color:#8a8a97; font-style:italic; font-size:.74rem; line-height:1.5; margin:0; }
+
+  /* ---- WhatsApp floating button ---- */
+  .wa-float{
+    position:fixed; bottom:24px; right:24px; z-index:40;
+    width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(135deg,#34e07a,#1fb85f);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 0 #128a3e, 0 14px 32px rgba(37,211,102,.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .wa-float:hover{ transform:translateY(-2px); box-shadow:0 5px 0 #128a3e, 0 18px 38px rgba(37,211,102,.45); }
+  .wa-float:active{ transform:translateY(3px); box-shadow:0 1px 0 #128a3e, 0 4px 10px rgba(0,0,0,.2); }
+  .wa-ring{
+    position:absolute; inset:-6px; border-radius:50%; border:1.5px solid rgba(37,211,102,.45);
+    animation: wa-pulse 2.6s ease-out infinite;
+  }
+  @keyframes wa-pulse{
+    0%{ transform:scale(.85); opacity:.7; }
+    70%{ transform:scale(1.35); opacity:0; }
+    100%{ transform:scale(1.35); opacity:0; }
+  }
+  .wa-tooltip{
+    position:absolute; right:72px; top:50%; transform:translateY(-50%) translateX(6px);
+    background:#16161a; border:1px solid #2c2c34; color:#e8e8f2;
+    font-size:12.5px; padding:8px 14px; border-radius:10px; white-space:nowrap;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+  }
+  .wa-float:hover .wa-tooltip{ opacity:1; transform:translateY(-50%) translateX(0); }
+  @media (max-width:768px){ .wa-tooltip{ display:none; } }
+</style>
+</head>
+<body class="bg-bg text-ink font-sans antialiased min-h-screen">
+
+<div class="grain fixed"></div>
+
+<!-- ========================= NAV ========================= -->
+<header id="top" class="sticky top-0 z-50 border-b border-line/70 bg-bg/80 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 h-[72px] flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-3 group">
+      <div class="w-11 h-11 rounded-full bg-black/40 flex items-center justify-center overflow-hidden ring-1 ring-line2 group-hover:ring-gold/50 transition">
+        <img src="data:image/png;base64,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" alt="Nica English Club" class="w-8 h-8 object-contain">
+      </div>
+      <span class="font-serif text-lg tracking-wide text-white">Nica<span class="text-gradient-gold">English</span>Club</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-9 text-[13.5px] text-muted">
+      <a href="#metodo" class="hover:text-white transition">Método</a>
+      <a href="#club" class="hover:text-white transition">El club</a>
+      <a href="#testimonios" class="hover:text-white transition">Miembros</a>
+      <a href="#preguntas" class="hover:text-white transition">Preguntas</a>
+    </nav>
+
+    <div class="flex items-center gap-2.5">
+      <button onclick="openModal('login')" class="hidden sm:inline-flex btn-ghost rounded-full px-5 py-2.5 text-[13px] font-medium text-ink">
+        Iniciar sesión
+      </button>
+      <button onclick="openModal('apply')" class="btn-gold rounded-full px-5 py-2.5 text-[13px] font-bold text-black">
+        Aplicar ahora
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ========================= HERO ========================= -->
+<section class="relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-24 md:pb-32 grid md:grid-cols-[1.05fr_0.95fr] gap-14 md:gap-10 items-center">
+
+    <div class="reveal in" style="transition-delay:.05s">
+      <div class="inline-flex items-center gap-2 rounded-full border border-line2 bg-card/60 pl-2.5 pr-4 py-1.5 mb-7">
+        <span class="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center text-gold text-[10px]">♛</span>
+        <span class="text-[12.5px] text-muted">Admisión abierta — cupos limitados cada mes</span>
+      </div>
+
+      <h1 class="font-serif text-[38px] leading-[1.08] sm:text-[48px] sm:leading-[1.08] lg:text-[58px] lg:leading-[1.06] text-white">
+        Habla inglés con la
+        <span class="text-gradient-gold">confianza de un miembro</span>
+        del club.
+      </h1>
+
+      <p class="mt-6 text-[15.5px] md:text-[16.5px] leading-relaxed text-muted max-w-[46ch]">
+        Nica English Club es tu espacio de práctica diaria: un coach real te acompaña por WhatsApp,
+        retos y rachas te mantienen constante, y una comunidad te sostiene hasta que el inglés
+        deje de darte pena.
+      </p>
+
+      <div class="mt-9 flex flex-col sm:flex-row gap-3.5">
+        <button onclick="openModal('apply')" class="btn-gold rounded-xl px-7 py-4 text-[14px] font-bold text-black">
+          Aplicar a mi cupo
+        </button>
+        <button onclick="openModal('login')" class="btn-ghost rounded-xl px-7 py-4 text-[14px] font-medium text-ink">
+          Ya soy miembro — Iniciar sesión
+        </button>
+      </div>
+
+      <div class="mt-10 flex items-center gap-5">
+        <a href="https://share.google/8GtJ3FiGBh43p3lVI" target="_blank" rel="noopener" class="flex items-center gap-2 text-[12.5px] text-muted hover:text-white transition">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21.35 11.1h-9.17v2.92h5.4c-.24 1.42-1.63 4.17-5.4 4.17-3.25 0-5.9-2.69-5.9-6s2.65-6 5.9-6c1.85 0 3.09.79 3.8 1.47l2.59-2.5C17.02 3.5 14.9 2.5 12.18 2.5 6.9 2.5 2.6 6.8 2.6 12s4.3 9.5 9.58 9.5c5.53 0 9.2-3.89 9.2-9.36 0-.63-.07-1.11-.15-1.54Z" fill="#f0b429"/></svg>
+          Ver reseñas en Google
+        </a>
+        <span class="w-1 h-1 rounded-full bg-line2"></span>
+        <span class="text-[12.5px] text-muted">Coaches reales, no bots</span>
+      </div>
+    </div>
+
+    <!-- Membership card visual -->
+    <div class="relative reveal in" style="transition-delay:.2s">
+      <div class="relative mx-auto max-w-[380px] md:max-w-none">
+
+        <div class="membership-card relative rounded-[26px] p-[1.5px] bg-gradient-to-br from-goldlight via-gold to-golddeep shadow-[0_30px_80px_-20px_rgba(240,180,41,0.25)]">
+          <div class="rounded-[24px] bg-[#0d0d10] p-6 relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-gold/10 blur-2xl"></div>
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center ring-1 ring-gold/30 overflow-hidden">
+                  <img src="data:image/png;base64,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" class="w-9 h-9 object-contain" alt="">
+                </div>
+                <div>
+                  <p class="font-serif text-white text-[15px] leading-tight">Nica English Club</p>
+                  <p class="font-mono text-[10px] text-gold tracking-wider">MIEMBRO VERIFICADO</p>
+                </div>
+              </div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 4.8 5.3.5-4 3.6 1.2 5.2L12 13.8 7.3 16.1l1.2-5.2-4-3.6 5.3-.5L12 2z" fill="#4d9fff"/></svg>
+            </div>
+
+            <div class="mt-6 flex items-center justify-between">
+              <div>
+                <p class="font-mono text-[10px] text-muted mb-1">RACHA ACTUAL</p>
+                <div class="flex items-end gap-1.5">
+                  <span class="font-serif text-3xl text-white">14</span>
+                  <span class="text-[11px] text-muted mb-1">días</span>
+                </div>
+              </div>
+              <div class="flex gap-1.5">
+                <div class="w-3 h-3 rounded-full flame"></div>
+                <div class="w-3 h-3 rounded-full flame opacity-80"></div>
+                <div class="w-3 h-3 rounded-full flame opacity-60"></div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-5 border-t border-line flex items-center justify-between">
+              <span class="font-mono text-[10px] text-muted">NIVEL · INTERMEDIO B1</span>
+              <span class="font-mono text-[10px] text-gold">EST. CLUB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- floating chat bubbles -->
+        <div class="chat-bubble absolute -left-6 md:-left-10 top-10 md:top-16 bg-card2 border border-line2 rounded-2xl rounded-bl-sm px-4 py-3 shadow-xl max-w-[190px] hidden sm:block">
+          <p class="text-[11.5px] text-muted">🎙️ Coach: "¡Excelente pronunciación en ese audio, sigue así!"</p>
+        </div>
+        <div class="chat-bubble delay absolute -right-4 md:-right-8 bottom-4 md:bottom-10 bg-card2 border border-line2 rounded-2xl rounded-br-sm px-4 py-3 shadow-xl max-w-[170px] hidden sm:block">
+          <p class="text-[11.5px] text-ink">🔥 Reto del día completado</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= LOGOS/SOCIAL MARQUEE ========================= -->
+<div class="border-y border-line/70 bg-card/30 overflow-hidden py-5">
+  <div class="flex whitespace-nowrap marquee-track">
+    <div class="flex items-center gap-14 pr-14 text-[12.5px] text-muted font-mono tracking-wide">
+      <span>PRÁCTICA DIARIA POR WHATSAPP</span><span class="text-gold">·</span>
+      <span>COACHES 1:1</span><span class="text-gold">·</span>
+      <span>ENCUENTROS EN VIVO</span><span class="text-gold">·</span>
+      <span>COMUNIDAD NECLUB</span><span class="text-gold">·</span>
+      <span>RETOS Y RACHAS</span><span class="text-gold">·</span>
+    </div>
+    <div class="flex items-center gap-14 pr-14 text-[12.5px] text-muted font-mono tracking-wide" aria-hidden="true">
+      <span>PRÁCTICA DIARIA POR WHATSAPP</span><span class="text-gold">·</span>
+      <span>COACHES 1:1</span><span class="text-gold">·</span>
+      <span>ENCUENTROS EN VIVO</span><span class="text-gold">·</span>
+      <span>COMUNIDAD NECLUB</span><span class="text-gold">·</span>
+      <span>RETOS Y RACHAS</span><span class="text-gold">·</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= MÉTODO ========================= -->
+<section id="metodo" class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+  <div class="max-w-2xl reveal" data-reveal>
+    <p class="font-mono text-[11.5px] text-gold mb-4">Cómo entras al club</p>
+    <h2 class="font-serif text-[32px] md:text-[42px] leading-tight text-white">Cuatro pasos, un solo objetivo: que hables sin miedo.</h2>
+  </div>
+
+  <div class="mt-16 grid md:grid-cols-4 gap-x-6 gap-y-14 relative">
+    <div class="hidden md:block absolute top-6 left-[12.5%] right-[12.5%] h-px step-line-h"></div>
+
+    <div class="relative reveal" data-reveal style="transition-delay:.05s">
+      <div class="w-12 h-12 rounded-full bg-bg border border-gold/40 flex items-center justify-center font-serif text-gold text-lg relative z-10">1</div>
+      <h3 class="mt-5 font-serif text-lg text-white">Aplicas a tu cupo</h3>
+      <p class="mt-2 text-[13.5px] text-muted leading-relaxed">Completas el formulario de admisión. El equipo revisa tu nivel actual y tu objetivo real con el inglés.</p>
+    </div>
+    <div class="relative reveal" data-reveal style="transition-delay:.12s">
+      <div class="w-12 h-12 rounded-full bg-bg border border-gold/40 flex items-center justify-center font-serif text-gold text-lg relative z-10">2</div>
+      <h3 class="mt-5 font-serif text-lg text-white">Te unes al club</h3>
+      <p class="mt-2 text-[13.5px] text-muted leading-relaxed">Acceso a tu panel, tu coach asignado y la comunidad de miembros activos practicando cada día.</p>
+    </div>
+    <div class="relative reveal" data-reveal style="transition-delay:.19s">
+      <div class="w-12 h-12 rounded-full bg-bg border border-gold/40 flex items-center justify-center font-serif text-gold text-lg relative z-10">3</div>
+      <h3 class="mt-5 font-serif text-lg text-white">Practicas cada día</h3>
+      <p class="mt-2 text-[13.5px] text-muted leading-relaxed">Retos de conversación, notas de voz por WhatsApp y corrección personalizada de tu coach.</p>
+    </div>
+    <div class="relative reveal" data-reveal style="transition-delay:.26s">
+      <div class="w-12 h-12 rounded-full bg-bg border border-gold/40 flex items-center justify-center font-serif text-gold text-lg relative z-10">4</div>
+      <h3 class="mt-5 font-serif text-lg text-white">Subes de nivel</h3>
+      <p class="mt-2 text-[13.5px] text-muted leading-relaxed">Rachas, insignias y encuentros en vivo te mantienen constante hasta hablar con fluidez real.</p>
+    </div>
+  </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-5 md:px-8"><div class="divider-gold"></div></div>
+
+<!-- ========================= FEATURES / EL CLUB ========================= -->
+<section id="club" class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+  <div class="max-w-2xl reveal" data-reveal>
+    <p class="font-mono text-[11.5px] text-gold mb-4">Lo que encuentras adentro</p>
+    <h2 class="font-serif text-[32px] md:text-[42px] leading-tight text-white">No es una app de gramática. Es un club de práctica.</h2>
+  </div>
+
+  <div class="mt-14 grid md:grid-cols-6 gap-5">
+
+    <!-- big feature -->
+    <div class="md:col-span-4 md:row-span-2 rounded-3xl border border-line bg-card p-8 md:p-10 card-hover reveal" data-reveal>
+      <div class="w-12 h-12 rounded-2xl bg-wa/10 flex items-center justify-center mb-6">
+        <svg width="22" height="22" viewBox="0 0 448 512" fill="#25D366"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+      </div>
+      <h3 class="font-serif text-2xl text-white">Coach personal por WhatsApp</h3>
+      <p class="mt-3 text-[14px] text-muted leading-relaxed max-w-[48ch]">Envías audios, textos y prácticas reales a tu coach — no a un chatbot. Recibes corrección con voz, contexto y seguimiento de tu progreso, todos los días de la semana.</p>
+      <div class="mt-8 rounded-2xl bg-[#0b141a] border border-line p-4 max-w-sm">
+        <div class="flex justify-end mb-2">
+          <div class="bg-[#005c4b] text-[#e9edef] rounded-2xl rounded-br-sm px-3.5 py-2.5 text-[12.5px] max-w-[85%]">"I went to the market yesterday and bought fresh vegetables."</div>
+        </div>
+        <div class="flex justify-start">
+          <div class="bg-[#202c33] text-[#e9edef] rounded-2xl rounded-bl-sm px-3.5 py-2.5 text-[12.5px] max-w-[85%]">🎙️ "¡Muy bien! Solo cuida la pronunciación de 'vegetables' — te mando un audio."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="md:col-span-2 rounded-3xl border border-line bg-card p-7 card-hover reveal" data-reveal style="transition-delay:.06s">
+      <div class="w-11 h-11 rounded-2xl bg-gold/10 flex items-center justify-center mb-5">
+        <div class="w-4 h-4 rounded-full flame"></div>
+      </div>
+      <h3 class="font-serif text-lg text-white">Retos y rachas diarias</h3>
+      <p class="mt-2.5 text-[13.5px] text-muted leading-relaxed">Un reto corto cada día. Tu racha crece mientras la constancia se vuelve hábito.</p>
+    </div>
+
+    <div class="md:col-span-2 rounded-3xl border border-line bg-card p-7 card-hover reveal" data-reveal style="transition-delay:.12s">
+      <div class="w-11 h-11 rounded-2xl bg-blue-400/10 flex items-center justify-center mb-5">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#4d9fff" stroke-width="1.6"/><path d="M9 12.5l2 2 4-4.5" stroke="#4d9fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3 class="font-serif text-lg text-white">Comunidad verificada</h3>
+      <p class="mt-2.5 text-[13.5px] text-muted leading-relaxed">Un feed de miembros reales compartiendo su avance — el club como comunidad, no como app solitaria.</p>
+    </div>
+
+    <div class="md:col-span-6 rounded-3xl border border-line bg-gradient-to-r from-card to-card2 p-7 md:p-8 card-hover reveal flex flex-col md:flex-row md:items-center gap-6 justify-between" data-reveal style="transition-delay:.18s">
+      <div class="flex items-center gap-5">
+        <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#f0b429" stroke-width="1.6"/><path d="M3 8l9 6 9-6" stroke="#f0b429" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <h3 class="font-serif text-lg text-white">Encuentros en vivo</h3>
+          <p class="mt-1 text-[13.5px] text-muted max-w-[52ch]">Sesiones grupales por videollamada para soltar el acento del miedo y hablar frente a otros miembros.</p>
+        </div>
+      </div>
+      <button onclick="openModal('apply')" class="btn-ghost rounded-full px-6 py-3 text-[13px] font-medium text-ink whitespace-nowrap self-start md:self-auto">Quiero un cupo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= TESTIMONIOS ========================= -->
+<section id="testimonios" class="py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 max-w-2xl reveal" data-reveal>
+    <p class="font-mono text-[11.5px] text-gold mb-4">Voces del club</p>
+    <h2 class="font-serif text-[32px] md:text-[42px] leading-tight text-white">Lo que dicen quienes ya están adentro.</h2>
+  </div>
+
+  <div class="mt-14 t-wrap reveal" data-reveal>
+    <div class="t-slider" id="t-slider"></div>
+  </div>
+</section>
+
+<!-- ========================= CTA BANNER ========================= -->
+<section class="max-w-7xl mx-auto px-5 md:px-8 pb-24 md:pb-32">
+  <div class="relative rounded-[32px] border border-gold/25 bg-gradient-to-br from-[#151109] to-[#0d0d10] p-10 md:p-16 overflow-hidden reveal" data-reveal>
+    <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-gold/10 blur-3xl"></div>
+    <div class="absolute -left-10 -bottom-10 w-48 h-48 rounded-full bg-gold/5 blur-3xl"></div>
+    <div class="relative flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <div class="max-w-xl">
+        <h2 class="font-serif text-[30px] md:text-[38px] leading-tight text-white">Los cupos de este mes son limitados.</h2>
+        <p class="mt-4 text-[14.5px] text-muted leading-relaxed">Cada coach acompaña a un número reducido de miembros para que la práctica siga siendo real, no masiva. Aplica hoy y te contactamos en menos de 24 horas.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3.5 flex-shrink-0">
+        <button onclick="openModal('apply')" class="btn-gold rounded-xl px-8 py-4 text-[14px] font-bold text-black whitespace-nowrap">Aplicar a mi cupo</button>
+        <a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener" class="btn-wa rounded-xl px-8 py-4 text-[14px] font-bold text-[#04220f] whitespace-nowrap inline-flex items-center justify-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 448 512" fill="#04220f"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          Escribir por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= FAQ ========================= -->
+<section id="preguntas" class="max-w-4xl mx-auto px-5 md:px-8 pb-24 md:pb-32">
+  <div class="reveal" data-reveal>
+    <p class="font-mono text-[11.5px] text-gold mb-4">Antes de aplicar</p>
+    <h2 class="font-serif text-[30px] md:text-[36px] leading-tight text-white mb-10">Preguntas frecuentes</h2>
+  </div>
+
+  <div class="space-y-3">
+    <details class="group rounded-2xl border border-line bg-card p-5 md:p-6 reveal" data-reveal>
+      <summary class="flex items-center justify-between cursor-pointer list-none">
+        <span class="text-[14.5px] md:text-[15px] text-white font-medium">¿Necesito saber inglés para aplicar?</span>
+        <span class="text-gold text-lg transition group-open:rotate-45">+</span>
+      </summary>
+      <p class="mt-3 text-[13.5px] text-muted leading-relaxed">No. Evaluamos tu nivel en la admisión y te asignamos un coach y un plan de práctica acorde a dónde estás — desde cero hasta niveles avanzados.</p>
+    </details>
+
+    <details class="group rounded-2xl border border-line bg-card p-5 md:p-6 reveal" data-reveal style="transition-delay:.05s">
+      <summary class="flex items-center justify-between cursor-pointer list-none">
+        <span class="text-[14.5px] md:text-[15px] text-white font-medium">¿Cómo es la práctica diaria por WhatsApp?</span>
+        <span class="text-gold text-lg transition group-open:rotate-45">+</span>
+      </summary>
+      <p class="mt-3 text-[13.5px] text-muted leading-relaxed">Tu coach te envía retos cortos de conversación. Respondes con audio o texto y recibes corrección personalizada — todo dentro de tu chat, sin apps adicionales que aprender.</p>
+    </details>
+
+    <details class="group rounded-2xl border border-line bg-card p-5 md:p-6 reveal" data-reveal style="transition-delay:.1s">
+      <summary class="flex items-center justify-between cursor-pointer list-none">
+        <span class="text-[14.5px] md:text-[15px] text-white font-medium">¿Qué pasa después de aplicar?</span>
+        <span class="text-gold text-lg transition group-open:rotate-45">+</span>
+      </summary>
+      <p class="mt-3 text-[13.5px] text-muted leading-relaxed">El equipo revisa tu solicitud y te contacta por WhatsApp para confirmar tu cupo, tu coach y tu horario de práctica.</p>
+    </details>
+
+    <details class="group rounded-2xl border border-line bg-card p-5 md:p-6 reveal" data-reveal style="transition-delay:.15s">
+      <summary class="flex items-center justify-between cursor-pointer list-none">
+        <span class="text-[14.5px] md:text-[15px] text-white font-medium">Ya soy miembro, ¿dónde inicio sesión?</span>
+        <span class="text-gold text-lg transition group-open:rotate-45">+</span>
+      </summary>
+      <p class="mt-3 text-[13.5px] text-muted leading-relaxed">Usa el botón "Iniciar sesión" en la parte superior — te lleva directo a tu panel en app.nicaenglishclub.com.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="border-t border-line/70">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-14 grid md:grid-cols-[1.3fr_1fr_1fr] gap-10">
+    <div>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-black/40 flex items-center justify-center ring-1 ring-line2 overflow-hidden">
+          <img src="data:image/png;base64,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" alt="Nica English Club" class="w-7 h-7 object-contain">
+        </div>
+        <span class="font-serif text-white">Nica<span class="text-gold">English</span>Club</span>
+      </div>
+      <p class="text-[13px] text-muted leading-relaxed max-w-[36ch]">El club privado de práctica de inglés para nicaragüenses que quieren hablar con confianza — un coach real, cada día, por WhatsApp.</p>
+    </div>
+
+    <div>
+      <p class="font-mono text-[11px] text-muted mb-4">EL CLUB</p>
+      <ul class="space-y-2.5 text-[13.5px] text-muted">
+        <li><a href="#metodo" class="hover:text-white transition">Método</a></li>
+        <li><a href="#club" class="hover:text-white transition">Qué incluye</a></li>
+        <li><a href="#testimonios" class="hover:text-white transition">Miembros</a></li>
+        <li><button onclick="openModal('apply')" class="hover:text-white transition text-left">Aplicar ahora</button></li>
+        <li><button onclick="openModal('login')" class="hover:text-white transition text-left">Iniciar sesión</button></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="font-mono text-[11px] text-muted mb-4">SÍGUENOS</p>
+      <ul class="space-y-2.5 text-[13.5px] text-muted">
+        <li><a href="https://www.tiktok.com/@nicaenglishclub" target="_blank" rel="noopener" class="hover:text-white transition inline-flex items-center gap-2.5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-.9-.6-1.5-1.6-1.6-2.82h-3v13.4c0 1.5-1.2 2.7-2.7 2.7s-2.7-1.2-2.7-2.7 1.2-2.7 2.7-2.7c.3 0 .5 0 .8.1v-3.1c-.3 0-.5-.1-.8-.1-3.1 0-5.7 2.5-5.7 5.7s2.5 5.7 5.7 5.7 5.7-2.5 5.7-5.7V9.2c1.1.8 2.5 1.3 4 1.3V7.5c-.9 0-1.7-.3-2.4-.7-.1-.3-.6-.6-.9-.98Z"/></svg>
+          TikTok
+        </a></li>
+        <li><a href="https://www.facebook.com/NicaEnglishClub" target="_blank" rel="noopener" class="hover:text-white transition inline-flex items-center gap-2.5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.8h2.6l.4-3h-3v-1.9c0-.87.24-1.46 1.5-1.46h1.6V4.1c-.28-.04-1.23-.12-2.34-.12-2.32 0-3.9 1.4-3.9 4V10.2H7.8v3h2.56V21h3.14Z"/></svg>
+          Facebook
+        </a></li>
+        <li><a href="https://www.instagram.com/nicaenglishclub" target="_blank" rel="noopener" class="hover:text-white transition inline-flex items-center gap-2.5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Zm0 6.27a2.47 2.47 0 1 1 0-4.94 2.47 2.47 0 0 1 0 4.94Zm4.84-6.42a.89.89 0 1 1-1.78 0 .89.89 0 0 1 1.78 0ZM20 7.2c-.08-1.6-.44-3-1.6-4.16-1.16-1.16-2.56-1.52-4.16-1.6C12.6 1.36 11.4 1.36 9.76 1.44c-1.6.08-3 .44-4.16 1.6C4.44 4.2 4.08 5.6 4 7.2 3.92 8.8 3.92 10 4 11.6c.08 1.6.44 3 1.6 4.16 1.16 1.16 2.56 1.52 4.16 1.6 1.36.08 2.56.08 4.16 0 1.6-.08 3-.44 4.16-1.6 1.16-1.16 1.52-2.56 1.6-4.16.08-1.6.08-2.8 0-4.4Z"/></svg>
+          Instagram
+        </a></li>
+        <li><a href="https://share.google/8GtJ3FiGBh43p3lVI" target="_blank" rel="noopener" class="hover:text-white transition inline-flex items-center gap-2.5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.35 11.1h-9.17v2.92h5.4c-.24 1.42-1.63 4.17-5.4 4.17-3.25 0-5.9-2.69-5.9-6s2.65-6 5.9-6c1.85 0 3.09.79 3.8 1.47l2.59-2.5C17.02 3.5 14.9 2.5 12.18 2.5 6.9 2.5 2.6 6.8 2.6 12s4.3 9.5 9.58 9.5c5.53 0 9.2-3.89 9.2-9.36 0-.63-.07-1.11-.15-1.54Z"/></svg>
+          Reseñas en Google
+        </a></li>
+        <li><a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener" class="hover:text-white transition inline-flex items-center gap-2.5">
+          <svg width="15" height="15" viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+          +505 8326 7703
+        </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-line/70">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-[12px] text-muted">© <span id="year"></span> Nica English Club. Todos los derechos reservados.</p>
+      <a href="#top" class="text-[12px] text-muted hover:text-gold transition">Volver arriba ↑</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ========================= WHATSAPP FLOAT ========================= -->
+<a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener"
+   class="wa-float" aria-label="Escribir por WhatsApp">
+  <span class="wa-ring" aria-hidden="true"></span>
+  <svg width="28" height="28" viewBox="0 0 448 512" fill="#04220f"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+  <span class="wa-tooltip">¿Dudas? Escríbenos</span>
+</a>
+
+<!-- ========================= MODAL: APPLY ========================= -->
+<div id="modal-apply" class="fixed inset-0 z-[60] hidden items-center justify-center p-5">
+  <div class="modal-backdrop absolute inset-0 bg-black/70" onclick="closeModal('apply')"></div>
+  <div class="modal-panel relative w-full max-w-md rounded-3xl border border-line2 bg-[#101013] p-8 md:p-9">
+    <button onclick="closeModal('apply')" class="absolute top-5 right-5 w-8 h-8 rounded-full border border-line2 flex items-center justify-center text-muted hover:text-white hover:border-gold/50 transition" aria-label="Cerrar">✕</button>
+
+    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center ring-1 ring-gold/30 overflow-hidden mb-5">
+      <img src="data:image/png;base64,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" class="w-9 h-9 object-contain" alt="">
+    </div>
+    <h3 class="font-serif text-2xl text-white">Aplica a tu cupo</h3>
+    <p class="mt-3 text-[13.5px] text-muted leading-relaxed">Te llevamos al formulario oficial de admisión. Cuéntanos tu nivel y tu objetivo — el equipo te contacta por WhatsApp para confirmar tu coach y tu cupo.</p>
+
+    <ul class="mt-5 space-y-2.5 text-[13px] text-ink">
+      <li class="flex items-center gap-2.5"><span class="text-gold">✓</span> Respuesta en menos de 24 horas</li>
+      <li class="flex items-center gap-2.5"><span class="text-gold">✓</span> Sin compromiso hasta confirmar tu cupo</li>
+      <li class="flex items-center gap-2.5"><span class="text-gold">✓</span> Coach asignado según tu nivel</li>
+    </ul>
+
+    <a href="https://app.nicaenglishclub.com/nica-english-club-admision/" target="_blank" rel="noopener" class="btn-gold w-full mt-7 rounded-xl px-6 py-4 text-[14px] font-bold text-black flex items-center justify-center">
+      Continuar a la admisión
+    </a>
+    <a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20aplicar%20a%20un%20cupo%20en%20Nica%20English%20Club" target="_blank" rel="noopener" class="mt-3 w-full rounded-xl px-6 py-3.5 text-[13px] font-medium text-muted hover:text-white border border-line2 hover:border-wa/50 transition flex items-center justify-center gap-2">
+      Prefiero preguntar por WhatsApp primero
+    </a>
+  </div>
+</div>
+
+<!-- ========================= MODAL: LOGIN ========================= -->
+<div id="modal-login" class="fixed inset-0 z-[60] hidden items-center justify-center p-5">
+  <div class="modal-backdrop absolute inset-0 bg-black/70" onclick="closeModal('login')"></div>
+  <div class="modal-panel relative w-full max-w-md rounded-3xl border border-line2 bg-[#101013] p-8 md:p-9">
+    <button onclick="closeModal('login')" class="absolute top-5 right-5 w-8 h-8 rounded-full border border-line2 flex items-center justify-center text-muted hover:text-white hover:border-gold/50 transition" aria-label="Cerrar">✕</button>
+
+    <div class="w-12 h-12 rounded-full bg-black flex items-center justify-center ring-1 ring-gold/30 overflow-hidden mb-5">
+      <img src="data:image/png;base64,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" class="w-9 h-9 object-contain" alt="">
+    </div>
+    <h3 class="font-serif text-2xl text-white">Bienvenido de vuelta</h3>
+    <p class="mt-3 text-[13.5px] text-muted leading-relaxed">Tu panel de práctica, tu coach y tu racha te esperan en el portal del club.</p>
+
+    <a href="https://app.nicaenglishclub.com/" target="_blank" rel="noopener" class="btn-gold w-full mt-7 rounded-xl px-6 py-4 text-[14px] font-bold text-black flex items-center justify-center">
+      Ir a mi panel
+    </a>
+    <p class="mt-4 text-center text-[12.5px] text-muted">¿Aún no eres miembro?
+      <button onclick="closeModal('login'); openModal('apply')" class="text-gold hover:text-goldlight transition">Aplica aquí</button>
+    </p>
+  </div>
+</div>
+
+<script>
+  // ---- Modal system ----
+  function openModal(which){
+    const el = document.getElementById('modal-'+which);
+    if(!el) return;
+    el.classList.remove('hidden');
+    el.classList.add('flex');
+    requestAnimationFrame(()=> el.classList.add('modal-open'));
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(which){
+    const el = document.getElementById('modal-'+which);
+    if(!el) return;
+    el.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    setTimeout(()=>{ el.classList.add('hidden'); el.classList.remove('flex'); }, 250);
+  }
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){ closeModal('apply'); closeModal('login'); }
+  });
+
+  // ---- Scroll reveal ----
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('[data-reveal]').forEach(el=>{
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+
+  // ---- Footer year ----
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Testimonials carousel ----
+  const testimonios = [
+    { name: 'Josmary Medina', quote: 'Pensaba que aprender era solo pasar clases, pero descubrí que el secreto es vivirlo y practicarlo.' },
+    { name: 'Owen Diaz', quote: '¡Hoy mi lengua ya funciona! Antes se me trababa, pero ahora el inglés fluye con naturalidad.' },
+    { name: 'Elena Fletes', quote: 'Nica English Club me brindó la confianza que necesitaba para hablar fluido.' },
+    { name: 'Ashly Diaz', quote: 'Aprender inglés es mucho más fácil y divertido cuando lo haces rodeada de amigos.' },
+    { name: 'Jensy Bravo', quote: 'Los cambios que hacemos en la vida son los que realmente nos llevan a ser mejores cada día.' },
+    { name: 'Alexander Pineda', quote: 'Debemos imaginar lo que decimos; solo así podemos sentir el idioma y hablarlo de verdad.' },
+    { name: 'Jarixa Garcia', quote: 'Dominar el inglés no es solo hablar otro idioma, es descubrir una personalidad nueva en ti.' },
+    { name: 'Meybell Valle', quote: 'Aprender inglés fue la mejor inversión en mi futuro.' },
+    { name: 'Scarleth Diaz', quote: 'Para hablar inglés, el mayor reto no es la gramática, es atreverse a dejar la pena a un lado.' },
+    { name: 'Rene Davila', quote: 'El inglés no es algo que se estudia por ratos, se convierte en un hábito de vida constante.' },
+    { name: 'Eduardo Lopez', quote: 'Ahora que conozco los sonidos y el porqué de las palabras, finalmente entiendo todo lo que dicen.' },
+    { name: 'Katherine Rocha', quote: 'El inglés se aprende entendiendo las palabras frente a la vida real, no comparándolas con el español.' },
+    { name: 'Frankling Martinez', quote: 'La constancia y el enfoque diario son las llaves que abren todas las puertas del éxito.' },
+    { name: 'Angely Ortega', quote: 'El club me enseñó que el progreso real viene de disfrutar el proceso de aprendizaje.' },
+    { name: 'Maykell Martinez', quote: 'Cada palabra nueva es una oportunidad para conectar con un mundo lleno de posibilidades.' },
+    { name: 'Shamira Ortega', quote: 'Perder el miedo a hablar fue el primer paso para dominar el idioma con seguridad.' },
+    { name: 'Mabel Castro', quote: 'El inglés me ha dado la herramienta más poderosa para mi crecimiento profesional.' },
+    { name: 'Adith Martinez', quote: 'No se trata de ser perfecto, se trata de ser constante hasta que el idioma sea parte de ti.' },
+    { name: 'Maria Hernandez', quote: 'La comunidad del club hace que aprender inglés sea una experiencia increíble.' },
+    { name: 'Carlos Hurtado', quote: 'Entender el origen de los sonidos me permitió escuchar el inglés de una forma distinta.' },
+    { name: 'Mario Urbina', quote: 'El éxito en el inglés requiere paciencia, práctica y sobre todo, muchas ganas de aprender.' },
+    { name: 'Cesar Rocha', quote: 'El club transformó mi miedo en fluidez; hoy el inglés es mi mejor aliado.' }
+  ];
+
+  const tSlider = document.getElementById('t-slider');
+  let tInteracting = false;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderTestimonials(){
+    testimonios.forEach(m=>{
+      const initials = m.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+      const card = document.createElement('div');
+      card.className = 't-card';
+      card.innerHTML = `
+        <div class="t-avatar">${initials}</div>
+        <div class="t-badge"><span>✓ Miembro NEC</span></div>
+        <div class="t-name">${m.name}</div>
+        <p class="t-quote">"${m.quote}"</p>
+      `;
+      tSlider.appendChild(card);
+    });
+    // duplicate set for seamless infinite loop
+    [...tSlider.children].forEach(c=> tSlider.appendChild(c.cloneNode(true)));
+  }
+
+  function updateTZoom(){
+    const cards = tSlider.querySelectorAll('.t-card');
+    const center = tSlider.scrollLeft + (tSlider.offsetWidth / 2);
+    cards.forEach(card=>{
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      card.classList.toggle('active', Math.abs(center - cardCenter) < 120);
+    });
+  }
+
+  function tAutoPlay(){
+    if(!tInteracting && !reduceMotion){
+      tSlider.scrollLeft += 0.7;
+      if(tSlider.scrollLeft >= tSlider.scrollWidth / 2) tSlider.scrollLeft = 0;
+      updateTZoom();
+    }
+    requestAnimationFrame(tAutoPlay);
+  }
+
+  tSlider.addEventListener('touchstart', ()=> tInteracting = true, {passive:true});
+  tSlider.addEventListener('touchend', ()=> tInteracting = false, {passive:true});
+  tSlider.addEventListener('mousedown', ()=> tInteracting = true);
+  window.addEventListener('mouseup', ()=> tInteracting = false);
+  tSlider.addEventListener('scroll', updateTZoom, {passive:true});
+
+  renderTestimonials();
+  updateTZoom();
+  requestAnimationFrame(tAutoPlay);
+</script>
+
+</body>
+</html>

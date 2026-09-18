@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) - Landing Page -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PJ282G68GR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PJ282G68GR');
+</script>
 <title>Nica English Club — No estudies inglés. Entrénalo.</title>
 <meta name="description" content="Nica English Club es un entrenamiento de comunicación en inglés: usas el idioma desde el primer día, practicas con guía y un coach te corrige. Coach IA, Training Room, clases en vivo y comunidad.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -768,10 +777,9 @@
     const capNum = document.getElementById('loop-num'), capTitle = document.getElementById('loop-cap-title'), capText = document.getElementById('loop-cap-text');
     const cap = document.getElementById('loop-cap');
     const toggle = document.getElementById('loop-toggle'), toggleIco = document.getElementById('loop-toggle-ico');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const nodes = [], labels = [];
     let elapsed = 0, seg = -1, last = 0, raf = null, wrapTimer = null;
-    let manualPaused = reduce, hoverPaused = false, wrapping = false;
+    let manualPaused = false, hoverPaused = false, wrapping = false;
     const ease = (t)=> t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
 
     steps.forEach((s,i)=>{
@@ -840,10 +848,10 @@
       elapsed = i * STEP; setStep(i); draw(i, false);
     }
 
-    loop.addEventListener('mouseenter', ()=>{ hoverPaused = true; refresh(); });
-    loop.addEventListener('mouseleave', ()=>{ hoverPaused = false; refresh(); });
-    loop.addEventListener('focusin',    ()=>{ hoverPaused = true; refresh(); });
-    loop.addEventListener('focusout',   ()=>{ hoverPaused = false; refresh(); });
+    loop.addEventListener('pointerenter', (e)=>{ if(e.pointerType === 'mouse'){ hoverPaused = true; refresh(); } });
+    loop.addEventListener('pointerleave', (e)=>{ if(e.pointerType === 'mouse'){ hoverPaused = false; refresh(); } });
+    loop.addEventListener('focusin',  (e)=>{ if(e.target.matches(':focus-visible')){ hoverPaused = true; refresh(); } });
+    loop.addEventListener('focusout', ()=>{ hoverPaused = false; refresh(); });
 
     function setToggle(){
       toggle.setAttribute('aria-label', manualPaused ? 'Reanudar la animación' : 'Pausar la animación');

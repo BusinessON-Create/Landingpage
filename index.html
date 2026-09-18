@@ -77,7 +77,8 @@
   .loop{ position:relative; width:100%; max-width:500px; aspect-ratio:1; margin-inline:auto; }
   .loop-svg{ position:absolute; inset:0; width:100%; height:100%; }
   .loop-svg .track{ fill:none; stroke:#2a2520; stroke-width:2; }
-  .loop-svg .prog{ fill:none; stroke:url(#goldg); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1); }
+  .loop-svg .prog{ fill:none; stroke:url(#goldg); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; transition:opacity .35s ease; filter:drop-shadow(0 0 4px rgba(240,180,41,.45)); }
+  .loop-svg .head{ fill:#ffe9a6; opacity:0; transition:opacity .2s ease; filter:drop-shadow(0 0 5px rgba(255,217,102,.95)) drop-shadow(0 0 12px rgba(240,180,41,.7)); }
   .loop-glow{ position:absolute; left:50%; top:50%; width:46%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle, rgba(240,180,41,.16), rgba(240,180,41,0) 70%); pointer-events:none; }
   .loop-node{
     position:absolute; width:44px; height:44px; transform:translate(-50%,-50%);
@@ -257,6 +258,7 @@
           </defs>
           <circle class="track" cx="200" cy="200" r="112"/>
           <circle class="prog" id="loop-prog" cx="200" cy="200" r="112" pathLength="100" transform="rotate(-90 200 200)"/>
+          <circle class="head" id="loop-head" cx="200" cy="88" r="5.5"/>
         </svg>
         <div class="loop-glow"></div>
         <div class="loop-center">
@@ -265,7 +267,7 @@
         </div>
       </div>
 
-      <div class="mt-6 max-w-[500px] mx-auto min-h-[112px] flex items-start gap-4 rounded-2xl border border-line bg-surface/80 p-5" aria-live="polite">
+      <div id="loop-cap" class="mt-6 max-w-[500px] mx-auto min-h-[112px] flex items-start gap-4 rounded-2xl border border-line bg-surface/80 p-5" aria-live="off">
         <div class="w-9 h-9 flex-none rounded-full bg-gold/10 text-gold grid place-items-center font-display font-bold" id="loop-num">1</div>
         <div class="min-w-0 flex-1">
           <p class="font-semibold text-white text-[15px]" id="loop-cap-title">Situación</p>
@@ -758,14 +760,19 @@
       { t:'Volver a usar',  d:'Lo usas otra vez en una situación nueva, y ya te sale natural.' }
     ];
     const N = steps.length, R = 28, RL = 37;
+    const STEP = 4200;   // ms por paso: se queda un momento en el punto y luego la línea corre al siguiente
+    const HOLD = 0.3;    // fracción del paso que se queda quieto para leer
     const loop = document.getElementById('loop');
-    const prog = document.getElementById('loop-prog');
+    const prog = document.getElementById('loop-prog'), head = document.getElementById('loop-head');
     const lc = document.getElementById('lc'), lt = document.getElementById('lt');
     const capNum = document.getElementById('loop-num'), capTitle = document.getElementById('loop-cap-title'), capText = document.getElementById('loop-cap-text');
+    const cap = document.getElementById('loop-cap');
     const toggle = document.getElementById('loop-toggle'), toggleIco = document.getElementById('loop-toggle-ico');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const nodes = [], labels = [];
-    let cur = 0, timer = null, manualPaused = reduce, hoverPaused = false;
+    let elapsed = 0, seg = -1, last = 0, raf = null, wrapTimer = null;
+    let manualPaused = reduce, hoverPaused = false, wrapping = false;
+    const ease = (t)=> t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
 
     steps.forEach((s,i)=>{
       const a = i * 2 * Math.PI / N, sn = Math.sin(a);
@@ -773,7 +780,7 @@
       b.type = 'button'; b.className = 'loop-node';
       b.style.left = (50 + R*sn) + '%'; b.style.top = (50 - R*Math.cos(a)) + '%';
       b.textContent = i+1; b.setAttribute('aria-label', 'Paso ' + (i+1) + ': ' + s.t);
-      b.addEventListener('click', ()=>{ go(i); restart(); });
+      b.addEventListener('click', ()=> jumpTo(i));
       loop.appendChild(b); nodes.push(b);
 
       const l = document.createElement('span');
@@ -783,32 +790,60 @@
       loop.appendChild(l); labels.push(l);
     });
 
-    function go(i){
-      cur = i;
-      nodes.forEach((n,j)=>{ n.classList.toggle('active', j===i); n.classList.toggle('done', j<i); if(j===i) n.setAttribute('aria-current','step'); else n.removeAttribute('aria-current'); });
+    function setStep(i){
+      seg = i;
+      nodes.forEach((n,j)=>{
+        n.classList.toggle('active', j===i); n.classList.toggle('done', j<i);
+        if(j===i) n.setAttribute('aria-current','step'); else n.removeAttribute('aria-current');
+      });
       labels.forEach((l,j)=> l.classList.toggle('active', j===i));
       lc.textContent = i+1; lt.textContent = steps[i].t;
       capNum.textContent = i+1; capTitle.textContent = steps[i].t; capText.textContent = steps[i].d;
-      prog.style.strokeDashoffset = 100 - (i / N * 100);
     }
-    function next(){
-      if(cur === N-1){
-        // close the ring, then start over: the loop repeats
-        prog.style.strokeDashoffset = 0;
-        setTimeout(()=>{
-          prog.style.transition = 'none'; prog.style.strokeDashoffset = 100;
-          void prog.getBoundingClientRect(); prog.style.transition = '';
-          go(0);
-        }, 700);
-      } else { go(cur+1); }
+    // pos = 0..N : distancia recorrida sobre el anillo, medida en pasos
+    function draw(pos, traveling){
+      if(!wrapping) prog.style.strokeDashoffset = 100 - (pos / N * 100);
+      const th = pos / N * 2 * Math.PI;
+      head.setAttribute('cx', 200 + 112 * Math.sin(th));
+      head.setAttribute('cy', 200 - 112 * Math.cos(th));
+      head.style.opacity = traveling ? 1 : 0;
     }
-    function stop(){ clearInterval(timer); timer = null; }
-    function restart(){ stop(); if(!manualPaused && !hoverPaused) timer = setInterval(next, 3800); }
+    function wrap(){
+      // la línea cierra el círculo, se desvanece y el ciclo vuelve a empezar
+      wrapping = true;
+      prog.style.strokeDashoffset = 0; prog.style.opacity = 0; head.style.opacity = 0;
+      clearTimeout(wrapTimer);
+      wrapTimer = setTimeout(()=>{
+        prog.style.transition = 'none'; prog.style.strokeDashoffset = 100; prog.style.opacity = 1;
+        void prog.getBoundingClientRect(); prog.style.transition = '';
+        wrapping = false;
+      }, 450);
+    }
+    function frame(now){
+      raf = requestAnimationFrame(frame);
+      const dt = Math.min(now - last, 100); last = now;
+      elapsed += dt;
+      if(elapsed >= N * STEP){ elapsed -= N * STEP; wrap(); }
+      const s = Math.floor(elapsed / STEP), t = (elapsed - s * STEP) / STEP;
+      const k = t < HOLD ? 0 : ease((t - HOLD) / (1 - HOLD));
+      if(s !== seg) setStep(s);
+      draw(s + k, k > 0 && k < 1);
+    }
+    function refresh(){
+      const run = !manualPaused && !hoverPaused;
+      if(run && !raf){ last = performance.now(); raf = requestAnimationFrame(frame); }
+      if(!run && raf){ cancelAnimationFrame(raf); raf = null; }
+      cap.setAttribute('aria-live', run ? 'off' : 'polite');
+    }
+    function jumpTo(i){
+      clearTimeout(wrapTimer); wrapping = false; prog.style.opacity = 1;
+      elapsed = i * STEP; setStep(i); draw(i, false);
+    }
 
-    loop.addEventListener('mouseenter', ()=>{ hoverPaused = true; stop(); });
-    loop.addEventListener('mouseleave', ()=>{ hoverPaused = false; restart(); });
-    loop.addEventListener('focusin', ()=>{ hoverPaused = true; stop(); });
-    loop.addEventListener('focusout', ()=>{ hoverPaused = false; restart(); });
+    loop.addEventListener('mouseenter', ()=>{ hoverPaused = true; refresh(); });
+    loop.addEventListener('mouseleave', ()=>{ hoverPaused = false; refresh(); });
+    loop.addEventListener('focusin',    ()=>{ hoverPaused = true; refresh(); });
+    loop.addEventListener('focusout',   ()=>{ hoverPaused = false; refresh(); });
 
     function setToggle(){
       toggle.setAttribute('aria-label', manualPaused ? 'Reanudar la animación' : 'Pausar la animación');
@@ -816,9 +851,9 @@
         ? '<path d="M8 5v14l11-7L8 5Z"/>'
         : '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
     }
-    toggle.addEventListener('click', ()=>{ manualPaused = !manualPaused; setToggle(); restart(); });
+    toggle.addEventListener('click', ()=>{ manualPaused = !manualPaused; setToggle(); refresh(); });
 
-    go(0); setToggle(); restart();
+    jumpTo(0); setToggle(); refresh();
   })();
 
   // ---- Platform tabs ----

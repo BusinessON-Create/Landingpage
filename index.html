@@ -8,6 +8,11 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  var NEC_ALL=false; /* true = aviso de cookies para todos; false = solo visitantes de Europa */
+  var necTz=''; try{necTz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+  var necNeed=NEC_ALL||(/^Europe\//.test(necTz)&&!/Moscow|Minsk|Istanbul/.test(necTz));
+  var necSaved=null; try{necSaved=localStorage.getItem('nec_cookies')}catch(e){}
+  gtag('consent','default',{analytics_storage:(necNeed&&necSaved!=='granted')?'denied':'granted',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
   gtag('js', new Date());
 
   gtag('config', 'G-PJ282G68GR');
@@ -831,6 +836,7 @@
       <a href="#top" class="text-[12.5px] text-muted hover:text-gold transition">Volver arriba ↑</a>
     </div>
   </div>
+<p style="text-align:center;font-size:13px;color:#9a948a;padding:16px 20px 6px"><a href="privacidad.html" style="text-decoration:underline">Política de privacidad</a> · <a href="terminos.html" style="text-decoration:underline">Términos y condiciones</a> · <a href="#" onclick="necCookies();return false" style="text-decoration:underline">Cookies</a></p>
 <p style="text-align:center;font-size:12px;color:#7d776d;padding:0 20px 24px">WhatsApp es una marca de Meta Platforms, Inc. Nica English Club no está afiliado ni respaldado por Meta.</p>
 </footer>
 
@@ -1147,7 +1153,7 @@
 <style>
 .wa-online{position:absolute;top:-1px;right:-1px;width:13px;height:13px;border-radius:50%;background:#22c55e;border:2px solid #110f0d;z-index:1}
 .wa-online::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:#22c55e;opacity:.6;z-index:-1;animation:wa-pulse 2.2s ease-out infinite}
-.gm-note{margin:10px 0 0;text-align:center;color:#9a948a;font-size:12.5px}
+.gm-note a{color:#f0b429}.gm-note{margin:10px 0 0;text-align:center;color:#9a948a;font-size:12.5px}
 #gm[hidden]{display:none}
 #gm{position:fixed;left:0;right:0;top:0;height:100dvh;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.72)}
 .gm-panel{width:100%;max-width:440px;height:min(640px,94%);display:flex;flex-direction:column;background:#110f0d;border:1px solid #38322b;border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
@@ -1198,7 +1204,9 @@
 (function(){
 const NUM='50583267703',reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ov=document.getElementById('gm'),log=document.getElementById('gm-log'),foot=document.getElementById('gm-foot'),back=document.getElementById('gm-back');
-let a={},i=0,intent='info',opener=null,token=0;
+const LEADS_URL='https://script.google.com/macros/s/AKfycbwCkEP4d_JKgHfJG0L0Txvqr7iAM0xMSSCN6X17EzEMLE_UsajO7nFLxr4WObUBHxB5/exec',LEADS_TOKEN='nec-leads-2026'; // pega aquí la URL /exec de Apps Script
+let a={},i=0,intent='info',opener=null,token=0,sid='';
+function save(stage){if(!LEADS_URL)return;try{fetch(LEADS_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:LEADS_TOKEN,id:sid,stage,name:a.name,phone:a.phone,country:a.country,age:a.age,level:a.level,email:a.email,source:intent==='apply'?'Aplicar a cupo':'Información'})}).catch(()=>{})}catch(e){}}
 const first=()=>{const n=(a.name||'').trim().split(/\s+/)[0]||'';return n.charAt(0).toUpperCase()+n.slice(1)};
 const S=[
 {id:'start',t:'start',m:()=>['¡Hola! 🤗 Soy Gustavo Martinez, de Nica English Club. Antes de pasarte a WhatsApp quiero conocerte un poquito, son 30 segundos.']},
@@ -1219,20 +1227,20 @@ function bot(t){const r=el('gm-row');r.append(mini());if(t==='GIFT'){const g=el(
 function me(t){const r=el('gm-row me');r.append(el('bubble-me',t));log.append(r);down()}
 async function say(list,tk){for(const t of list){if(!reduce){const d=el('gm-row');d.append(mini());d.insertAdjacentHTML('beforeend','<div class="gm-b gm-dots"><i></i><i></i><i></i></div>');log.append(d);down();await wait(500+Math.random()*300);d.remove();if(tk!==token)return false}bot(t)}return true}
 function waUrl(){const t=`¡Hola! 👋 Soy ${a.name}${a.country==='Otro'?'':', de '+a.country}. Tengo ${a.age} años y mi nivel de inglés es ${a.level}. ${intent==='apply'?'Quiero aplicar a un cupo en Nica English Club.':'Quiero información sobre Nica English Club.'} Vengo por el regalo de bienvenida: Ahorra Matrícula $35.`+(a.email?` Mi correo es ${a.email}.`:'');return`https://wa.me/${NUM}?text=${encodeURIComponent(t)}`}
-function answer(v){a[S[i].id]=v;foot.innerHTML='';me(v||'Saltar');show(i+1)}
+function answer(v){const k=S[i].id;a[k]=v;foot.innerHTML='';me(v||'Saltar');if(k==='phone')save('Parcial');if(k==='email')save('Completo');show(i+1)}
 function input(s){foot.innerHTML='';
-if(s.t==='start'){foot.innerHTML='<button type="button" class="gm-btn">Empezar</button><p class="gm-note">Usaremos tus datos solo para responderte por WhatsApp.</p>';const b2=foot.firstChild;b2.onclick=()=>{foot.innerHTML='';show(1)};b2.focus()}
+if(s.t==='start'){foot.innerHTML='<button type="button" class="gm-btn">Acepto y empezar</button><p class="gm-note">Guardamos tus datos solo para contactarte y responder tu solicitud. Más en la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a> y los <a href="terminos.html" target="_blank" rel="noopener">términos</a>.</p>';const b2=foot.firstChild;b2.onclick=()=>{foot.innerHTML='';show(1)};b2.focus()}
 else if(s.t==='chips'){const w=el('gm-chips');s.o.forEach(o=>{const b=document.createElement('button');b.type='button';b.className='gm-chip'+(a[s.id]===o?' sel':'');b.textContent=o;b.onclick=()=>answer(o);w.append(b)});foot.append(w);w.firstChild.focus()}
 else if(s.t==='text'){foot.innerHTML=`<form class="gm-f" novalidate><input class="gm-in" type="${s.im||'text'}" ${s.im==='tel'?'inputmode="tel"':''} autocomplete="${s.ac}" placeholder="${s.ph}" aria-label="${s.ph}"><button class="gm-send">Continuar</button></form>${s.skip?'<button type="button" class="gm-skip">Saltar</button>':''}<p class="gm-err" role="alert"></p>`;
 const inp=foot.querySelector('input'),er=foot.querySelector('.gm-err');inp.value=a[s.id]||'';
 foot.querySelector('form').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!s.ok(v)){er.textContent=s.err;inp.focus();return}answer(v)};
 if(s.skip)foot.querySelector('.gm-skip').onclick=()=>answer('');inp.focus()}
-else{foot.innerHTML=`<a class="gm-go btn-wa" href="${waUrl()}" target="_blank" rel="noopener">Abrir WhatsApp</a>`;const g=foot.firstChild;g.onclick=()=>setTimeout(close,300);g.focus()}}
+else{foot.innerHTML=`<a class="gm-go btn-wa" href="${waUrl()}" target="_blank" rel="noopener">Abrir WhatsApp</a>`;const g=foot.firstChild;g.onclick=()=>{save('Abrió WhatsApp');setTimeout(close,300)};g.focus()}}
 async function show(n){i=n;const tk=++token;back.hidden=n<2;foot.innerHTML='';if(await say(S[n].m(),tk))input(S[n])}
 function rebuild(n){token++;i=n;back.hidden=n<2;log.innerHTML='';for(let j=0;j<n;j++){S[j].m().forEach(bot);if(j>0)me(a[S[j].id]||'Saltar')}S[n].m().forEach(bot);input(S[n])}
 back.onclick=()=>{if(i>=2)rebuild(i-1)};
 function fit(){const v=window.visualViewport;if(v){ov.style.top=v.offsetTop+'px';ov.style.height=v.height+'px'}down()}
-function open(from,it){opener=from;intent=it;a={};ov.hidden=false;document.body.style.overflow='hidden';log.innerHTML='';fit();show(0)}
+function open(from,it){opener=from;intent=it;a={};sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);ov.hidden=false;document.body.style.overflow='hidden';log.innerHTML='';fit();show(0)}
 function close(){token++;ov.hidden=true;document.body.style.overflow='';if(opener&&opener.focus)opener.focus()}
 document.getElementById('gm-x').onclick=close;
 ov.addEventListener('click',e=>{if(e.target===ov)close()});
@@ -1240,6 +1248,26 @@ ov.addEventListener('keydown',e=>{if(e.key==='Escape'){close();return}if(e.key!=
 if(window.visualViewport){visualViewport.addEventListener('resize',fit);visualViewport.addEventListener('scroll',fit)}
 document.addEventListener('click',e=>{const l=e.target.closest&&e.target.closest('a[href*="wa.me/'+NUM+'"]');if(!l||l.closest('#gm'))return;e.preventDefault();open(l,/aplicar/i.test(decodeURIComponent(l.href))?'apply':'info')},true);
 })();
+</script>
+<style>
+#nec-ck{position:fixed;left:16px;bottom:16px;width:300px;z-index:70;background:#1a1714;border:1px solid #38322b;border-radius:14px;padding:14px;font:13px/1.5 Figtree,system-ui,sans-serif;color:#f4efe6}
+#nec-ck[hidden]{display:none}#nec-ck p{margin:0 0 12px}#nec-ck a{color:#f0b429}
+#nec-ck .r{display:flex;gap:8px;margin-bottom:10px}
+#nec-ck button{flex:1;min-height:40px;border-radius:10px;font:600 13px Figtree,sans-serif;background:none;border:1px solid #4a4238;color:#f4efe6;cursor:pointer}
+#nec-ck button.y{border-color:#f0b429;color:#f0b429}#nec-ck button:focus-visible{outline:2px solid #f0b429;outline-offset:2px}
+@media(max-width:640px){#nec-ck{left:12px;right:12px;width:auto;bottom:96px}}
+</style>
+<div id="nec-ck" role="dialog" aria-label="Cookies" hidden>
+<p>Usamos cookies para medir visitas y mejorar la página. Tú decides.</p>
+<div class="r"><button type="button" id="nec-no">Rechazar</button><button type="button" id="nec-yes" class="y">Aceptar</button></div>
+<a href="privacidad.html#cookies">Más info en la política de privacidad</a></div>
+<script>
+(function(){var b=document.getElementById('nec-ck');
+function set(v){try{localStorage.setItem('nec_cookies',v)}catch(e){}gtag('consent','update',{analytics_storage:v});b.hidden=true}
+document.getElementById('nec-yes').onclick=function(){set('granted')};
+document.getElementById('nec-no').onclick=function(){set('denied')};
+window.necCookies=function(){b.hidden=false;document.getElementById('nec-yes').focus()};
+if(necNeed&&!necSaved)b.hidden=false})();
 </script>
 </body>
 </html>

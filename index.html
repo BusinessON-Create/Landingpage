@@ -1206,7 +1206,7 @@ const NUM='50583267703',reduce=matchMedia('(prefers-reduced-motion: reduce)').ma
 const ov=document.getElementById('gm'),log=document.getElementById('gm-log'),foot=document.getElementById('gm-foot'),back=document.getElementById('gm-back');
 const LEADS_URL='https://script.google.com/macros/s/AKfycbwCkEP4d_JKgHfJG0L0Txvqr7iAM0xMSSCN6X17EzEMLE_UsajO7nFLxr4WObUBHxB5/exec',LEADS_TOKEN='nec-leads-2026'; // pega aquí la URL /exec de Apps Script
 let a={},i=0,intent='info',opener=null,token=0,sid='';
-function save(stage){if(!LEADS_URL)return;try{fetch(LEADS_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:LEADS_TOKEN,id:sid,stage,name:a.name,phone:a.phone,country:a.country,age:a.age,level:a.level,email:a.email,source:intent==='apply'?'Aplicar a cupo':'Información'})}).catch(()=>{})}catch(e){}}
+function save(stage){if(!LEADS_URL)return;try{fetch(LEADS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:LEADS_TOKEN,id:sid,stage,name:a.name,phone:a.phone,country:a.country,age:a.age,level:a.level,email:a.email,source:intent==='apply'?'Aplicar a cupo':'Información'})}).then(()=>console.log('lead enviado:',stage)).catch(er=>console.warn('lead no enviado',er))}catch(e){console.warn(e)}}
 const first=()=>{const n=(a.name||'').trim().split(/\s+/)[0]||'';return n.charAt(0).toUpperCase()+n.slice(1)};
 const S=[
 {id:'start',t:'start',m:()=>['¡Hola! 🤗 Soy Gustavo Martinez, de Nica English Club. Antes de pasarte a WhatsApp quiero conocerte un poquito, son 30 segundos.']},

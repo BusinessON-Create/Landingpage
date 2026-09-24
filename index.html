@@ -231,6 +231,79 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
   }
+
+  /* ===== NICA ENGLISH CLUB — VISUAL ENHANCEMENT PASS =====
+     Visual-only layer: preserves existing content, links and application logic. */
+  :root{
+    --ne-glow: rgba(240,180,41,.18);
+    --ne-glow-strong: rgba(240,180,41,.30);
+    --ne-glass: rgba(255,255,255,.035);
+  }
+  body{ position:relative; overflow-x:hidden; }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
+    background:
+      radial-gradient(520px 360px at 50% 8%, rgba(240,180,41,.055), transparent 72%),
+      radial-gradient(420px 320px at 100% 48%, rgba(90,169,255,.035), transparent 72%);
+  }
+  header{
+    background:rgba(10,9,8,.72) !important;
+    border-bottom-color:rgba(240,180,41,.10) !important;
+    box-shadow:0 10px 35px rgba(0,0,0,.18);
+  }
+  section{ position:relative; }
+  section::after{
+    content:""; position:absolute; top:0; left:50%; width:min(22rem,35vw); height:1px;
+    transform:translateX(-50%); pointer-events:none;
+    background:linear-gradient(90deg,transparent,rgba(240,180,41,.18),transparent);
+  }
+  .btn-gold{
+    position:relative; overflow:hidden; isolation:isolate;
+    border:1px solid rgba(255,217,102,.38);
+    background:linear-gradient(135deg,#ffe27c 0%,#f0b429 48%,#c8891a 100%);
+    box-shadow:0 10px 28px -10px rgba(240,180,41,.55), inset 0 1px 0 rgba(255,255,255,.32);
+  }
+  .btn-gold::before{
+    content:""; position:absolute; inset:0; transform:translateX(-120%);
+    background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.34) 48%,transparent 76%);
+    transition:transform .55s cubic-bezier(.16,1,.3,1); pointer-events:none;
+  }
+  .btn-gold:hover::before{ transform:translateX(120%); }
+  .btn-gold:hover{ filter:brightness(1.04); box-shadow:0 14px 38px -10px rgba(240,180,41,.62), inset 0 1px 0 rgba(255,255,255,.4); }
+  .btn-ghost{
+    background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+    border-color:rgba(255,255,255,.10);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+  }
+  .btn-ghost:hover{ box-shadow:0 10px 28px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.07); }
+  .btn-wa{ box-shadow:0 7px 0 #128a3e,0 14px 32px rgba(37,211,102,.20),inset 0 1px 0 rgba(255,255,255,.25); }
+
+  /* Give existing cards a premium layered surface without changing their markup. */
+  .rounded-2xl.border-line, .rounded-3xl.border-line,
+  .appwin, .t-card, .faq, #loop-cap{
+    box-shadow:0 18px 50px -32px rgba(0,0,0,.90), inset 0 1px 0 rgba(255,255,255,.025);
+  }
+  .appwin, .t-card{ transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s ease,box-shadow .35s ease; }
+  .appwin:hover, .t-card.active:hover{ transform:translateY(-4px); border-color:rgba(240,180,41,.28); box-shadow:0 28px 70px -38px rgba(0,0,0,.95),0 0 0 1px rgba(240,180,41,.035); }
+  .faq{ transition:background .25s ease,padding .25s ease; }
+  .faq:hover{ background:rgba(255,255,255,.018); }
+  .tab{ transition:transform .22s ease,background .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease; }
+  .tab:hover{ transform:translateX(3px); }
+  .tab[aria-selected="true"]{ box-shadow:inset 3px 0 0 #f0b429,0 10px 30px -24px rgba(240,180,41,.5); }
+  .loop-node{ transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,border-color .25s ease,box-shadow .25s ease,color .25s ease; }
+  .loop-node:hover{ transform:translate(-50%,-50%) scale(1.06); box-shadow:0 0 24px rgba(240,180,41,.12); }
+  .loop-node.active{ box-shadow:0 0 0 6px rgba(240,180,41,.11),0 0 38px rgba(240,180,41,.32); }
+  .wa-float{ box-shadow:0 5px 0 #128a3e,0 18px 38px rgba(37,211,102,.24); }
+
+  /* Scroll reveal — content remains identical; only presentation changes. */
+  .ne-reveal{ opacity:0; transform:translateY(18px); transition:opacity .65s ease,transform .65s cubic-bezier(.16,1,.3,1); }
+  .ne-reveal.ne-visible{ opacity:1; transform:none; }
+  .ne-delay-1{ transition-delay:.06s; } .ne-delay-2{ transition-delay:.12s; } .ne-delay-3{ transition-delay:.18s; }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{ scroll-behavior:auto !important; animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+    .ne-reveal{ opacity:1; transform:none; }
+  }
+
 </style>
 </head>
 <body class="bg-bg text-ink font-sans antialiased min-h-screen">
@@ -758,6 +831,7 @@
       <a href="#top" class="text-[12.5px] text-muted hover:text-gold transition">Volver arriba ↑</a>
     </div>
   </div>
+<p style="text-align:center;font-size:12px;color:#7d776d;padding:0 20px 24px">WhatsApp es una marca de Meta Platforms, Inc. Nica English Club no está afiliado ni respaldado por Meta.</p>
 </footer>
 
 <!-- ========================= WHATSAPP FLOAT ========================= -->
@@ -1051,6 +1125,121 @@
 
     window.addEventListener('load', ()=>{ show(0); start(); });
   })();
+</script>
+
+<script>
+/* Visual-only enhancement: reveal existing UI elements as they enter the viewport. */
+(function(){
+  const selectors = [
+    'main > section > div',
+    'main > section > .max-w-6xl',
+    '#loop-cap', '.appwin', '.t-card', '.faq', 'footer > div'
+  ];
+  const els=[];
+  selectors.forEach(sel=>document.querySelectorAll(sel).forEach(el=>{ if(!els.includes(el)) els.push(el); }));
+  els.forEach((el,i)=>{ el.classList.add('ne-reveal'); if(i%4===1) el.classList.add('ne-delay-1'); if(i%4===2) el.classList.add('ne-delay-2'); if(i%4===3) el.classList.add('ne-delay-3'); });
+  if(!('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('ne-visible')); return; }
+  const io=new IntersectionObserver(entries=>entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('ne-visible'); io.unobserve(entry.target); }}),{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
+
+<style>
+.wa-online{position:absolute;top:-1px;right:-1px;width:13px;height:13px;border-radius:50%;background:#22c55e;border:2px solid #110f0d;z-index:1}
+.wa-online::after{content:"";position:absolute;inset:-2px;border-radius:50%;background:#22c55e;opacity:.6;z-index:-1;animation:wa-pulse 2.2s ease-out infinite}
+.gm-note{margin:10px 0 0;text-align:center;color:#9a948a;font-size:12.5px}
+#gm[hidden]{display:none}
+#gm{position:fixed;left:0;right:0;top:0;height:100dvh;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.72)}
+.gm-panel{width:100%;max-width:440px;height:min(640px,94%);display:flex;flex-direction:column;background:#110f0d;border:1px solid #38322b;border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
+@media(min-width:640px){#gm{align-items:center;padding:20px}.gm-panel{border-radius:24px}}
+.gm-head{display:flex;align-items:center;gap:12px;padding:12px 12px 12px 16px;border-bottom:1px solid #2a2520;background:#141210}
+.gm-av{position:relative;flex:none;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#ffd966,#f0b429);color:#1a1200;font:700 18px 'Bricolage Grotesque',sans-serif;display:grid;place-items:center}
+.gm-av .wa-online{top:auto;bottom:-1px;right:-1px;border-color:#141210}.gm-av .wa-online::after{display:none}
+.gm-av{padding:2px}.gm-av img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.gm-mini{width:30px;height:30px;border-radius:50%;object-fit:cover;flex:none;align-self:flex-end}
+.gm-row{gap:8px}.gm-row .gm-b{max-width:80%}
+.gm-who{flex:1;min-width:0;line-height:1.25}.gm-who b{display:block;color:#fff;font-size:15px}.gm-who small{color:#22c55e;font-size:12px}
+.gm-hb{min-height:40px;min-width:40px;padding:0 10px;border-radius:12px;color:#c9c2b6;font-size:13.5px}.gm-hb:hover{background:#221d17;color:#fff}
+#gm-log{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:18px 16px;display:flex;flex-direction:column;gap:10px}
+.gm-row{display:flex;animation:gmin .25s ease-out}.gm-row.me{justify-content:flex-end}
+@keyframes gmin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.gm-b{background:#1a1714;border:1px solid #2f2921;color:#f4efe6;border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:14.5px;line-height:1.5;max-width:86%}
+.gm-dots{display:flex;gap:5px;padding:15px 16px}.gm-dots i{width:7px;height:7px;border-radius:50%;background:#9a948a;animation:gmd 1s infinite}
+.gm-dots i:nth-child(2){animation-delay:.15s}.gm-dots i:nth-child(3){animation-delay:.3s}
+@keyframes gmd{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.gm-gift{display:flex;flex-direction:column;gap:2px;padding:13px 18px;border-radius:16px;background:linear-gradient(135deg,#ffd966,#f0b429);color:#1a1200;box-shadow:0 0 24px rgba(240,180,41,.3)}
+.gm-gift span{font-size:12.5px;font-weight:600}.gm-gift b{font:800 20px 'Bricolage Grotesque',sans-serif;letter-spacing:-.01em}
+#gm-foot{padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #2a2520;background:#141210;min-height:76px}
+.gm-f{display:flex;gap:8px}.gm-in{flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:14px;background:#0a0908;border:1px solid #38322b;color:#fff;font-size:16px}
+.gm-in:focus{border-color:#f0b429;outline:none}
+.gm-btn,.gm-send{min-height:48px;padding:0 18px;border-radius:14px;background:#f0b429;color:#1a1200;font-weight:700;font-size:14.5px}.gm-btn{width:100%}
+.gm-skip{margin-top:8px;min-height:40px;width:100%;color:#9a948a;font-size:13.5px}.gm-skip:hover{color:#fff}
+.gm-err{margin:8px 2px 0;color:#ffb4a0;font-size:13px}.gm-err:empty{display:none}
+.gm-chips{display:flex;flex-wrap:wrap;gap:8px}
+.gm-chip{min-height:44px;padding:0 18px;border-radius:999px;background:#1a1714;border:1px solid #38322b;color:#f4efe6;font-size:14.5px;transition:border-color .15s,background .15s}
+.gm-chip:hover,.gm-chip.sel{border-color:#f0b429;background:#221d17}
+.gm-go{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;border-radius:14px;font-weight:700;font-size:15.5px;color:#04220f;text-decoration:none}
+#gm :focus-visible{outline:2px solid #f0b429;outline-offset:2px}
+</style>
+<!-- ========================= WHATSAPP MINI-CHAT ========================= -->
+<div id="gm" hidden role="dialog" aria-modal="true" aria-labelledby="gm-t">
+  <div class="gm-panel">
+    <div class="gm-head">
+      <div class="gm-av" aria-hidden="true"><img id="gm-face" src="data:image/jpeg;base64,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" alt="" width="42" height="42"><span class="wa-online"></span></div>
+      <div class="gm-who"><b id="gm-t">Gustavo Martinez</b><small>En línea</small></div>
+      <button type="button" id="gm-back" class="gm-hb" hidden>← Atrás</button>
+      <button type="button" id="gm-x" class="gm-hb" aria-label="Cerrar">✕</button>
+    </div>
+    <div id="gm-log" aria-live="polite"></div>
+    <div id="gm-foot"></div>
+  </div>
+</div>
+<script>
+(function(){
+const NUM='50583267703',reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ov=document.getElementById('gm'),log=document.getElementById('gm-log'),foot=document.getElementById('gm-foot'),back=document.getElementById('gm-back');
+let a={},i=0,intent='info',opener=null,token=0;
+const first=()=>{const n=(a.name||'').trim().split(/\s+/)[0]||'';return n.charAt(0).toUpperCase()+n.slice(1)};
+const S=[
+{id:'start',t:'start',m:()=>['¡Hola! 🤗 Soy Gustavo Martinez, de Nica English Club. Antes de pasarte a WhatsApp quiero conocerte un poquito, son 30 segundos.']},
+{id:'name',t:'text',ph:'Nombre y apellido',ac:'name',m:()=>['Para empezar, ¿cómo te llamas? 😃'],ok:v=>v.length>1,err:'Necesito tu nombre para saber cómo llamarte 🤭'},
+{id:'phone',t:'text',im:'tel',ph:'Tu número de WhatsApp',ac:'tel',m:()=>[`¡Un gusto, ${first()}! 🤝 ¿Cuál es tu número de WhatsApp?`],ok:v=>{const d=v.replace(/\D/g,'');return /^[\d\s+()-]+$/.test(v)&&d.length>=7&&d.length<=15},err:'Parece que falta algún número, ¿lo revisamos? 🤭'},
+{id:'country',t:'chips',o:['Nicaragua','Estados Unidos','Costa Rica','Otro'],m:()=>['Perfecto. ¿Desde qué país nos escribes?']},
+{id:'age',t:'chips',o:['13–17','18–24','25–34','35–44','45+'],m:()=>['¿Qué edad tienes? 🤭 Prometo no decirle a nadie.']},
+{id:'level',t:'chips',o:['Principiante','Básico','Intermedio','Avanzado'],m:()=>['Y sin pena, ¿cómo describirías tu nivel de inglés ahorita? 😜 Aquí nadie te juzga.']},
+{id:'email',t:'text',im:'email',ph:'tucorreo@email.com',ac:'email',skip:1,m:()=>['Gracias por la confianza 🥰 Última: ¿tienes correo? Es opcional, puedes saltarla 👇🏻'],ok:v=>!v||/^\S+@\S+\.\S+$/.test(v),err:'Ese correo parece incompleto. Revísalo o toca Saltar.'},
+{id:'done',t:'done',m:()=>[`¡Listo, ${first()}! 🤩 Ya tengo todo.`,'GIFT','Te paso a WhatsApp para seguir la conversación allá.']}
+];
+const face=document.getElementById('gm-face');
+const mini=()=>{const m=document.createElement('img');m.className='gm-mini';m.src=face.src;m.alt='';return m};
+const el=(c,t)=>{const d=document.createElement('div');d.className=c;if(t!=null)d.textContent=t;return d};
+const down=()=>log.scrollTo({top:log.scrollHeight,behavior:reduce?'auto':'smooth'});
+const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
+function bot(t){const r=el('gm-row');r.append(mini());if(t==='GIFT'){const g=el('gm-gift');g.innerHTML='<span>🎁 Regalo de bienvenida</span><b>Ahorra Matrícula $35</b>';r.append(g)}else r.append(el('gm-b',t));log.append(r);down()}
+function me(t){const r=el('gm-row me');r.append(el('bubble-me',t));log.append(r);down()}
+async function say(list,tk){for(const t of list){if(!reduce){const d=el('gm-row');d.append(mini());d.insertAdjacentHTML('beforeend','<div class="gm-b gm-dots"><i></i><i></i><i></i></div>');log.append(d);down();await wait(500+Math.random()*300);d.remove();if(tk!==token)return false}bot(t)}return true}
+function waUrl(){const t=`¡Hola! 👋 Soy ${a.name}${a.country==='Otro'?'':', de '+a.country}. Tengo ${a.age} años y mi nivel de inglés es ${a.level}. ${intent==='apply'?'Quiero aplicar a un cupo en Nica English Club.':'Quiero información sobre Nica English Club.'} Vengo por el regalo de bienvenida: Ahorra Matrícula $35.`+(a.email?` Mi correo es ${a.email}.`:'');return`https://wa.me/${NUM}?text=${encodeURIComponent(t)}`}
+function answer(v){a[S[i].id]=v;foot.innerHTML='';me(v||'Saltar');show(i+1)}
+function input(s){foot.innerHTML='';
+if(s.t==='start'){foot.innerHTML='<button type="button" class="gm-btn">Empezar</button><p class="gm-note">Usaremos tus datos solo para responderte por WhatsApp.</p>';const b2=foot.firstChild;b2.onclick=()=>{foot.innerHTML='';show(1)};b2.focus()}
+else if(s.t==='chips'){const w=el('gm-chips');s.o.forEach(o=>{const b=document.createElement('button');b.type='button';b.className='gm-chip'+(a[s.id]===o?' sel':'');b.textContent=o;b.onclick=()=>answer(o);w.append(b)});foot.append(w);w.firstChild.focus()}
+else if(s.t==='text'){foot.innerHTML=`<form class="gm-f" novalidate><input class="gm-in" type="${s.im||'text'}" ${s.im==='tel'?'inputmode="tel"':''} autocomplete="${s.ac}" placeholder="${s.ph}" aria-label="${s.ph}"><button class="gm-send">Continuar</button></form>${s.skip?'<button type="button" class="gm-skip">Saltar</button>':''}<p class="gm-err" role="alert"></p>`;
+const inp=foot.querySelector('input'),er=foot.querySelector('.gm-err');inp.value=a[s.id]||'';
+foot.querySelector('form').onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!s.ok(v)){er.textContent=s.err;inp.focus();return}answer(v)};
+if(s.skip)foot.querySelector('.gm-skip').onclick=()=>answer('');inp.focus()}
+else{foot.innerHTML=`<a class="gm-go btn-wa" href="${waUrl()}" target="_blank" rel="noopener">Abrir WhatsApp</a>`;const g=foot.firstChild;g.onclick=()=>setTimeout(close,300);g.focus()}}
+async function show(n){i=n;const tk=++token;back.hidden=n<2;foot.innerHTML='';if(await say(S[n].m(),tk))input(S[n])}
+function rebuild(n){token++;i=n;back.hidden=n<2;log.innerHTML='';for(let j=0;j<n;j++){S[j].m().forEach(bot);if(j>0)me(a[S[j].id]||'Saltar')}S[n].m().forEach(bot);input(S[n])}
+back.onclick=()=>{if(i>=2)rebuild(i-1)};
+function fit(){const v=window.visualViewport;if(v){ov.style.top=v.offsetTop+'px';ov.style.height=v.height+'px'}down()}
+function open(from,it){opener=from;intent=it;a={};ov.hidden=false;document.body.style.overflow='hidden';log.innerHTML='';fit();show(0)}
+function close(){token++;ov.hidden=true;document.body.style.overflow='';if(opener&&opener.focus)opener.focus()}
+document.getElementById('gm-x').onclick=close;
+ov.addEventListener('click',e=>{if(e.target===ov)close()});
+ov.addEventListener('keydown',e=>{if(e.key==='Escape'){close();return}if(e.key!=='Tab')return;const f=[...ov.querySelectorAll('button,input,a[href]')].filter(x=>!x.hidden&&x.offsetParent);if(!f.length)return;const s=f[0],l=f[f.length-1];if(e.shiftKey&&document.activeElement===s){e.preventDefault();l.focus()}else if(!e.shiftKey&&document.activeElement===l){e.preventDefault();s.focus()}});
+if(window.visualViewport){visualViewport.addEventListener('resize',fit);visualViewport.addEventListener('scroll',fit)}
+document.addEventListener('click',e=>{const l=e.target.closest&&e.target.closest('a[href*="wa.me/'+NUM+'"]');if(!l||l.closest('#gm'))return;e.preventDefault();open(l,/aplicar/i.test(decodeURIComponent(l.href))?'apply':'info')},true);
+})();
 </script>
 </body>
 </html>

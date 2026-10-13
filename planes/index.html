@@ -6,13 +6,16 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#060607">
 <title>Planes · NicaEnglishClub</title>
-<meta name="description" content="Elige tu plan en Nica English Club: 3 sesiones en vivo por semana, grupos reducidos y práctica 24/7. No estudies inglés, entrénalo.">
+<meta name="description" content="Elige tu plan en Nica English Club: 3 sesiones entre semana o 2 los fines de semana, grupos reducidos y práctica 24/7. No estudies inglés, entrénalo.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_LA">
 <meta property="og:title" content="Planes · Nica English Club">
 <meta property="og:description" content="Sesiones en vivo por Google Meet, grupos de 5 a 8 personas y corrección directa. Elige tu plan.">
-<!-- Para que el link se vea con foto en WhatsApp, Facebook e Instagram, agrega aquí:
-     <meta property="og:image" content="https://URL-ABSOLUTA-DE-UNA-IMAGEN-1200x630.jpg"> -->
+<meta property="og:url" content="https://nicaenglishclub.com/planes/">
+<meta property="og:image" content="https://nicaenglishclub.com/og-planes.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -42,7 +45,8 @@
       radial-gradient(70% 38% at 50% 0%, rgba(240,180,41,.14), transparent 70%),
       radial-gradient(40% 30% at 90% 100%, rgba(200,138,26,.07), transparent 70%);
   }
-  body.has-bar { padding-bottom:92px; }
+  body.has-bar { padding-bottom:calc(92px + env(safe-area-inset-bottom)); }
+  body.has-fab { padding-bottom:calc(84px + env(safe-area-inset-bottom)); }
   a { color:inherit; }
   :focus-visible { outline:2px solid var(--gold); outline-offset:3px; border-radius:8px; }
   img[data-logo]:not([src]) { visibility:hidden; }
@@ -134,6 +138,48 @@
   .switch button[aria-pressed="true"] { color:#1c1305; }
   .switch .tag { padding:3px 8px; border-radius:999px; font-size:11.5px; font-weight:700; background:rgba(240,180,41,.16); color:var(--gold3); transition:background .3s, color .3s; }
   .switch button[aria-pressed="true"] .tag { background:rgba(28,19,5,.16); color:#1c1305; }
+
+  /* ---------- País: rótulo + pantalla de banderas ---------- */
+  .country { margin-top:28px; text-align:center; }
+  .country-label { display:flex; flex-wrap:wrap; justify-content:center; align-items:baseline; gap:2px 12px; font-size:16px; font-weight:600; color:var(--white); }
+  .country-label b { color:var(--gold3); font-weight:700; }
+  button.tlink { border:0; background:none; cursor:pointer; font-family:var(--sans); }
+  .country .tlink { padding:6px 0; font-size:13.5px; }
+
+  .welcome { position:fixed; inset:0; z-index:100; overflow-y:auto; display:flex; justify-content:center; background:var(--bg); padding:calc(28px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom)); }
+  .welcome::before { content:""; position:fixed; inset:0; pointer-events:none; background:radial-gradient(70% 38% at 50% 0%, rgba(240,180,41,.14), transparent 70%); }
+  .welcome-in { position:relative; width:100%; max-width:920px; margin:auto 0; text-align:center; }
+  .welcome .brand { justify-content:center; margin-bottom:22px; }
+  .welcome h2 { font-family:var(--serif); font-weight:900; color:var(--white); font-size:clamp(28px, 6.4vw, 44px); line-height:1.1; letter-spacing:-.02em; }
+  .welcome .sub { margin:10px auto 0; color:var(--muted); max-width:44ch; }
+  .flags { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:28px; }
+  .flags .flag-card:last-child { grid-column:1 / -1; }
+  .flag-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; min-width:0; padding:22px 10px; border-radius:22px; border:1px solid var(--line2); cursor:pointer; color:var(--white); font:700 16px var(--sans); background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 40%), var(--card); transition:border-color .2s, background .2s, transform .15s var(--ease); }
+  .flag-card:hover { border-color:rgba(240,180,41,.6); background:linear-gradient(180deg, rgba(240,180,41,.10), rgba(240,180,41,0) 60%), var(--card); }
+  .flag-card:active { transform:scale(.98); }
+  .flag { width:72px; height:auto; display:block; border-radius:6px; box-shadow:0 8px 20px -10px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.1); }
+  .welcome-close { position:absolute; top:-6px; right:0; }
+
+  /* ---------- Horarios y condiciones ---------- */
+  .sched { margin-top:26px; text-align:center; }
+  .sched-grid { display:grid; gap:14px; margin-top:18px; text-align:left; }
+  .sched-box { padding:20px; border-radius:20px; border:1px solid var(--line); background:var(--card); }
+  .sched-box h4 { font-family:var(--serif); font-weight:700; font-size:18px; color:var(--white); line-height:1.25; }
+  .sched-box h4 small { display:block; margin-top:3px; font:500 13px var(--sans); color:var(--muted); }
+  .sched-box ul { list-style:none; display:grid; gap:9px; margin-top:14px; font-size:15px; color:#d0d0d8; font-variant-numeric:tabular-nums; }
+  .sched-box li { display:flex; align-items:center; gap:10px; }
+  .sched-box li::before { content:""; flex:none; width:7px; height:7px; border-radius:50%; background:var(--gold); }
+  .sched-note { margin-top:16px; font-size:13.5px; color:var(--muted); }
+  .sched-note b { color:var(--gold3); font-weight:600; }
+  .test-cta { display:flex; justify-content:center; margin-top:20px; }
+  .test-cta .btn { max-width:100%; height:auto; min-height:44px; padding:10px 18px; white-space:normal; line-height:1.3; }
+  .terms { display:grid; gap:12px; margin-top:26px; }
+  .term { padding:18px 20px; border-radius:20px; border:1px solid var(--line); background:var(--card); }
+  .term b { display:block; color:var(--white); font-size:16px; line-height:1.3; }
+  .term span { display:block; margin-top:5px; font-size:14.5px; color:var(--muted); }
+  .stats.one { grid-template-columns:1fr; }
+  .stats.one .stat + .stat { padding-left:0; border-left:0; }
+  .stat.txt { font-size:14px; color:#d0d0d8; }
 
   /* ---------- Planes ---------- */
   .plans { display:grid; gap:22px; margin-top:34px; }
@@ -301,7 +347,7 @@
   .bar .t b { display:block; font-size:16px; color:var(--white); font-family:var(--serif); }
   .bar .btn { height:44px; padding:0 18px; font-size:14.5px; border-radius:14px; white-space:nowrap; }
   .bar .btn-icon { width:44px; padding:0; color:var(--gold); }
-  .fab { position:fixed; right:24px; bottom:24px; z-index:50; width:56px; height:56px; border-radius:50%; display:none; place-items:center; background:rgba(15,15,17,.92); border:1px solid rgba(240,180,41,.45); color:var(--gold); box-shadow:0 18px 36px -14px rgba(0,0,0,.9); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .3s, transform .3s var(--ease), border-color .2s, background .2s; }
+  .fab { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom)); z-index:50; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; background:rgba(15,15,17,.92); border:1px solid rgba(240,180,41,.45); color:var(--gold); box-shadow:0 18px 36px -14px rgba(0,0,0,.9); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .3s, transform .3s var(--ease), border-color .2s, background .2s; }
   .fab .ic { width:27px; height:27px; }
   .fab.show { opacity:1; transform:none; pointer-events:auto; }
   .fab:hover { border-color:var(--gold); background:rgba(240,180,41,.12); }
@@ -314,7 +360,7 @@
   @media (prefers-reduced-motion:reduce) {
     html { scroll-behavior:auto; }
     .bar, .plan.enter, .card.featured::after { animation:none; }
-    .switch .thumb, .fab { transition:none; }
+    .switch .thumb, .fab, .flag-card { transition:none; }
   }
 
   /* ---------- Celulares pequeños ---------- */
@@ -355,11 +401,35 @@
     .steps b { padding-top:0; }
     .final { padding:46px 36px; }
     .bar { display:none !important; }
-    .fab { display:grid; }
-    body.has-bar { padding-bottom:0; }
+    .fab { right:24px; bottom:24px; }
+    body.has-bar, body.has-fab { padding-bottom:0; }
+    .sched-grid { grid-template-columns:1fr 1fr; }
+    .terms { grid-template-columns:1fr 1fr; }
+    .flags { grid-template-columns:repeat(5,1fr); gap:16px; }
+    .flags .flag-card:last-child { grid-column:auto; }
+    .flag-card { padding:32px 10px; }
+    .flag { width:92px; }
   }
 </style>
 <script>document.documentElement.className += ' js';</script>
+<!-- Google Analytics 4: cambia el ID por el tuyo (Administrar > Flujos de datos). Si sigue como G-XXXXXXXXXX no se carga. -->
+<script>
+(function () {
+  var GA_ID = 'G-PJ282G68GR';
+  window.NEC_GA_ID = GA_ID;
+  if (!/^G-[A-Z0-9]{6,}$/.test(GA_ID) || /X{4,}/.test(GA_ID)) return;
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== 'function') window.gtag = function () { window.dataLayer.push(arguments); };
+  if (!document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+    var g = document.createElement('script'); g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(g);
+  }
+  gtag('js', new Date());
+  var dbg = /[?&]ga_debug=1/.test(location.search);   // abre la página con ?ga_debug=1 para verla en DebugView
+  gtag('config', GA_ID, dbg ? { debug_mode: true } : {});
+})();
+</script>
 </head>
 <body>
 
@@ -395,7 +465,7 @@
       <h1 class="rise" style="--d:.12s">No solo estudies inglés. Entrénalo.</h1>
       <p class="lead rise" style="--d:.18s">Sesiones en vivo por Google Meet, grupos de 5 a 8 personas y corrección directa en cada práctica.</p>
       <div class="rise" style="--d:.24s">
-        <p class="hero-price">Desde <b>$<span data-b="duoDia">1.65</span> al día</b> por persona en Dúo</p>
+        <p class="hero-price">Desde <b id="heroPrice">$56 al mes</b> por persona en Dúo</p>
         <div class="hero-cta">
           <a class="btn btn-gold" href="#planes">Ver planes</a>
           <a class="btn btn-line" href="#" data-wa="general" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
@@ -407,7 +477,7 @@
       </div>
 
       <div class="facts rise" style="--d:.32s">
-        <div class="fact"><svg class="ic"><use href="#i-cal"/></svg><span>3 sesiones por semana<small>En vivo, por Google Meet</small></span></div>
+        <div class="fact"><svg class="ic"><use href="#i-cal"/></svg><span>3 sesiones entre semana o 2 los fines de semana<small>En vivo, por Google Meet</small></span></div>
         <div class="fact"><svg class="ic"><use href="#i-users"/></svg><span>Grupos de 5 a 8<small>Cupos limitados</small></span></div>
         <div class="fact"><svg class="ic"><use href="#i-screen"/></svg><span>Plataforma 24/7<small>Práctica interactiva</small></span></div>
         <div class="fact"><svg class="ic"><use href="#i-chat"/></svg><span>Club de Conversación<small>Comunidad</small></span></div>
@@ -433,6 +503,13 @@
 
       <div class="plans-wrap">
 
+        <div class="country">
+          <p class="country-label">
+            <span>Precios para <b data-paisname>Nicaragua</b></span>
+            <button type="button" class="tlink" id="changeCountry">Cambiar país</button>
+          </p>
+        </div>
+
         <!-- Interruptor: solo se ve en celular -->
         <div class="switch-wrap">
           <div class="switch" id="switch" data-mode="duo" role="group" aria-label="Tipo de plan">
@@ -451,12 +528,12 @@
             <p class="desc">Para quien prefiere avanzar a su propio ritmo, con grupo y seguimiento.</p>
             <div class="price"><span class="cur">$</span><span class="p-whole" data-b="soloWhole">69</span><span class="p-cents" data-b="soloCents">.99</span><span class="per">USD / mes</span></div>
             <p class="price-note">Pago mensual para una persona</p>
-            <div class="stats">
-              <div class="stat">Por sesión en vivo<b>$<span data-b="soloSes">5.83</span></b></div>
-              <div class="stat">Por día<b>$<span data-b="soloDia">2.33</span></b></div>
+            <div class="stats one">
+              <div class="stat" data-st="dia">Por día<b>$<span data-b="soloDia">2.33</span></b></div>
+              <div class="stat txt" data-st="txt" hidden>Clases en vivo cada semana, con corrección personal</div>
             </div>
             <ul class="checks">
-              <li><span><b>3 sesiones semanales</b> por Google Meet</span></li>
+              <li><span><b>3 sesiones entre semana o 2 los fines de semana</b>, por Google Meet</span></li>
               <li><span>Grupos de máx. <b>5 a 8 personas</b></span></li>
               <li><span>Seguimiento semanal personalizado</span></li>
             </ul>
@@ -468,9 +545,9 @@
                 <li><span>Material de estudio y grupo de WhatsApp</span></li>
               </ul>
             </details>
-            <button type="button" class="nudge" data-goto="duo">¿Con un amigo? Cada uno paga $<span data-b="duoPP">49.50</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="nudge" data-goto="duo">¿Con un amigo? Cada uno paga $<span data-b="duoPP">56</span><svg class="ic"><use href="#i-arrow"/></svg></button>
             <div class="cta">
-              <a class="btn btn-line btn-block" href="#" data-reserva target="_blank" rel="noopener">Aplicar a mi cupo</a>
+              <a class="btn btn-line btn-block" href="#" data-wa="solo" target="_blank" rel="noopener">Aplicar a mi cupo</a>
               <div class="tlinks"><a class="tlink" href="#" data-wa="solo" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Preguntar por WhatsApp</a></div>
             </div>
           </article>
@@ -483,14 +560,14 @@
             <p class="desc">Entra con un amigo, tu pareja o un colega. Mismos beneficios, cada quien en su nivel.</p>
             <div class="price"><span class="cur">$</span><span class="p-whole" data-b="duoPPWhole">49</span><span class="p-cents" data-b="duoPPCents">.50</span><span class="per">USD / mes por persona</span></div>
             <p class="price-note">Un solo pago de <b>$<span data-b="duoFull">99</span></b> al mes por los dos</p>
-            <div class="stats">
-              <div class="stat">Por sesión, por persona<b>$<span data-b="duoSes">4.13</span></b></div>
-              <div class="stat">Por día, por persona<b>$<span data-b="duoDia">1.65</span></b></div>
+            <div class="stats one">
+              <div class="stat" data-st="dia">Por día, por persona<b>$<span data-b="duoDia">1.65</span></b></div>
+              <div class="stat txt" data-st="txt" hidden>Clases en vivo cada semana, con corrección personal</div>
             </div>
             <p class="save"><strong><svg class="ic"><use href="#i-check"/></svg>Mejor precio por persona</strong>Cada uno ahorra <b>$<span data-b="duoAhorroPP">20.49</span></b> al mes frente a Solo. Entre los dos, <b>$<span data-b="duoAhorroAnio">492</span></b> menos al año.</p>
             <ul class="checks">
               <li><span><b>Dos accesos</b> individuales e independientes</span></li>
-              <li><span><b>3 sesiones semanales</b> por persona, por Google Meet</span></li>
+              <li><span><b>3 sesiones entre semana o 2 los fines de semana</b>, por persona, por Google Meet</span></li>
               <li><span>Cada uno con su propio test de nivelación</span></li>
             </ul>
             <details class="more">
@@ -502,7 +579,7 @@
               </ul>
             </details>
             <div class="cta">
-              <a class="btn btn-gold btn-block" href="#" data-reserva target="_blank" rel="noopener">Aplicar como dúo</a>
+              <a class="btn btn-gold btn-block" href="#" data-wa="duo" target="_blank" rel="noopener">Aplicar como dúo</a>
               <div class="tlinks">
                 <a class="tlink" href="#" data-share target="_blank" rel="noopener"><svg class="ic"><use href="#i-userplus"/></svg>Invitar a un amigo</a>
                 <a class="tlink" href="#" data-wa="duo" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Preguntar por WhatsApp</a>
@@ -523,14 +600,14 @@
               </div>
             </div>
             <p class="desc">Sesiones directas con tu coach para acelerar tu desarrollo personal o profesional.</p>
-            <p class="only-us">Disponible por ahora solo para estudiantes en Estados Unidos.</p>
+            <p class="only-us">Cupos limitados</p>
           </div>
           <div class="vip-buy">
             <div>
               <p class="vprice">$<span data-b="vipWhole">199</span><span data-b="vipCents">.99</span> <small>USD / mes</small></p>
-              <p class="vip-day">Equivale a $<span data-b="vipDia">6.67</span> por día</p>
+              <p class="vip-day" id="vipDay" hidden>Equivale a $<span data-b="vipDia">6.67</span> por día</p>
             </div>
-            <a class="btn btn-line btn-block" href="#" data-reserva target="_blank" rel="noopener">Solicitar admisión VIP</a>
+            <a class="btn btn-line btn-block" href="#" data-wa="vip" target="_blank" rel="noopener">Solicitar admisión VIP</a>
           </div>
           <details class="more">
             <summary><span class="lc">Ver qué incluye</span><span class="lo">Ver menos</span></summary>
@@ -544,7 +621,20 @@
           </details>
         </article>
 
-        <p class="fine">Precios en USD. Pueden variar según tu país; te confirmamos el precio exacto al reservar.</p>
+        <div class="sched">
+          <button type="button" class="btn btn-line btn-sm" id="schedBtn" aria-expanded="false" aria-controls="sched"><svg class="ic"><use href="#i-cal"/></svg><span>Ver horarios</span></button>
+          <div id="sched" hidden>
+            <div class="sched-grid">
+              <div class="sched-box"><h4>Entre semana<small>Lunes a miércoles</small></h4><ul id="schedWeek"></ul></div>
+              <div class="sched-box"><h4>Fin de semana<small>Sábado y domingo, para quienes trabajan</small></h4><ul id="schedWeekend"></ul></div>
+            </div>
+            <p class="sched-note">Horarios en <b id="schedTz">hora de Nicaragua</b>.<br>Tu grupo se asigna según tu nivel y disponibilidad. Te confirmamos tu horario por WhatsApp.</p>
+          </div>
+        </div>
+
+        <div class="test-cta"><a class="btn btn-line btn-sm" href="#" data-wa="test" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Hacer mi test de nivel gratis por WhatsApp</a></div>
+
+        <p class="fine">Precio en USD según tu país. Te confirmamos el método de pago al reservar.</p>
       </div>
     </div>
   </section>
@@ -586,10 +676,22 @@
     <div class="wrap">
       <h2>Así empiezas</h2>
       <ol class="steps">
-        <li><div><b>Aplica a tu cupo</b><span>Elige tu plan y completa el formulario.</span></div></li>
+        <li><div><b>Aplica a tu cupo</b><span>Elige tu plan y escríbenos por WhatsApp para aplicar.</span></div></li>
         <li><div><b>Haz tu test de nivelación</b><span>Te asignamos al grupo de tu nivel. Si son dos, cada quien hace el suyo.</span></div></li>
-        <li><div><b>Empieza a entrenar</b><span>Tres sesiones en vivo por semana, más práctica en la plataforma cuando quieras.</span></div></li>
+        <li><div><b>Empieza a entrenar</b><span>Sesiones en vivo (3 entre semana o 2 los fines de semana), más práctica en la plataforma cuando quieras.</span></div></li>
       </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="condiciones">
+    <div class="wrap">
+      <h2>Condiciones claras</h2>
+      <div class="terms">
+        <div class="term"><b>Pago al inicio de cada mes</b><span>Pagas tu mensualidad al comenzar cada mes.</span></div>
+        <div class="term"><b>No reembolsable</b><span>El pago no se reembolsa, pero el cupo se puede transferir a otra persona.</span></div>
+        <div class="term"><b>Grupos de 5 a 8 personas</b><span>Para que tengas práctica y corrección directa.</span></div>
+        <div class="term"><b>Formas de pago</b><span data-pay>Transferencia o depósito en Banpro o LAFISE.</span></div>
+      </div>
     </div>
   </section>
 
@@ -611,15 +713,19 @@
         </details>
         <details>
           <summary>¿Qué pasa si mi compañero se retira?</summary>
-          <p>Puedes invitar a otra persona para el siguiente ciclo y mantener el Plan Dúo. Si sigues solo, tu plan pasa al precio de Solo Élite (<b>$<span data-b="soloFull">69.99</span></b>).</p>
+          <p>Puedes invitar a otra persona para el siguiente ciclo y mantener el Plan Dúo. Si sigues solo, tu plan pasa al precio de Solo Élite de tu país (<b>$<span data-b="soloFull">70</span></b>).</p>
         </details>
         <details>
           <summary>¿Los precios son iguales en todos los países?</summary>
-          <p>Los precios están en USD y pueden variar según el país. Te confirmamos el precio exacto al reservar.</p>
+          <p>No. Ajustamos el precio según tu país; elígelo arriba.</p>
+        </details>
+        <details>
+          <summary>¿Cuál horario elijo?</summary>
+          <p>Entre semana o fin de semana, según tu disponibilidad. El fin de semana es para quienes trabajan.</p>
         </details>
         <details>
           <summary>¿Quién puede tomar el plan Uno a Uno VIP?</summary>
-          <p>Por ahora el plan VIP está disponible solo para estudiantes en Estados Unidos.</p>
+          <p>Cualquier persona, desde cualquier país. Los cupos son limitados, así que aplica con tiempo.</p>
         </details>
       </div>
 
@@ -627,9 +733,10 @@
         <h2>¿Listo para entrenar tu inglés?</h2>
         <p>Aplica hoy y empieza con tu test de nivelación.</p>
         <div class="actions">
-          <a class="btn btn-gold" href="#" data-reserva target="_blank" rel="noopener">Aplicar a mi cupo</a>
+          <a class="btn btn-gold" href="#" data-wa="general" target="_blank" rel="noopener">Aplicar a mi cupo</a>
           <a class="btn btn-line" href="#" data-wa="general" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
         </div>
+        <div class="test-cta"><a class="btn btn-line btn-sm" href="#" data-wa="test" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Hacer mi test de nivel gratis por WhatsApp</a></div>
         <p class="small">Sin compromiso hasta confirmar tu cupo.</p>
       </div>
     </div>
@@ -649,6 +756,23 @@
   <p>&copy; 2026 NicaEnglishClub. Todos los derechos reservados.</p>
 </footer>
 
+<!-- Pantalla de bienvenida: solo si no se detecta el país -->
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welTitle" hidden>
+  <div class="welcome-in">
+    <button type="button" class="tlink welcome-close" id="welClose" hidden>Cerrar</button>
+    <div class="brand"><img class="brand-logo" data-logo alt="" width="34" height="36"><span>Nica<em>English</em>Club</span></div>
+    <h2 id="welTitle">¿Desde qué país te conectas?</h2>
+    <p class="sub">Así te mostramos el precio y los horarios que te corresponden.</p>
+    <div class="flags">
+        <button type="button" class="flag-card" data-pais="nicaragua"><svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#0067c6"/><rect y="6.67" width="30" height="6.67" fill="#fff"/><polygon points="15,7.9 18,12.1 12,12.1" fill="#e8c24a" stroke="#2a8f5a" stroke-width=".5" stroke-linejoin="round"/></svg><span>Nicaragua</span></button>
+        <button type="button" class="flag-card" data-pais="costarica"><svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#002b7f"/><rect y="3.33" width="30" height="13.34" fill="#fff"/><rect y="6.67" width="30" height="6.66" fill="#ce1126"/></svg><span>Costa Rica</span></button>
+        <button type="button" class="flag-card" data-pais="colombia"><svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="10" fill="#fcd116"/><rect y="10" width="30" height="5" fill="#003893"/><rect y="15" width="30" height="5" fill="#ce1126"/></svg><span>Colombia</span></button>
+        <button type="button" class="flag-card" data-pais="espana"><svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#aa151b"/><rect y="5" width="30" height="10" fill="#f1bf00"/></svg><span>España</span></button>
+        <button type="button" class="flag-card" data-pais="otros"><svg class="flag" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#b22234"/><rect y="1.538" width="30" height="1.539" fill="#fff"/><rect y="4.615" width="30" height="1.539" fill="#fff"/><rect y="7.692" width="30" height="1.539" fill="#fff"/><rect y="10.769" width="30" height="1.539" fill="#fff"/><rect y="13.846" width="30" height="1.539" fill="#fff"/><rect y="16.923" width="30" height="1.539" fill="#fff"/><rect width="12.5" height="10.77" fill="#3c3b6e"/><circle cx="2" cy="2" r=".55" fill="#fff"/><circle cx="5" cy="2" r=".55" fill="#fff"/><circle cx="8" cy="2" r=".55" fill="#fff"/><circle cx="11" cy="2" r=".55" fill="#fff"/><circle cx="3.5" cy="4" r=".55" fill="#fff"/><circle cx="6.5" cy="4" r=".55" fill="#fff"/><circle cx="9.5" cy="4" r=".55" fill="#fff"/><circle cx="2" cy="6" r=".55" fill="#fff"/><circle cx="5" cy="6" r=".55" fill="#fff"/><circle cx="8" cy="6" r=".55" fill="#fff"/><circle cx="11" cy="6" r=".55" fill="#fff"/><circle cx="3.5" cy="8" r=".55" fill="#fff"/><circle cx="6.5" cy="8" r=".55" fill="#fff"/><circle cx="9.5" cy="8" r=".55" fill="#fff"/></svg><span>EE. UU. y otros</span></button>
+    </div>
+  </div>
+</div>
+
 <!-- Barra fija en celular -->
 <div class="bar" id="bar" hidden>
   <div class="t">Plan Dúo<b>$<span data-b="duoPP">49.50</span> c/u al mes</b></div>
@@ -664,15 +788,25 @@
    CONFIGURACIÓN: aquí cambias todo sin tocar el resto del código
    ===================================================================== */
 var CONFIG = {
-  reservaUrl: 'https://sites.google.com/view/nicaenglishclub/reservacion',
+  reservaUrl: 'https://sites.google.com/view/nicaenglishclub/reservacion',   // ya no lo usan los botones de aplicar (abren WhatsApp)
   sitioUrl:   'https://www.nicaenglishclub.com',
   whatsapp:   '50583267703',
   resenasUrl: 'https://share.google/8GtJ3FiGBh43p3lVI',   // '' para ocultar el botón de reseñas
-  paginaUrl:  '',            // link de esta página para "Invitar a un amigo" (vacío = la dirección actual)
+  paginaUrl:  'https://nicaenglishclub.com/planes/',   // base del link de "Invitar a un amigo"
 
   // Precios reales en USD. Todo lo demás (por sesión, por día, ahorros) se calcula solo.
-  precios: { solo: 69.99, duo: 99, vip: 199.99 },
-  sesionesPorMes: 12,        // 3 por semana x 4 semanas
+  // solo = precio individual; duo = total mensual de los dos (por persona es la mitad). USD por mes.
+  // modo 'frase' = muestra "Clases en vivo cada semana, con corrección personal"; modo 'dia' = muestra solo "Por día".
+  // tz = zona para convertir horarios (vacío = zona del dispositivo). Clave = valor de ?pais=
+  paises: {
+    nicaragua: { nombre: 'Nicaragua',       corto: 'Nicaragua',        solo: 70, duo: 112, modo: 'frase', tz: 'America/Costa_Rica', tzLabel: 'hora de Nicaragua',        pago: 'Transferencia o depósito en Banpro o LAFISE.' },
+    costarica: { nombre: 'Costa Rica',      corto: 'Costa Rica',       solo: 80, duo: 128, modo: 'frase', tz: 'America/Costa_Rica', tzLabel: 'hora de Costa Rica',       pago: 'Te indicamos el método de pago al reservar.' },
+    colombia:  { nombre: 'Colombia',        corto: 'Colombia',         solo: 60, duo: 96,  modo: 'frase', tz: 'America/Bogota',     tzLabel: 'hora de Colombia',         pago: 'Te indicamos el método de pago al reservar.' },
+    espana:    { nombre: 'España',          corto: 'España',           solo: 90, duo: 144, modo: 'dia',   tz: 'Europe/Madrid',      tzLabel: 'hora de España',           pago: 'Te indicamos el método de pago al reservar.' },
+    otros:     { nombre: 'EE. UU. y otros', corto: 'EE. UU. u otro país', solo: 90, duo: 144, modo: 'dia', tz: '',                 tzLabel: 'hora de tu dispositivo',   pago: 'Te indicamos el método de pago al reservar.' }
+  },
+  paisDefault: 'nicaragua',  // se usa detrás de la pantalla de banderas
+  vip: 250,                  // igual en todos los países
 
   // Texto de la etiqueta sobre el título ('' para ocultarla)
   estado: 'Admisión abierta, cupos limitados',
@@ -685,38 +819,86 @@ var CONFIG = {
 };
 
 (function () {
-  var C = CONFIG, P = C.precios, N = C.sesionesPorMes;
+  var C = CONFIG, N = C.sesionesPorMes, P = {}, duoPP = 0, v = {}, paisKey = '', ref = '';
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var money = function (n) { return n.toFixed(2); };
+  var money = function (n) { return n % 1 ? n.toFixed(2) : String(n); };
   var whole = function (n) { return String(Math.floor(n)); };
   var cents = function (n) { var c = Math.round((n - Math.floor(n)) * 100); return c ? '.' + (c < 10 ? '0' + c : c) : ''; };
 
-  /* ---------- Precios calculados ---------- */
-  var duoPP = P.duo / 2;
-  var ahorro = 2 * P.solo - P.duo;
-  var ahorroPP = P.solo - duoPP;
-  var v = {
-    soloFull: money(P.solo), soloFull2: money(P.solo),
-    soloWhole: whole(P.solo), soloCents: cents(P.solo),
-    soloSes: money(P.solo / N), soloDia: money(P.solo / 30),
-    duoFull: P.duo % 1 ? money(P.duo) : String(P.duo),
-    duoPP: money(duoPP), duoPPWhole: whole(duoPP), duoPPCents: cents(duoPP),
-    duoSes: money(duoPP / N), duoDia: money(duoPP / 30),
-    duoAhorro: money(ahorro), duoAhorroPP: money(ahorroPP),
-    duoAhorroAnio: String(Math.round(ahorro * 12)),
-    duoPct: String(Math.round(ahorroPP / P.solo * 100)),
-    vipWhole: whole(P.vip), vipCents: cents(P.vip), vipDia: money(P.vip / 30)
-  };
-  if (C.tutorPrivadoHora) {
-    v.tutorHora = String(C.tutorPrivadoHora);
-    v.tutorMes = String(Math.round(C.tutorPrivadoHora * N));
+  /* ---------- Precios por país ---------- */
+  function calc(pk) {
+    var p = C.paises[pk];
+    P = { solo: p.solo, duo: p.duo, vip: C.vip };
+    duoPP = P.duo / 2;
+    var ahorro = 2 * P.solo - P.duo, ahorroPP = P.solo - duoPP;
+    v = {
+      soloFull: money(P.solo), soloFull2: money(P.solo),
+      soloWhole: whole(P.solo), soloCents: cents(P.solo),
+      soloSes: money(P.solo / N), soloDia: money(P.solo / 30),
+      duoFull: money(P.duo),
+      duoPP: money(duoPP), duoPPWhole: whole(duoPP), duoPPCents: cents(duoPP),
+      duoSes: money(duoPP / N), duoDia: money(duoPP / 30),
+      duoAhorro: money(ahorro), duoAhorroPP: money(ahorroPP),
+      duoAhorroAnio: String(Math.round(ahorro * 12)),
+      duoPct: String(Math.round(ahorroPP / P.solo * 100)),
+      vipWhole: whole(P.vip), vipCents: cents(P.vip), vipDia: money(P.vip / 30)
+    };
+    if (C.tutorPrivadoHora) {
+      v.tutorHora = String(C.tutorPrivadoHora);
+      v.tutorMes = String(Math.round(C.tutorPrivadoHora * N));
+    }
+    $$('[data-b]').forEach(function (el) {
+      var k = el.getAttribute('data-b');
+      if (v[k] !== undefined) el.textContent = v[k];
+    });
+    $$('[data-paisname]').forEach(function (el) { el.textContent = p.nombre; });
+    $$('[data-pay]').forEach(function (el) { el.textContent = p.pago; });
+    $$('[data-st="dia"]').forEach(function (el) { el.hidden = p.modo !== 'dia'; });
+    $$('[data-st="txt"]').forEach(function (el) { el.hidden = p.modo !== 'frase'; });
+    var vd = $('#vipDay'); if (vd) vd.hidden = p.modo !== 'dia';
+    var hp = $('#heroPrice');
+    if (hp) hp.textContent = p.modo === 'dia' ? '$' + v.duoDia + ' al día' : '$' + v.duoPP + ' al mes';
   }
-  $$('[data-b]').forEach(function (el) {
-    var k = el.getAttribute('data-b');
-    if (v[k] !== undefined) el.textContent = v[k];
-  });
+  var norm = function (t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, ''); };
+  function detectCountry() {
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    if (!tz) return '';
+    if (tz === 'America/Managua') return 'nicaragua';
+    if (tz === 'America/Costa_Rica') return 'costarica';
+    if (tz === 'America/Bogota') return 'colombia';
+    if (tz === 'Europe/Madrid' || tz === 'Atlantic/Canary') return 'espana';
+    if (/^America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Detroit|Boise|Adak|Juneau|Sitka|Nome|Yakutat|Menominee|Metlakatla)$/.test(tz) ||
+        /^America\/(Indiana|Kentucky|North_Dakota)\//.test(tz) || tz === 'Pacific/Honolulu' || /^US\//.test(tz)) return 'otros';
+    return '';
+  }
+  // Prioridad: ?pais= > elección guardada > zona horaria > pantalla de banderas
+  function initialCountry() {
+    var q = '';
+    try { q = norm(new URLSearchParams(location.search).get('pais')); } catch (e) {}
+    if (q && C.paises[q]) return { k: q, method: 'url' };
+    try { var st = localStorage.getItem('nec_pais'); if (st && C.paises[st]) return { k: st, method: 'guardado' }; } catch (e) {}
+    var d = detectCountry();
+    return d && C.paises[d] ? { k: d, method: 'zona_horaria' } : '';
+  }
+  // ?ref=nombre
+  try {
+    var r = new URLSearchParams(location.search).get('ref');
+    if (r) {
+      ref = r.replace(/[^A-Za-z0-9 _.\-áéíóúüñÁÉÍÓÚÜÑ]/g, '').trim().slice(0, 40);
+      if (ref) { try { localStorage.setItem('nec_ref', ref); } catch (e) {} }
+    }
+  } catch (e) {}
+  if (!ref) { try { ref = localStorage.getItem('nec_ref') || ''; } catch (e) {} }
+
+  var found = initialCountry();
+  var needWelcome = !found;
+  var firstMethod = found ? found.method : '';
+  found = found ? found.k : '';
+  paisKey = found || C.paisDefault;
+  calc(paisKey);
 
   /* ---------- Logo: una sola copia (la del hero) se reutiliza ---------- */
   var heroLogo = $('.hero-logo');
@@ -727,23 +909,37 @@ var CONFIG = {
 
   /* ---------- Enlaces ---------- */
   var sitio = C.sitioUrl.replace(/\/+$/, '');
-  $$('[data-reserva]').forEach(function (a) { a.href = C.reservaUrl; });
   $$('[data-sitio]').forEach(function (a) {
     var h = a.getAttribute('data-sitio');
     a.href = h ? sitio + '/' + h : sitio;
   });
-  var msgs = {
-    general: 'Hola, quiero información sobre Nica English Club',
-    solo: 'Hola, quiero aplicar al plan Solo Élite de Nica English Club',
-    duo: 'Hola, quiero aplicar al plan Dúo Dinámico de Nica English Club'
-  };
-  $$('[data-wa]').forEach(function (a) {
-    var m = msgs[a.getAttribute('data-wa')] || msgs.general;
-    a.href = 'https://wa.me/' + C.whatsapp + '?text=' + encodeURIComponent(m);
-  });
-  var pageUrl = C.paginaUrl || location.href.split('#')[0];
-  var shareMsg = 'Mira este plan de Nica English Club: entramos juntos por $' + v.duoPP + ' al mes cada uno. ' + pageUrl;
-  $$('[data-share]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(shareMsg); });
+  /* ---------- Medición GA4 (sin datos personales) ---------- */
+  function track(name, extra) {
+    try {
+      if (typeof window.gtag !== 'function' || !/^G-[A-Z0-9]{6,}$/.test(window.NEC_GA_ID || '') || /X{4,}/.test(window.NEC_GA_ID)) return;
+      var p = { country: paisKey === 'otros' ? 'otros' : C.paises[paisKey].nombre };
+      if (extra) for (var k in extra) p[k] = extra[k];
+      if (ref) p.ref = ref;
+      window.gtag('event', name, p);
+    } catch (e) {}
+  }
+  var planName = { solo: 'Solo Élite', duo: 'Dúo', vip: 'VIP' };
+  function waUrl(kind) {
+    var pais = C.paises[paisKey].corto, m;
+    if (kind === 'test') m = 'Hola, soy de ' + pais + '. Quiero hacer mi test de nivel.';
+    else {
+      m = 'Hola, soy de ' + pais + ' y quiero información ' + (planName[kind] ? 'del plan ' + planName[kind] : 'de Nica English Club') + '.';
+      if (ref) m += ' Me refirió: ' + ref;
+    }
+    return 'https://wa.me/' + C.whatsapp + '?text=' + encodeURIComponent(m);
+  }
+  function setLinks() {
+    $$('[data-wa]').forEach(function (a) { a.href = waUrl(a.getAttribute('data-wa')); });
+    var link = C.paginaUrl + '?pais=' + paisKey;
+    var shareMsg = 'Mira este plan de Nica English Club: entramos juntos por $' + v.duoPP + ' al mes cada uno. ' + link;
+    $$('[data-share]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(shareMsg); });
+  }
+  setLinks();
   var rs = $('[data-resenas]');
   if (rs) { if (C.resenasUrl) rs.href = C.resenasUrl; else rs.hidden = true; }
 
@@ -774,6 +970,73 @@ var CONFIG = {
   var grid = $('#plansGrid'), sw = $('#switch');
   var soloCard = $('.plan[data-plan="solo"]'), duoCard = $('.plan[data-plan="duo"]');
   var tw = 0;
+
+  /* ---------- Horarios: base hora de Nicaragua (UTC-6), convertidos con Intl ---------- */
+  var BASE = [[8, 15], [10, 15], [13, 15], [15, 15], [18, 15]];
+  function tp(d, tz) {
+    var o = { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' };
+    if (tz) o.timeZone = tz;
+    var h = 0, m = 0;
+    new Intl.DateTimeFormat('en-US', o).formatToParts(d).forEach(function (p) {
+      if (p.type === 'hour') h = parseInt(p.value, 10) % 24;
+      if (p.type === 'minute') m = parseInt(p.value, 10);
+    });
+    return { h: h, m: m };
+  }
+  var f12 = function (t) { return ((t.h % 12) || 12) + ':' + (t.m < 10 ? '0' + t.m : t.m); };
+  var ap = function (t) { return t.h < 12 ? 'a.m.' : 'p.m.'; };
+  function range(a, b) { return ap(a) === ap(b) ? f12(a) + '–' + f12(b) + ' ' + ap(b) : f12(a) + ' ' + ap(a) + '–' + f12(b) + ' ' + ap(b); }
+  function renderSched() {
+    var p = C.paises[paisKey], now = new Date(), list = [];
+    BASE.forEach(function (b) {
+      try {
+        var s0 = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), b[0] + 6, b[1]));
+        var e0 = new Date(s0.getTime() + 90 * 60000);
+        var a = tp(s0, p.tz), z = tp(e0, p.tz);
+        if (paisKey === 'espana' && a.h < 7) return;   // oculta madrugada (12:00 a.m. a 7:00 a.m.)
+        list.push(range(a, z));
+      } catch (e) {}
+    });
+    ['schedWeek', 'schedWeekend'].forEach(function (id) {
+      var ul = document.getElementById(id); ul.textContent = '';
+      list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+    });
+    $('#schedTz').textContent = p.tzLabel;
+  }
+  var schedBtn = $('#schedBtn'), schedBox = $('#sched');
+  schedBtn.addEventListener('click', function () {
+    var open = schedBox.hidden;
+    schedBox.hidden = !open;
+    schedBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    $('span', schedBtn).textContent = open ? 'Ocultar horarios' : 'Ver horarios';
+    if (open) track('horarios_open');
+  });
+
+  /* ---------- País: pantalla de banderas + cambio ---------- */
+  var wel = $('#welcome'), welClose = $('#welClose'), welCloseable = false;
+  function openWelcome(closable) {
+    welCloseable = closable; welClose.hidden = !closable;
+    wel.hidden = false; wel.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    var f = $('.flag-card', wel); if (f) setTimeout(function () { f.focus(); }, 0);
+  }
+  function closeWelcome() { wel.hidden = true; document.body.style.overflow = ''; }
+  function setCountry(k, persist) {
+    if (!C.paises[k]) return;
+    paisKey = k; calc(k); setLinks(); renderSched(); settle();
+    if (persist) track('country_selected', { method: 'banderas' });
+    if (persist) {
+      try { localStorage.setItem('nec_pais', k); } catch (e) {}
+      try { var u = new URL(location.href); u.searchParams.set('pais', k); history.replaceState(null, '', u.toString()); } catch (e) {}
+    }
+    if (!RM) [soloCard, duoCard].forEach(function (cd) { cd.classList.remove('enter'); void cd.offsetWidth; cd.classList.add('enter'); });
+  }
+  $$('.flag-card').forEach(function (b) {
+    b.addEventListener('click', function () { setCountry(b.getAttribute('data-pais'), true); closeWelcome(); });
+  });
+  welClose.addEventListener('click', closeWelcome);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !wel.hidden && welCloseable) closeWelcome(); });
+  $('#changeCountry').addEventListener('click', function () { openWelcome(true); });
 
   function paint(card, val, fin) {
     var t = Math.round(val * 100), w = Math.floor(t / 100), c = t % 100;
@@ -822,6 +1085,9 @@ var CONFIG = {
     seen.observe(grid);
   }
 
+  renderSched(); settle();
+  if (needWelcome) openWelcome(false); else track('country_selected', { method: firstMethod });
+
   /* ---------- Header con fondo al hacer scroll ---------- */
   var hd = $('#top');
   var onScroll = function () { hd.classList.toggle('scrolled', window.scrollY > 8); };
@@ -838,16 +1104,31 @@ var CONFIG = {
       var show = C.barraFija && heroOut && !plansIn && !finalIn;
       bar.hidden = !show;
       document.body.classList.toggle('has-bar', show);
-      fab.classList.toggle('show', heroOut);
-      if (past) { barCta.textContent = 'Aplicar a mi cupo'; barCta.href = C.reservaUrl; barCta.target = '_blank'; barCta.rel = 'noopener'; }
+      var desk = window.matchMedia && window.matchMedia('(min-width:860px)').matches;
+      fab.classList.toggle('show', heroOut && (desk || !show));
+      document.body.classList.toggle('has-fab', heroOut && !desk && !show);
+      if (past) { barCta.textContent = 'Aplicar a mi cupo'; barCta.href = waUrl('general'); barCta.target = '_blank'; barCta.rel = 'noopener'; }
       else { barCta.textContent = 'Ver planes'; barCta.href = '#planes'; barCta.removeAttribute('target'); }
     };
+    window.addEventListener('resize', update);
     new IntersectionObserver(function (e) { heroOut = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; update(); }, { threshold: 0 }).observe($('#hero'));
     new IntersectionObserver(function (e) { plansIn = e[0].isIntersecting; update(); }, { threshold: 0.15 }).observe(planes);
     new IntersectionObserver(function (e) { finalIn = e[0].isIntersecting; update(); }, { threshold: 0.2 }).observe($('.final'));
   } else {
     fab.classList.add('show');
   }
+  /* ---------- Eventos de clic ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var kind = a.getAttribute('data-wa');
+    if (a.hasAttribute('data-share')) return track('invite_click');
+    if (kind === 'test') return track('test_click');
+    if (a.id === 'barCta' && /wa\.me/.test(a.href)) return track('apply_click', { plan: 'general' });
+    if (!kind) return;
+    var isApply = /^Aplicar|^Solicitar/.test((a.textContent || '').trim());
+    track(isApply ? 'apply_click' : 'whatsapp_click', { plan: kind });
+  });
 })();
 </script>
 </body>

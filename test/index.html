@@ -63,9 +63,9 @@ main{position:relative;z-index:1}
 #cf{position:fixed;inset:0;pointer-events:none;z-index:5}
 header,.brand{display:flex;align-items:center;gap:12px}.brand img{height:40px;width:auto}.brand span{color:var(--mu);font-size:.9rem;border-left:1px solid var(--line);padding-left:12px}
 .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 4px 30px}
-.shots figure{margin:0;position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#3a2e0a,#14110b 70%);transition:transform .3s;animation:up .6s both}
-.shots figure:nth-child(1){transform:rotate(-3deg)}.shots figure:nth-child(2){transform:translateY(-12px);animation-delay:.1s}.shots figure:nth-child(3){transform:rotate(3deg);animation-delay:.2s}
-.shots figure:hover{transform:none}.ov{position:absolute;inset:0;z-index:2;border-radius:16px}.ov:focus-visible{outline:2px solid var(--ac);outline-offset:-2px}
+.shots figure{margin:0;position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#3a2e0a,#14110b 70%);transition:transform .3s,rotate .3s,translate .3s;animation:up .6s both}
+.shots figure:nth-child(1){rotate:-3deg}.shots figure:nth-child(2){translate:0 -12px;animation-delay:.1s}.shots figure:nth-child(3){rotate:3deg;animation-delay:.2s}
+.shots figure:hover{rotate:none;translate:none}.ov{position:absolute;inset:0;z-index:2;border-radius:16px}.ov:focus-visible{outline:2px solid var(--ac);outline-offset:-2px}
 .shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .shots figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 10px;font:700 .85rem "Bricolage Grotesque",Georgia,serif;background:linear-gradient(transparent,rgba(10,9,8,.9))}
 .how{list-style:none;counter-reset:s;padding:0;margin:0 0 26px;display:grid;gap:10px}.how li{counter-increment:s;display:flex;gap:12px;align-items:center;color:var(--mu)}.how li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#1a1300;font-weight:800;display:grid;place-items:center}.how b{color:var(--tx)}

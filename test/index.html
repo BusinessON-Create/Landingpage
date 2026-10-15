@@ -69,6 +69,8 @@ header,.brand{display:flex;align-items:center;gap:12px}.brand img{height:40px;wi
 .shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .shots figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 10px;font:700 .85rem "Bricolage Grotesque",Georgia,serif;background:linear-gradient(transparent,rgba(10,9,8,.9))}
 .how{list-style:none;counter-reset:s;padding:0;margin:0 0 26px;display:grid;gap:10px}.how li{counter-increment:s;display:flex;gap:12px;align-items:center;color:var(--mu)}.how li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#1a1300;font-weight:800;display:grid;place-items:center}.how b{color:var(--tx)}
+.qn{display:block;color:var(--mu);font-size:.8rem;margin-bottom:4px}.sp{height:26px}.hint{color:var(--mu);font-size:.9rem;margin:-8px 0 20px}.player.stk{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:3;box-shadow:0 10px 24px rgba(0,0,0,.6)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
 .player{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:20px}
 .play{flex:none;width:58px;height:58px;border-radius:50%;border:0;background:var(--ac);color:#1a1300;font-size:1.3rem;cursor:pointer;transition:transform .15s}.play:active{transform:scale(.93)}.play:disabled{opacity:.4;cursor:default}
 .pi{flex:1}.eq{display:flex;gap:4px;height:22px;align-items:flex-end;margin-bottom:8px}.eq i{width:5px;height:6px;background:var(--ac);border-radius:3px}
@@ -198,7 +200,7 @@ function intro(){
  <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo.</label></div>
  <div class="err" id="e" role="alert"></div>
  <button class="btn" id="go">Empezar el test</button></div>
- <p style="margin-top:18px;font-size:.9rem">Usa audífonos y responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, elige la que creas más probable.</p>`;
+ <p style="margin-top:18px;font-size:.9rem">Usa audífonos: en las preguntas de escucha, cada audio se puede reproducir solo 3 veces. Responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, elige la que creas más probable.</p>`;
  document.getElementById('go').onclick = start;
 }
 function start(){
@@ -217,20 +219,21 @@ function start(){
  ask();
 }
 function ask(){
- const n = S.i, q = Q[S.order[n]], opts = shuffle(q[3].map((t,k)=>({t,ok:k===0})));
+ const n=S.i, f=Q[S.order[n]][5], grp=[S.order[n]];
+ if(f&&Q[S.order[n+1]]&&Q[S.order[n+1]][5]===f)grp.push(S.order[n+1]); // las preguntas de un mismo audio van juntas en una pantalla
+ const m=grp.length, tot=S.order.length;
  if(S.au){S.au.pause();S.au=null}
- S.cur = opts; S.pick = null;
- app.innerHTML = head+`<div class="in"><div class="bar"><i style="width:${n/S.order.length*100}%"></i></div>
- <div class="meta"><span>Pregunta ${n+1} de ${S.order.length}</span><span>Sin retroceso</span></div>
- ${q[4]?`<p class="read">${esc(q[4])}</p>`:''}
- ${q[5]?'<div class="player" id="pl"><button class="play" id="pb" aria-label="Reproducir audio">▶</button><div class="pi"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><div class="bar"><i id="pg" style="width:0"></i></div><small id="pn"></small></div></div>':''}
- <div class="q">${esc(q[2])}</div>
- <div id="os">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o.t)}</button>`).join('')}</div>
- <button class="btn" id="nx" disabled>${n===S.order.length-1?'Ver mi resultado':'Continuar'}</button></div>`;
- requestAnimationFrame(()=>{const b=document.querySelector('.bar i');b.style.width=((n+1)/S.order.length*100)+'%'});
- document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S.pick=+b.dataset.k;document.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('nx').disabled=false;});
- document.getElementById('nx').onclick=()=>{S.ans.push(S.cur[S.pick].ok);S.i++;S.i<S.order.length?ask():finish();};
- if(q[5])bindAudio(q[5]);
+ S.cur=grp.map(qi=>shuffle(Q[qi][3].map((t,k)=>({t,ok:k===0})))); S.pick=grp.map(()=>null);
+ const blocks=grp.map((qi,j)=>{const q=Q[qi];return `${q[4]?`<p class="read">${esc(q[4])}</p>`:''}<div class="q">${m>1?`<small class="qn">Pregunta ${n+j+1}</small>`:''}${esc(q[2])}</div><div data-j="${j}">${S.cur[j].map((o,k)=>`<button class="opt" data-k="${k}">${esc(o.t)}</button>`).join('')}</div>`}).join('<div class="sp"></div>');
+ app.innerHTML = head+`<div class="in"><div class="bar"><i style="width:${n/tot*100}%"></i></div>
+ <div class="meta"><span>${m>1?`Preguntas ${n+1} y ${n+2} de ${tot}`:`Pregunta ${n+1} de ${tot}`}</span><span>Sin retroceso</span></div>
+ ${f?`<div class="player${m>1?' stk':''}" id="pl"><button class="play" id="pb" aria-label="Reproducir audio">▶</button><div class="pi"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><div class="bar"><i id="pg" style="width:0"></i></div><small id="pn"></small></div></div><p class="hint">Este audio tiene ${m} preguntas. Respóndelas todas aquí abajo antes de continuar.</p>`:''}
+ ${blocks}
+ <button class="btn" id="nx" disabled>${n+m>=tot?'Ver mi resultado':'Continuar'}</button></div>`;
+ requestAnimationFrame(()=>{const b=document.querySelector('.bar i');b.style.width=((n+m)/tot*100)+'%'});
+ document.querySelectorAll('[data-j]').forEach(box=>box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S.pick[+box.dataset.j]=+b.dataset.k;box.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('nx').disabled=S.pick.some(p=>p===null)}));
+ document.getElementById('nx').onclick=()=>{S.cur.forEach((o,j)=>S.ans.push(o[S.pick[j]].ok));S.i+=m;S.i<tot?ask():finish()};
+ if(f)bindAudio(f);
 }
 const FB=[
 {m:['Revisamos tus respuestas y estás muy cerca de abrir el nivel A1: ya reconoces varias estructuras básicas.','Revisamos tus respuestas: {t} de 50 aciertos nos dicen exactamente dónde empezar contigo, sin presión.'],s:'En {x} mostraste más base que en el resto, y desde ahí vamos a construir.',w:'Con {x} avanzaremos paso a paso: es donde más rápido vas a notar progreso.',p:['Respondiste con agilidad, y eso ayuda mucho a aprender hablando.','Tomaste tu tiempo en cada respuesta, y esa calma sirve para construir bases firmes.'],t:'Tu mejor jugada: unos minutos de práctica real cada día desde la primera semana.'},
@@ -243,10 +246,44 @@ const SN={g:'la gramática en contexto',v:'el vocabulario',r:'la lectura',l:'la 
 function count(id,to,ms){const el=document.getElementById(id),t0=performance.now();(function f(t){const p=Math.min((t-t0)/ms,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}
 function confetti(){const c=document.getElementById('cf'),x=c.getContext('2d');if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;c.width=innerWidth;c.height=innerHeight;const cols=['#ffc400','#ffe27a','#f3efe8','#ff9f1c'];const ps=Array.from({length:130},()=>({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,s:Math.random()*7+3,c:cols[Math.random()*4|0],r:Math.random()*6}));let n=0;(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++n<170)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
 const EXT=['jpeg','jpg','png','webp'];function nx(i){const n=+(i.dataset.n||0)+1;if(n<EXT.length){i.dataset.n=n;i.src=i.dataset.b+'.'+EXT[n]}else i.remove()} // acepta jpeg, jpg, png o webp
+const loadImg=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
+async function drawCert(){
+ const c=document.getElementById('cv');if(!c)return;const x=c.getContext('2d'),W=1080,H=1350,R=S.res,F='"Bricolage Grotesque",Georgia,serif';
+ try{await Promise.all([document.fonts.load('800 90px "Bricolage Grotesque"'),document.fonts.load('500 30px "Bricolage Grotesque"')])}catch(e){}
+ x.clearRect(0,0,W,H);x.fillStyle='#0a0908';x.fillRect(0,0,W,H);
+ const g=x.createRadialGradient(W/2,H*.4,40,W/2,H*.4,720);g.addColorStop(0,'rgba(255,196,0,.22)');g.addColorStop(1,'rgba(255,196,0,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.strokeStyle='#ffc400';x.lineWidth=4;x.strokeRect(36,36,W-72,H-72);x.lineWidth=1.5;x.strokeStyle='rgba(255,196,0,.45)';x.strokeRect(54,54,W-108,H-108);
+ const T=(t,px,y,col,w=500,al='center',xx=W/2)=>{x.font=`${w} ${px}px ${F}`;x.fillStyle=col;x.textAlign=al;x.fillText(t,xx,y)};
+ const lg=await loadImg('logo.png');
+ if(lg){const h=110,w=lg.width/lg.height*h;x.drawImage(lg,W/2-w/2,95,w,h)}else T('Nica English Club',52,175,'#ffc400',700);
+ T('Certificado de ubicación',42,290,'#f3efe8',500);
+ T('Se certifica que',28,350,'#a39b8f');
+ let fs=76;x.font=`800 ${fs}px ${F}`;while(x.measureText(R.nombre).width>880&&fs>36){fs-=2;x.font=`800 ${fs}px ${F}`}
+ T(R.nombre,fs,440,'#f3efe8',800);
+ T('ha alcanzado el nivel',28,505,'#a39b8f');
+ const cx=S.photo?735:W/2;
+ if(S.photo){const p=S.photo,s=Math.min(p.width,p.height),r=135,px=300,py=670;x.save();x.beginPath();x.arc(px,py,r,0,Math.PI*2);x.clip();x.drawImage(p,(p.width-s)/2,(p.height-s)/2,s,s,px-r,py-r,r*2,r*2);x.restore();x.beginPath();x.arc(px,py,r+8,0,Math.PI*2);x.strokeStyle='#ffc400';x.lineWidth=7;x.stroke()}
+ let lp=R.n.length>2?170:230;const mw=S.photo?500:820;x.font=`800 ${lp}px ${F}`;while(x.measureText(R.n).width>mw&&lp>60){lp-=4;x.font=`800 ${lp}px ${F}`}
+ T(R.n,lp,670+lp*.34,'#ffc400',800,'center',cx);
+ T('NEC Score '+R.score+' / 1000',44,880,'#f3efe8',700);
+ [['Gramática',R.p.g],['Vocabulario',R.p.v],['Lectura',R.p.r],['Comprensión auditiva',R.p.l]].forEach(([t,v],i)=>{const y=960+i*52;T(t,28,y,'#a39b8f',500,'left',140);x.fillStyle='rgba(255,255,255,.1)';x.beginPath();x.roundRect(470,y-22,400,16,8);x.fill();if(v){x.fillStyle='#ffc400';x.beginPath();x.roundRect(470,y-22,Math.max(16,4*v),16,8);x.fill()}T(v+'%',26,y,'#f3efe8',700,'right',940)});
+ T(R.code+'  ·  '+R.fecha,26,1200,'#a39b8f');
+ T('Descubre tu nivel gratis en nicaenglishclub.com/test',30,1262,'#ffc400',700);
+}
+function initCert(r){
+ S.res=r;S.photo=null;drawCert();
+ const pick=e=>{const f=e.target.files[0];if(!f)return;loadImg(URL.createObjectURL(f)).then(i=>{S.photo=i;drawCert()})};
+ document.getElementById('f1').onchange=pick;document.getElementById('f2').onchange=pick;
+ const cv=document.getElementById('cv');
+ document.getElementById('dl').onclick=()=>cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='certificado-nica-english-club.png';a.click()});
+ document.getElementById('sh').onclick=()=>cv.toBlob(async b=>{const f=new File([b],'certificado-nica-english-club.png',{type:'image/png'}),t='Mi nivel de inglés es '+r.n+'. Descubre el tuyo gratis en nicaenglishclub.com/test';
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:t});return}catch(e){if(e.name==='AbortError')return}}
+  document.getElementById('dl').click()});
+}
 function bindAudio(f){
  const pb=document.getElementById('pb'),pn=document.getElementById('pn'),pg=document.getElementById('pg'),pl=document.getElementById('pl');
- S.plays=S.plays||{};const left=()=>2-(S.plays[f]||0);
- const lab=()=>pn.textContent=left()>0?'Escucha el audio. Reproducciones disponibles: '+left()+' de 2':'Ya usaste tus 2 reproducciones';
+ S.plays=S.plays||{};const left=()=>3-(S.plays[f]||0);
+ const lab=()=>pn.textContent=left()>0?'Reproducciones disponibles: '+left()+' de 3 (se comparten entre las 2 preguntas de este audio)':'Ya usaste tus 3 reproducciones';
  const a=new Audio('audio/'+f+'.mp3');S.au=a;lab();if(left()<1)pb.disabled=true;
  a.onerror=()=>{pn.textContent='No se pudo cargar el audio. Revisa tu conexión y recarga la página.';pb.disabled=true};
  a.ontimeupdate=()=>pg.style.width=(a.currentTime/(a.duration||1)*100)+'%';
@@ -277,9 +314,13 @@ function finish(){
  <p class="read">${esc(R.a)}</p>
  <p>Tu código de test: <span class="code">${S.code}</span></p>
  <a class="btn" href="${wa}" target="_blank" rel="noopener">Enviar mi audio por WhatsApp</a></div>
+ <div class="card" style="margin-top:16px"><h2>Tu certificado</h2><p>Compártelo en tus redes. Agrega tu foto para que se vea aún mejor; se queda en tu dispositivo y no se sube a ningún lado.</p>
+ <canvas id="cv" width="1080" height="1350" style="width:100%;height:auto;border-radius:10px;background:#0a0908"></canvas>
+ <div class="row"><label class="btn ghost"><input type="file" accept="image/*" capture="user" id="f1" hidden>Tomarme una foto</label><label class="btn ghost"><input type="file" accept="image/*" id="f2" hidden>Elegir de galería</label></div>
+ <div class="row"><button class="btn" id="sh">Compartir</button><button class="btn ghost" id="dl">Descargar</button></div></div>
  <div style="margin-top:18px"><a class="btn ghost" href="${ADMISION}">Aplicar a mi cupo</a></div>
  <p style="margin-top:22px;font-size:.85rem">Este test es una estimación inicial. Tu nivel se confirma con tu audio y con tu coach.</p></div>`;
- S.done=true; scrollTo(0,0);
+ S.done=true; initCert({nombre:S.lead.nombre.replace(/\s+/g,' ').trim(),n:R.n,score:score,p:{g:pct(sc.g),v:pct(sc.v),r:pct(sc.r),l:pct(sc.l)},code:S.code,fecha:new Date().toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}); scrollTo(0,0);
  setTimeout(()=>document.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%'),500);
  document.querySelectorAll('.ladder span').forEach((el,i)=>{if(i<k)setTimeout(()=>el.classList.add('hit'),300+i*260)});
  count('sc',score,1600); confetti();

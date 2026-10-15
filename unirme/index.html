@@ -32,9 +32,9 @@ p{margin:0 0 1em;color:var(--mu)}
 .brand a{display:flex;color:var(--tx);text-decoration:none}.brand img{height:40px;width:auto}
 .brand span{font-size:.9rem;border-left:1px solid var(--line);padding-left:12px}
 .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 4px 30px}
-.shots figure{margin:0;position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#3a2e0a,#14110b 70%);transition:rotate .3s,translate .3s}
-.shots figure:nth-child(1){rotate:-3deg}.shots figure:nth-child(2){translate:0 -12px}.shots figure:nth-child(3){rotate:3deg}
-.shots figure:hover{rotate:none;translate:none}
+.shots figure{margin:0;position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#3a2e0a,#14110b 70%);transition:transform .3s;will-change:transform;backface-visibility:hidden;outline:1px solid transparent;transform:translateZ(0)}
+.shots figure:nth-child(1){transform:rotate(-3deg)}.shots figure:nth-child(2){transform:translateY(-12px)}.shots figure:nth-child(3){transform:rotate(3deg)}
+.shots figure:hover{transform:none}
 .shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .shots figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 10px;font:700 .85rem "Bricolage Grotesque",Georgia,serif;background:linear-gradient(transparent,rgba(10,9,8,.9))}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}

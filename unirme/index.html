@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Únete al club | Nica English Club</title>
+<meta name="description" content="Únete a Nica English Club: entrena tu inglés con coach, clases en vivo y plataforma propia. Cupos limitados por grupo.">
+<link rel="icon" href="logo.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://app.nicaenglishclub.com/nica-english-club-admision/">
+<meta property="og:title" content="Únete al club | Nica English Club">
+<meta property="og:description" content="Entrena tu inglés con coach y clases en vivo. Cupos limitados por grupo.">
+<meta property="og:image" content="https://app.nicaenglishclub.com/nica-english-club-admision/preview.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://app.nicaenglishclub.com/nica-english-club-admision/preview.jpg?v=2">
+<meta name="theme-color" content="#0a0908">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0908;--card:#16130f;--line:#2a251e;--tx:#f3efe8;--mu:#a39b8f;--ac:#ffc400;--ok:#8fd6a4;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(560px circle at var(--mx,75%) var(--my,8%),rgba(255,196,0,.14),transparent 62%)}
+main{position:relative;max-width:720px;margin:0 auto;padding:24px 20px 40px}
+h1,h2,h3{font-family:"Bricolage Grotesque",Georgia,serif;line-height:1.1;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(2.2rem,7vw,3.6rem);font-weight:800}
+h2{font-size:clamp(1.3rem,4vw,1.6rem)}
+p{margin:0 0 1em;color:var(--mu)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:28px;font-family:"Bricolage Grotesque",Georgia,serif;font-weight:700;color:var(--mu)}
+.brand a{display:flex;color:var(--tx);text-decoration:none}.brand img{height:40px;width:auto}
+.brand span{font-size:.9rem;border-left:1px solid var(--line);padding-left:12px}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:26px 4px 30px}
+.shots figure{margin:0;position:relative;aspect-ratio:3/4;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:radial-gradient(circle at 30% 20%,#3a2e0a,#14110b 70%);transition:rotate .3s,translate .3s}
+.shots figure:nth-child(1){rotate:-3deg}.shots figure:nth-child(2){translate:0 -12px}.shots figure:nth-child(3){rotate:3deg}
+.shots figure:hover{rotate:none;translate:none}
+.shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shots figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 10px;font:700 .85rem "Bricolage Grotesque",Georgia,serif;background:linear-gradient(transparent,rgba(10,9,8,.9))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+label{display:block;font-size:.9rem;color:var(--mu);margin:14px 0 6px}
+input,select{width:100%;background:#0f0d0a;color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:13px;font:inherit}
+input:focus,select:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.ph{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.btn{display:inline-block;background:var(--ac);color:#1a1300;border:0;border-radius:999px;padding:14px 26px;font:700 1rem "Bricolage Grotesque",system-ui,sans-serif;cursor:pointer;text-decoration:none;margin-top:18px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:.85rem;color:var(--mu)}.chk input{width:auto;margin-top:4px}
+.err{color:#ff8a7a;font-size:.9rem;min-height:1.2em;margin-top:10px}
+.hint{font-size:.85rem;margin:8px 0 0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.chal{border:1px solid var(--ac);background:#2a2208;border-radius:var(--r);padding:14px 16px;margin:0 0 18px;color:var(--tx)}
+#ok{display:none}
+@media (max-width:520px){.g2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<div id="form-wrapper">
+ <div class="brand"><a href="https://nicaenglishclub.com" target="_blank" rel="noopener"><img src="logo.png" alt="Nica English Club" onerror="this.outerHTML='<b>Nica English Club</b>'"></a><span>Aplicación de ingreso</span></div>
+ <h1>Únete al club.</h1>
+ <p>Entrena tu inglés con coach, clases en vivo y plataforma propia. Los grupos son pequeños y los cupos se confirman en orden de llegada.</p>
+ <div class="shots" id="shots"></div>
+ <div class="row" style="margin:-6px 0 22px"><a class="btn" style="margin:0" href="https://nicaenglishclub.com/test">Hacer el test gratis</a><a class="btn ghost" style="margin:0" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div>
+ <div id="tst" class="chal" style="display:none"></div>
+ <form id="f" class="card" novalidate>
+  <h2>Tus datos</h2>
+  <label for="nombre">Nombre y apellido</label><input id="nombre" name="nombre" autocomplete="name" required>
+  <label for="correo">Correo</label><input id="correo" name="correo" type="email" autocomplete="email" required>
+  <div class="g2">
+   <div><label for="edad">Edad</label><select id="edad" name="edad" required><option value="">Elige una opción</option><option>Menos de 13</option><option>13 a 17</option><option>18 a 24</option><option>25 a 34</option><option>35 a 44</option><option>45 o más</option><option value="otra">Otra edad</option></select></div>
+   <div><label for="ciudad">Ciudad o municipio</label><input id="ciudad" name="ciudad" placeholder="Ej. Managua" required></div>
+  </div>
+  <div id="eo" style="display:none"><label for="edad2">Escribe tu edad</label><input id="edad2" type="number" min="3" max="99" inputmode="numeric"></div>
+  <label for="tel">WhatsApp</label>
+  <div class="ph"><select id="pais" aria-label="País"></select><input id="tel" type="tel" inputmode="tel" placeholder="8888 8888" autocomplete="tel-national" required></div>
+  <p class="hint">Solo escribe tu número, el código del país se agrega solo.</p>
+  <div class="g2">
+   <div><label for="objetivo">Objetivo del entrenamiento</label><select id="objetivo" name="objetivo"><option>Trabajar en Call Center</option><option>Crecimiento personal</option><option>Viaje / Negocios</option></select></div>
+   <div><label for="nivel">Nivel de inglés actual</label><select id="nivel" name="nivel"><option value="Principiante">Desde cero</option><option value="Intermedio">Entiendo pero no hablo</option><option value="Avanzado">Fluido / Conversacional</option></select></div>
+  </div>
+  <div class="g2">
+   <div><label for="modalidad">Modalidad</label><select id="modalidad" name="modalidad"><option value="En linea">En línea</option><option value="Presencial">Presencial (próximamente)</option></select></div>
+   <div><label for="plan">Plan de tu interés</label><select id="plan" name="plan" required><option value="">Elige un plan</option><option>Solo elite</option><option>Duo dinamico</option><option>VIP 1 a 1</option></select></div>
+  </div>
+  <label for="aplica_beca">¿Aplicas a media beca? (secundaria, 3.º a 5.º año)</label>
+  <select id="aplica_beca" name="aplica_beca"><option value="No">No aplico por ahora</option><option value="Si - Cumplo requisitos">Sí, mis notas son mayores a 85%</option></select>
+  <div class="g2">
+   <div><label for="fecha_cita">¿Cuándo te gustaría empezar?</label><input id="fecha_cita" name="fecha_cita" type="date" required></div>
+   <div><label for="origen">¿Cómo nos conociste?</label><select id="origen" name="origen"><option value="">Elige una opción</option><option>TikTok</option><option>Instagram</option><option>Facebook</option><option>Un amigo</option><option>Google</option><option>Otro</option></select></div>
+  </div>
+  <p class="hint">La fecha es una estimación: te confirmamos horario y cupo cuando te contactemos.</p>
+  <div class="hp" aria-hidden="true"><input name="web" tabindex="-1" autocomplete="off"></div>
+  <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para contactarme sobre mi cupo.</label></div>
+  <div class="err" id="e" role="alert"></div>
+  <button class="btn" id="go" type="submit">Quiero unirme</button>
+ </form>
+</div>
+<div id="ok" class="card">
+ <h1 style="font-size:clamp(2rem,6vw,2.8rem)">¡Ya casi eres parte del club!</h1>
+ <p>Recibimos tus datos. Te escribiremos por WhatsApp para confirmar tu cupo y tu horario.</p>
+ <div class="row"><a class="btn" href="https://nicaenglishclub.com/test">Hacer el test gratis</a><a class="btn ghost" href="https://wa.me/50583267703" target="_blank" rel="noopener">Escribirnos por WhatsApp</a><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div>
+</div>
+</main>
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyB-AUkJMr0H286Ms7hwh0FQP0-i4mxFFmf-l1y27tnjI6GpyVuEEi-sQ9zK99dzuw/exec";
+const $=id=>document.getElementById(id),P=new URLSearchParams(location.search);
+// Imágenes: cambia o agrega filas [título, archivo, enlace opcional]
+$('shots').innerHTML=[['Plataforma','captura1','https://app.nicaenglishclub.com'],['Coach IA','captura2'],['Clase en vivo','captura3']].map(([t,f,u])=>`<figure><img src="${f}.jpeg" alt="${t}" onerror="this.remove()"><figcaption>${t}</figcaption>${u?`<a href="${u}" target="_blank" rel="noopener" aria-label="${t}" style="position:absolute;inset:0"></a>`:''}</figure>`).join('');
+// Países: [bandera, nombre, código, largo mínimo, largo máximo]
+const C=[['🇳🇮','Nicaragua','505',8,8],['🇺🇸','Estados Unidos','1',10,10],['🇨🇷','Costa Rica','506',8,8],['🇭🇳','Honduras','504',8,8],['🇸🇻','El Salvador','503',8,8],['🇬🇹','Guatemala','502',8,8],['🇵🇦','Panamá','507',7,8],['🇲🇽','México','52',10,10],['🇨🇴','Colombia','57',10,10],['🇪🇸','España','34',9,9],['🌎','Otro país','',7,14]];
+$('pais').innerHTML=C.map((c,i)=>`<option value="${i}">${c[0]} ${c[2]?'+'+c[2]:'Otro'}</option>`).join('');
+$('pais').title='País';
+$('tel').placeholder='8888 8888';
+$('edad').onchange=()=>$('eo').style.display=$('edad').value==='otra'?'block':'none';
+$('fecha_cita').min=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+// Viene del test: ?code=NEC-2026-XXXX&n=Nombre&l=B1
+const nm=(P.get('n')||'').replace(/[^\p{L} '-]/gu,'').trim().slice(0,40),lv=(P.get('l')||'').replace(/[^A-Za-z0-9-]/g,'').slice(0,6),cd=(P.get('code')||'').replace(/[^A-Za-z0-9-]/g,'').slice(0,16);
+if(nm)$('nombre').value=nm;
+if(lv){$('tst').style.display='block';$('tst').innerHTML='Tu nivel en el test fue <b>'+lv+'</b>. Lo confirmamos contigo cuando te contactemos.'}
+$('f').addEventListener('submit',async ev=>{
+ ev.preventDefault();const e=$('e'),v=id=>$(id).value.trim(),c=C[$('pais').value],d=v('tel').replace(/\D/g,'');e.textContent='';
+ const age=v('edad')==='otra'?v('edad2'):v('edad');
+ if(!v('nombre').includes(' '))return e.textContent='Escribe tu nombre y apellido.';
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('correo')))return e.textContent='Revisa tu correo: parece incompleto.';
+ if(!age||(v('edad')==='otra'&&(+age<3||+age>99)))return e.textContent='Elige tu edad.';
+ if(!v('ciudad'))return e.textContent='Escribe tu ciudad o municipio.';
+ if(d.length<c[3]||d.length>c[4])return e.textContent='Revisa tu número de WhatsApp: para '+c[1]+' deben ser '+(c[3]===c[4]?c[3]:c[3]+' a '+c[4])+' dígitos, sin el código de país.';
+ if(!v('plan'))return e.textContent='Elige el plan de tu interés.';
+ if(!v('fecha_cita'))return e.textContent='Elige cuándo te gustaría empezar.';
+ if(!$('k').checked)return e.textContent='Acepta el uso de tus datos para poder continuar.';
+ const o={nombre:v('nombre'),correo:v('correo'),edad:age,ciudad:v('ciudad'),codigo_pais:c[2],telefono:'+'+c[2]+' '+d,objetivo:v('objetivo'),nivel:v('nivel'),modalidad:v('modalidad'),plan:v('plan'),aplica_beca:v('aplica_beca'),fecha_cita:v('fecha_cita'),origen:v('origen'),codigo_test:cd,nivel_test:lv,consentimiento:'Si',web:document.querySelector('[name=web]').value};
+ const b=$('go');b.disabled=true;b.textContent='Enviando…';
+ try{const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(o)}),j=await r.json();
+  if(!j.ok)throw 0;$('form-wrapper').style.display='none';$('ok').style.display='block';scrollTo(0,0)}
+ catch(_){b.disabled=false;b.textContent='Quiero unirme';e.textContent='No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo otra vez; tus datos siguen aquí.'}
+});
+addEventListener('pointermove',e=>{document.body.style.setProperty('--mx',e.clientX+'px');document.body.style.setProperty('--my',e.clientY+'px')});
+</script>
+</body>
+</html>

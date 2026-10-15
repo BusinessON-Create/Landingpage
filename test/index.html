@@ -81,96 +81,24 @@ header,.brand{display:flex;align-items:center;gap:12px}.brand img{height:40px;wi
 .mot{background:#1d1808;border:1px solid #3a2e0a;border-radius:12px;padding:10px 14px;margin:0 0 18px;color:var(--tx);font-size:.95rem}
 .chal{border:1px solid var(--ac);background:#2a2208;border-radius:var(--r);padding:14px 16px;margin:0 0 18px;color:var(--tx)}
 .opt.ns{color:var(--mu);border-style:dashed;text-align:center}.opt:nth-child(5){animation-delay:.24s}
+.tm{height:4px;background:var(--line);border-radius:9px;overflow:hidden;margin:0 0 6px}.tm i{display:block;height:100%;width:100%;background:var(--mu);transition:width .25s linear,background .4s}.tm.low i{background:#ff9f1c}
+.tt{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mu);margin-bottom:18px}
+.nec{max-width:720px;margin:0 auto;padding:0 20px 30px;position:relative;z-index:1;text-align:center;color:var(--mu);font-size:.8rem}.nec .ln{border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;align-items:center;gap:12px}.nec img{height:24px;width:auto;opacity:.9}.nec .btn{margin-top:0;padding:9px 18px;font-size:.85rem}
 </style>
 </head>
 <body>
 <canvas id="cf"></canvas>
 <main id="app"></main>
+<footer class="nec"><div class="ln"><img src="logo.png" alt="" onerror="this.remove()"><span>Nica English Club · 2026 · Test de ubicación alineado al MCER</span><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div></footer>
 <script>
 // ====== CONFIGURACIÓN ======
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQMsJ-EFLAqytkzQeJN2Ain2NZYoo0t3mspkfEqvw0oCbFU3qci4ujImipAkz4hsE/exec"; // pega aquí la URL de tu Apps Script (termina en /exec)
 const WA = "50583267703";
 const ADMISION = "https://app.nicaenglishclub.com/nica-english-club-admision/";
+const SITE = "https://nicaenglishclub.com";
 
-// ====== BANCO DE PREGUNTAS ======
-// [nivel(0=A1..4=C1), sección(g=gramática,v=vocabulario,r=lectura), texto, [correcta, ...distractores], lectura opcional]
-const Q = [
-[0,'g','Hello! I ___ from Nicaragua.',['am','is','are','be']],
-[0,'g','She ___ a teacher.',['is','are','am','be']],
-[0,'v','At the café: “Can I have a ___ of coffee, please?”',['cup','door','shoe','bed']],
-[0,'g','We ___ two brothers.',['have','has','is','do']],
-[0,'v','Monday, Tuesday, ___',['Wednesday','January','Morning','Summer']],
-[0,'r','Where does Ana live?',['In León','In a shop','In Managua','In Granada'],'Ana is 20. She lives in León with her mother. She works in a shop on Saturdays.'],
-[1,'g','Yesterday I ___ to the market with my mother.',['went','go','goes','going']],
-[1,'g','There isn’t ___ milk in the fridge.',['any','some','a','many']],
-[1,'v','You need a ___ to enter another country.',['passport','fridge','blanket','menu']],
-[1,'g','My sister is ___ than me.',['taller','more tall','tallest','the tall']],
-[1,'r','What should Sam bring?',['A drink','Food','A gift','Chairs'],'Hi Sam, the party is on Friday at 7 p.m. at my house. Please bring a drink. Don’t be late! — Lucy'],
-[1,'g','What ___ you doing right now?',['are','do','did','will']],
-[2,'g','If it rains tomorrow, we ___ at home.',['will stay','stay','stayed','would stayed']],
-[2,'g','I have lived in Managua ___ 2015.',['since','for','during','from']],
-[2,'v','The meeting was ___ because the manager was sick.',['cancelled','borrowed','wore','locked']],
-[2,'g','She asked me where I ___.',['worked','work','do work','am working']],
-[2,'r','What problem do remote workers mention?',['They find it hard to stop working.','They earn less money.','They dislike their managers.','They have no internet.'],'Many people think that remote work is easier. However, workers often say it is harder to switch off after work, so they end up working longer hours.'],
-[2,'g','You ___ wear a helmet. It’s the law.',['must','may','would','used']],
-[3,'g','I wish I ___ more time to study last year.',['had had','had','would have','have had']],
-[3,'g','By the time we arrived, the movie ___.',['had already started','already started','has already started','was already starting']],
-[3,'v','The company decided to ___ the project due to lack of funding.',['abandon','afford','admire','adopt']],
-[3,'g','Not only ___ late, but he also forgot the documents.',['did he arrive','he arrived','arrived he','he did arrive']],
-[3,'r','What do the researchers concede?',['The effect is not the same for everyone.','Sleep has no effect.','Six hours is ideal for all.','The study was too short.'],'The study found that people who sleep fewer than six hours are more likely to make poor decisions, although researchers admit the effect varies widely between individuals.'],
-[3,'g','He suggested ___ the meeting to Monday.',['moving','to move','move','moved']],
-[4,'g','Had I known about the delay, I ___ earlier.',['would have left','would leave','had left','left']],
-[4,'v','Her argument was so ___ that nobody could refute it.',['compelling','compulsory','compliant','complacent']],
-[4,'g','Seldom ___ such dedication in a young employee.',['have I seen','I have seen','I saw','did I saw']],
-[4,'g','The proposal, ___ merits are obvious, was rejected.',['whose','which','who','what']],
-[4,'v','He’s very ___ with money; he never wastes a cent.',['frugal','fragile','frantic','fertile']],
-[4,'r','What is the critics’ main point?',['Good intentions may produce harmful results.','Landlords support the policy.','Rents have fallen sharply.','The policy was never approved.'],'Critics argue the policy is well-intentioned yet ultimately counterproductive: by capping rents, it discourages landlords from maintaining properties.'],
-[0,'g','They ___ students.',['are','is','am','be']],
-[0,'g','This is my sister. ___ name is Laura.',['Her','His','She','Hers']],
-[0,'g','___ you like pizza?',['Do','Does','Are','Is']],
-[0,'v','I wash my hands in the ___.',['bathroom','tree','bridge','roof']],
-[0,'v','Water, juice and milk are ___.',['drinks','clothes','animals','jobs']],
-[0,'r','What time does the shop open?',['At nine','At six','At ten','At noon'],'Mario’s Shop opens at nine and closes at six, Monday to Saturday.'],
-[1,'g','I ___ my homework before dinner yesterday.',['did','do','doing','done']],
-[1,'g','How ___ water do you drink every day?',['much','many','few','long']],
-[1,'g','We are ___ to visit my grandmother this weekend.',['going','went','go','will going']],
-[1,'v','A person who cooks in a restaurant is a ___.',['chef','nurse','driver','pilot']],
-[1,'v','It’s very cold today, so take your ___.',['coat','sandals','fan','swimsuit']],
-[1,'r','Why is Tom tired?',['He went to bed very late.','He is sick.','He has too much work.','He didn’t eat breakfast.'],'Tom went to bed at 3 a.m. because he was playing video games. Now he can’t stop yawning at work.'],
-[2,'g','I’m not used to ___ up so early.',['getting','get','got','gets']],
-[2,'g','The book ___ by millions of people last year.',['was read','read','is reading','has reading']],
-[2,'g','If I ___ you, I would apologize.',['were','am','will be','would be']],
-[2,'v','Please ___ me a favor and close the window.',['do','make','take','put']],
-[2,'v','I need to ___ this form before Friday.',['fill out','fill off','fill away','fill under']],
-[2,'r','Why did Marta choose the small hotel?',['It was quieter.','It was cheaper.','It was closer to the beach.','It had a pool.'],'Marta booked the small hotel instead of the big resort. It cost a little more, but she wanted a quiet place to rest after a stressful year.'],
-[3,'g','I’d rather you ___ smoke in here.',['didn’t','don’t','won’t','not']],
-[3,'g','The manager, ___ I spoke yesterday, was very helpful.',['with whom','whose','which','who']],
-[3,'g','It’s high time we ___ a decision.',['made','make','will make','are making']],
-[3,'v','The results were ___ with what we expected.',['consistent','insistent','persistent','resistant']],
-[3,'v','He tried to ___ the blame onto his colleague.',['shift','shrink','shave','shout']],
-[3,'r','What is the writer’s attitude to the new app?',['Cautiously optimistic','Strongly opposed','Totally indifferent','Wildly enthusiastic'],'The new app may well save commuters time, but it’s too early to say whether people will actually use it; let’s wait for the first real data.'],
-[4,'g','Little ___ she know that the surprise was already ruined.',['did','does','was','has']],
-[4,'g','Should you ___ any questions, do not hesitate to contact us.',['have','had','having','to have']],
-[4,'g','___ the weather, the event went ahead as planned.',['Despite','Although','Even','However']],
-[4,'v','The politician’s remarks were deliberately ___, leaving everyone confused.',['ambiguous','ambitious','amiable','abundant']],
-[4,'v','Years of work had ___ in a major breakthrough.',['culminated','cultivated','cultured','curtailed']],
-[4,'r','What does the author imply about the reform?',['Its impact is overstated.','It has failed completely.','It is universally praised.','It was rushed through.'],'Supporters have hailed the reform as transformative, yet the available figures show only a marginal improvement, which hardly justifies the fanfare.']
-];
-// Escucha: [archivo en /audio, nivel, [[pregunta,[correcta,...]],[pregunta,[correcta,...]]]]
-[['a1-1',0,[['Where does Daniel live?',['Granada','León','Managua','Masaya']],['What does he do on weekends?',['He plays soccer','He studies','He works','He cooks']]]],
-['a1-2',0,[['What does the customer order?',['A coffee and a sandwich','Tea and cake','Juice and bread','Water and soup']],['How much is it?',['Five dollars','Fifteen dollars','Fifty dollars','Four dollars']]]],
-['a2-1',1,[['What time does the party start?',['Eight','Seven','Nine','Six']],['What does Marco ask Sofia to bring?',['Music','Food','Drinks','A cake']]]],
-['a2-2',1,[['Why is the flight delayed?',['Bad weather','A technical problem','Too many passengers','A strike']],['Where should passengers wait?',['Gate 6','Gate 16','Gate 4','At the restaurant']]]],
-['b1-1',2,[['What bothers the woman about the apartment?',['The rent','The size','The location','The noise']],['When will she go back?',['Tomorrow after five','Today after five','Tomorrow morning','On Friday']]]],
-['b1-2',2,[['When is the best time for a picnic?',['In the morning','In the afternoon','At night','Tomorrow evening']],['What will tomorrow be like?',['Cooler','Hotter','Rainier','Windier']]]],
-['b2-1',3,[['What is the problem?',['The client wants an earlier deadline','The client wants to cancel now','The design team quit','The budget is too low']],['What does Luis suggest?',['Delivering part of the work earlier','Hiring more people','Ignoring the email','Cancelling the contract']]]],
-['b2-2',3,[['What does research say about multitasking?',['It reduces productivity','It improves productivity','It saves time','It has no effect']],['What does the speaker recommend?',['Short focused blocks with breaks','Working longer hours','Doing several tasks at once','Avoiding breaks']]]],
-['c1-1',4,[['What does the speaker criticize?',['The policy ignored its wider effects','The policy was illegal','The government acted too slowly','Fuel prices were too low']],['What could save the measure?',['Quick compensation for affected households','Raising prices further','Cancelling transport','Waiting for food prices to fall']]]],
-['c1-2',4,[['How does the author feel about the divided reviews?',['She welcomes them','She is deeply hurt','She regrets the ending','She is confused by them']],['What was the aim of the ending?',['To leave readers with questions','To please everyone','To close every plot','To shock the critics']]]]
-].forEach(([f,l,qs])=>qs.forEach(([t,o])=>Q.push([l,'l',t,o,null,f])));
 const LV = ['A1','A2','B1','B2','C1'];
 const SPEED = {a1:.6, a2:.8}; // velocidad interna por nivel (el resto va a 1.0); el alumno no la ve
-const PER = 10, PASS = 7; // 10 preguntas por nivel (8 + 1 audio con 2 preguntas) = 50 por intento; se aprueba un nivel con 7/10
 const RES = [
  {n:'Pre-A1',t:'Estás en el punto de partida ideal: aquí entrenas desde la primera clase con frases simples y mucha guía.',a:'Preséntate en inglés: tu nombre, de dónde eres y qué te gusta hacer.'},
  {n:'A1',t:'Ya manejas lo básico. Tu entrenamiento se enfoca en hablar con seguridad en situaciones cotidianas.',a:'Cuéntanos cómo es tu día normal, de la mañana a la noche.'},
@@ -186,8 +114,13 @@ const S = {lead:{},i:0,pick:null,ans:[],ns:[],audio:null,code:'NEC-'+new Date().
 const P = new URLSearchParams(location.search);
 const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; };
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function send(d){ if(!SCRIPT_URL) return; try{ fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}); }catch(e){} }
-const head = `<div class="brand"><img src="logo.png" alt="Nica English Club" onerror="this.outerHTML='<b>Nica English Club</b>'"><span>Test de ubicación</span></div>`;
+const MSG_NET='No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo; tus respuestas anteriores se mantienen.';
+async function api(d){
+ const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),30000);
+ try{const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d),signal:ctl.signal});return await r.json()}
+ catch(e){return {ok:false,error:'net'}}finally{clearTimeout(tm)}
+}
+const head = `<div class="brand"><a href="${SITE}" target="_blank" rel="noopener" style="display:flex;color:inherit;text-decoration:none"><img src="logo.png" alt="Nica English Club" onerror="this.outerHTML='<b>Nica English Club</b>'"></a><span>Test de ubicación</span></div>`;
 
 // ====== PANTALLAS ======
 const BASE='https://nicaenglishclub.com/test/';
@@ -212,7 +145,7 @@ async function audioTest(){
 function intro(){
  app.innerHTML = head+`<h1>Descubre tu nivel real de inglés.</h1>
  ${CH?`<div class="chal"><b>${esc(CH.n)}</b> te retó a superar su nivel (<b>${CH.l}</b>). ¿Aceptas?</div>`:''}
- <p>50 preguntas de gramática, vocabulario, lectura y comprensión auditiva, de A1 a C1, alineadas al Marco Común Europeo. Unos 25 minutos, gratis. Recibes tu nivel, tu NEC Score y tu plan de entrenamiento.</p>
+ <p>Entre 15 y 25 preguntas de gramática, vocabulario, lectura y comprensión auditiva, de A1 a C1, alineadas al Marco Común Europeo. Unos 15 minutos, gratis. Recibes tu nivel, tu NEC Score y tu plan de entrenamiento.</p>
  <div class="shots">${[['Plataforma','captura1','https://app.nicaenglishclub.com'],['Coach IA','captura2'],['Clase en vivo','captura3']].map(([t,f,u])=>`<figure><img src="${f}.jpeg" data-b="${f}" alt="${t}" onerror="nx(this)"><figcaption>${t}</figcaption>${u?`<a class="ov" href="${u}" target="_blank" rel="noopener" aria-label="Ir a la ${t}"></a>`:''}</figure>`).join('')}</div>
  <ol class="how"><li><b>Haz el test.</b> Cada intento sortea preguntas y audios distintos.</li><li><b>Recibe tu nivel</b> y tu NEC Score al instante.</li><li><b>Envía un audio</b> y un coach confirma tu nivel contigo.</li></ol>
  <div class="card" style="margin-bottom:16px"><h2>Prueba tu audio</h2>
@@ -229,14 +162,14 @@ function intro(){
  <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo.</label></div>
  <div class="err" id="e" role="alert"></div>
  <button class="btn" id="go">Empezar el test</button></div>
- <p style="margin-top:18px;font-size:.9rem">Usa audífonos: en las preguntas de escucha, cada audio se puede reproducir solo 3 veces. Responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, marca «No sé». No pasa nada y nos ayuda a saber dónde empezar contigo.</p>`;
+ <p style="margin-top:18px;font-size:.9rem">Usa audífonos: en las preguntas de escucha, cada audio se puede reproducir solo 3 veces. Responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, marca «No sé». No pasa nada y nos ayuda a saber dónde empezar contigo. Cada pregunta tiene un tiempo límite que verás en una barra.</p>`;
  document.getElementById('go').onclick = start;
  document.getElementById('atp').onclick=audioTest;
  document.getElementById('aty').onclick=()=>{S.audio='ok';document.getElementById('atb').style.display='none';setAt('Listo: tu audio funciona. Ya puedes empezar.',true)};
  document.getElementById('atn').onclick=()=>{S.audio='sin-sonido';setAt('Sube el volumen, conecta audífonos y, si usas iPhone, apaga el modo silencio. Luego toca «Probar mi audio» otra vez. Si sigues sin oír, escríbenos por WhatsApp antes de empezar; aun así puedes continuar.')};
  if(CH)document.getElementById('s').value='Un amigo';
 }
-function start(){
+async function start(){
  const v = id => document.getElementById(id).value.trim(), e = document.getElementById('e');
  const l = {nombre:v('n'),whatsapp:v('w'),correo:v('c'),objetivo:v('o'),origen:v('s')};
  if(l.nombre.length<3) return e.textContent='Escribe tu nombre completo.';
@@ -245,38 +178,61 @@ function start(){
  if(!l.objetivo||!l.origen) return e.textContent='Completa todas las opciones.';
  if(!document.getElementById('k').checked) return e.textContent='Debes aceptar el uso de tus datos para continuar.';
  if(!S.audio) return e.textContent='Primero prueba tu audio (es rápido): así nos aseguramos de que puedes tomar el test.';
- S.lead = l; S.t0 = Date.now();
- const ix=Q.map((q,i)=>i);
- const units=LV.flatMap((_,l)=>{const pk=(sk,n)=>shuffle(ix.filter(i=>Q[i][0]===l&&Q[i][1]===sk)).slice(0,n),one=[...pk('g',4),...pk('v',2),...pk('r',2)].map(i=>[i]);const fs=[...new Set(ix.filter(i=>Q[i][0]===l&&Q[i][1]==='l').map(i=>Q[i][5]))],f=fs[Math.random()*fs.length|0];return one.concat([ix.filter(i=>Q[i][5]===f)]);});
- S.order = shuffle(units).flat(); // por nivel: 4 gramática + 2 vocabulario + 2 lectura + 1 audio (2 preguntas) = 10; así cada habilidad pesa igual en todos los intentos, orden aleatorio (las 2 preguntas de un audio van juntas)
- send({...l,codigo:S.code,estado:'inició',audioTest:S.audio,utm:P.get('utm_source')||P.get('ref')||'',fecha:new Date().toISOString()});
- ask();
+ const b=document.getElementById('go');b.disabled=true;b.textContent='Preparando tu test…';e.textContent='';
+ const r=await api({action:'start',lead:l,audioTest:S.audio,utm:P.get('utm_source')||P.get('ref')||''});
+ if(!r.ok||!r.block){b.disabled=false;b.textContent='Empezar el test';e.textContent=r.error==='bad'?'Revisa tus datos e inténtalo de nuevo.':MSG_NET;return}
+ S.lead=l;S.t0=Date.now();S.sid=r.sid;S.code=r.codigo;S.note='';S.busy=false;
+ ask(r.block);
 }
-function ask(){
- const n=S.i, f=Q[S.order[n]][5], grp=[S.order[n]];
- if(f&&Q[S.order[n+1]]&&Q[S.order[n+1]][5]===f)grp.push(S.order[n+1]); // las preguntas de un mismo audio van juntas en una pantalla
- const m=grp.length, tot=S.order.length;
- const mk=MS.find(([pp])=>{const ixm=Math.round(tot*pp);return n<=ixm&&ixm<n+m}), mot=mk?`<p class="mot">${esc(mk[1].replace('{n}',FN()))}</p>`:'';
+function ask(B){ // el servidor envía solo la pregunta y las opciones; nunca la respuesta correcta
+ clearInterval(S.tm);S.B=B;
+ const n=B.n, m=B.items.length, tot=B.total, f=B.audio;
+ const mk=MS.find(([pp])=>{const ixm=Math.round(15*pp);return n<=ixm&&ixm<n+m});
+ const mot=[S.note,B.ext?`Unas preguntas más para afinar tu resultado, ${FN()}.`:'',mk?mk[1].replace('{n}',FN()):''].filter(Boolean).map(x=>`<p class="mot">${esc(x)}</p>`).join('');S.note='';
  if(S.au){S.au.pause();S.au=null}
- S.cur=grp.map(qi=>shuffle(Q[qi][3].map((t,k)=>({t,ok:k===0})))); S.pick=grp.map(()=>null);
- const blocks=grp.map((qi,j)=>{const q=Q[qi];return `${q[4]?`<p class="read">${esc(q[4])}</p>`:''}<div class="q">${m>1?`<small class="qn">Pregunta ${n+j+1}</small>`:''}${esc(q[2])}</div><div data-j="${j}">${S.cur[j].map((o,k)=>`<button class="opt" data-k="${k}">${esc(o.t)}</button>`).join('')}<button class="opt ns" data-k="ns">No sé</button></div>`}).join('<div class="sp"></div>');
+ S.pick=B.items.map(()=>null);
+ const blocks=B.items.map((it,j)=>`${it.r?`<p class="read">${esc(it.r)}</p>`:''}<div class="q">${m>1?`<small class="qn">Pregunta ${n+j+1}</small>`:''}${esc(it.q)}</div><div data-j="${j}">${it.o.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join('')}<button class="opt ns" data-k="ns">No sé</button></div>`).join('<div class="sp"></div>');
  app.innerHTML = head+`<div class="in"><div class="bar"><i style="width:${n/tot*100}%"></i></div>
- <div class="meta"><span>${m>1?`Preguntas ${n+1} y ${n+2} de ${tot}`:`Pregunta ${n+1} de ${tot}`}</span><span>Sin retroceso</span></div>${mot}
+ <div class="meta"><span>${m>1?`Preguntas ${n+1} y ${n+2} de ${tot}`:`Pregunta ${n+1} de ${tot}`}</span><span>Sin retroceso</span></div>
+ <div class="tm" id="tm" role="timer" aria-label="Tiempo restante"><i id="tmi"></i></div><div class="tt"><span>Tiempo restante</span><span id="tmt"></span></div>${mot}
  ${f?`<div class="player${m>1?' stk':''}" id="pl"><button class="play" id="pb" aria-label="Reproducir audio">▶</button><div class="pi"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><div class="bar"><i id="pg" style="width:0"></i></div><small id="pn"></small></div></div><p class="hint">Este audio tiene ${m} preguntas. Respóndelas todas aquí abajo antes de continuar.</p>`:''}
  ${blocks}
- <button class="btn" id="nx" disabled>${n+m>=tot?'Ver mi resultado':'Continuar'}</button></div>`;
+ <button class="btn" id="nx" disabled>${n+m>=tot&&tot>=25?'Ver mi resultado':'Continuar'}</button></div>`;
  requestAnimationFrame(()=>{const b=document.querySelector('.bar i');b.style.width=((n+m)/tot*100)+'%'});
  document.querySelectorAll('[data-j]').forEach(box=>box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{S.pick[+box.dataset.j]=b.dataset.k==='ns'?-1:+b.dataset.k;box.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('nx').disabled=S.pick.some(p=>p===null)}));
- document.getElementById('nx').onclick=()=>{S.cur.forEach((o,j)=>{const ns=S.pick[j]<0;S.ans.push(ns?false:o[S.pick[j]].ok);S.ns.push(ns)});S.i+=m;S.i<tot?ask():finish()};
+ document.getElementById('nx').onclick=()=>submit(false);
  if(f)bindAudio(f);
+ // temporizador visual: al llegar a 0 se envía lo marcado y el resto como «sin responder»
+ const t0=Date.now(),L=B.limite,bar=document.getElementById('tmi'),lab=document.getElementById('tmt'),box=document.getElementById('tm');
+ const tick=()=>{const left=Math.max(0,L-(Date.now()-t0)/1000),s=Math.ceil(left);bar.style.width=(left/L*100)+'%';lab.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');box.classList.toggle('low',left<=10);if(left<=0){clearInterval(S.tm);submit(true)}};
+ tick();S.tm=setInterval(tick,250);
+}
+async function submit(auto){
+ if(S.busy)return;S.busy=true;clearInterval(S.tm);if(S.au)S.au.pause();
+ const nx=document.getElementById('nx');if(nx){nx.disabled=true;nx.textContent='Un momento…'}
+ document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+ S.auto=auto;S.last={action:'answer',sid:S.sid,bid:S.B.bid,picks:S.pick}; // -1 = «No sé»; null = sin responder
+ await sendLast();
+}
+async function sendLast(){
+ const r=await api(S.last);S.busy=false;
+ if(!r.ok)return oops(r.error);
+ if(r.done)return finish(r.result);
+ S.note=(S.auto||r.tarde)?'Se acabó el tiempo en la pregunta anterior. No pasa nada, seguimos con la siguiente.':'';
+ ask(r.block);
+}
+function oops(err){
+ clearInterval(S.tm);if(S.au)S.au.pause();const exp=err==='expired';
+ app.innerHTML=head+`<div class="in"><div class="card"><h2>${exp?'Tu sesión terminó':'Algo no salió como esperábamos'}</h2><p>${exp?'Pasó demasiado tiempo sin actividad y, para cuidar tu resultado, la sesión se cerró. Puedes volver a empezar cuando quieras.':MSG_NET}</p><button class="btn" id="rt2">${exp?'Volver a empezar':'Reintentar'}</button></div></div>`;
+ document.getElementById('rt2').onclick=()=>{if(exp){S.t0=0;S.sid=null;intro()}else{S.busy=true;app.innerHTML=head+'<div class="in"><p>Conectando…</p></div>';sendLast()}};
 }
 const FB=[
-{m:['Revisamos tus respuestas y estás muy cerca de abrir el nivel A1: ya reconoces varias estructuras básicas.','Revisamos tus respuestas: {t} de 50 aciertos nos dicen exactamente dónde empezar contigo, sin presión.'],s:'En {x} mostraste más base que en el resto, y desde ahí vamos a construir.',w:'Con {x} avanzaremos paso a paso: es donde más rápido vas a notar progreso.',p:['Respondiste con agilidad, y eso ayuda mucho a aprender hablando.','Tomaste tu tiempo en cada respuesta, y esa calma sirve para construir bases firmes.'],t:'Tu mejor jugada: unos minutos de práctica real cada día desde la primera semana.'},
+{m:['Revisamos tus respuestas y estás muy cerca de abrir el nivel A1: ya reconoces varias estructuras básicas.','Revisamos tus respuestas: {t} de {T} aciertos nos dicen exactamente dónde empezar contigo, sin presión.'],s:'En {x} mostraste más base que en el resto, y desde ahí vamos a construir.',w:'Con {x} avanzaremos paso a paso: es donde más rápido vas a notar progreso.',p:['Respondiste con agilidad, y eso ayuda mucho a aprender hablando.','Tomaste tu tiempo en cada respuesta, y esa calma sirve para construir bases firmes.'],t:'Tu mejor jugada: unos minutos de práctica real cada día desde la primera semana.'},
 {m:['Estás a pocas respuestas de A2: tu base ya es firme.','Tu base A1 es sólida: lo esencial lo respondiste con seguridad.'],s:'Tu punto fuerte hoy es {x}; se nota que ya lo usas con naturalidad.',w:'Un poco más de práctica en {x} te dará el salto más visible.',p:['Tu ritmo fue ágil: reconoces rápido lo básico.','Fuiste con calma y constancia, que es como se consolida lo básico.'],t:'En tu nivel, hablar en frases cortas todos los días vale más que memorizar reglas.'},
 {m:['Estás rozando el B1: varias respuestas de nivel intermedio ya te salieron bien.','Tu A2 es estable: te defiendes bien en situaciones del día a día.'],s:'En {x} se nota buen manejo, y eso es una ventaja real en tus conversaciones.',w:'Tu mayor oportunidad ahora está en {x}; con práctica enfocada avanzarás rápido.',p:['Respondiste con buen ritmo, señal de que ya piensas en frases cortas en inglés.','Tu ritmo fue pausado y cuidadoso, lo que ayuda a ganar precisión.'],t:'Tu siguiente salto está en dejar de traducir en tu cabeza: entrenar respuestas rápidas.'},
 {m:['Estás muy cerca del B2: ya resolviste parte de las preguntas más avanzadas.','Tu B1 es firme: te comunicas con ideas claras y estructuras variadas.'],s:'Tu mejor resultado fue en {x}, un buen motor para tu avance.',w:'Reforzar {x} te va a dar mucha más naturalidad al hablar.',p:['Mantuviste un ritmo ágil incluso en las preguntas largas.','Tomaste el tiempo para razonar, y eso se nota en tu precisión.'],t:'Ahora toca ganar precisión: hablar más, con corrección directa sobre tus errores reales.'},
 {m:['Estás a un paso del C1: resolviste varias preguntas de alto nivel.','Tu B2 es sólido: manejas estructuras complejas con independencia.'],s:'Destacas en {x}, y es una base excelente para el nivel avanzado.',w:'En {x} están los matices que separan un B2 de un C1; vale la pena pulirlos.',p:['Tu ritmo fue rápido y seguro frente a preguntas exigentes.','Fuiste reflexivo en cada respuesta, justo lo que pide este nivel.'],t:'Tu entrenamiento ideal: debate, opinión y corrección fina de matices.'},
-{m:['Tu resultado es de nivel avanzado: dominaste casi todo el test, incluidas las estructuras más difíciles.','Llegaste al nivel más alto del test: acertaste {t} de 50, un resultado muy sólido.'],s:'Tu dominio de {x} destaca incluso dentro de un nivel avanzado.',w:'Podemos afinar {x} hasta que suene totalmente natural.',p:['Mantuviste un ritmo muy ágil, como alguien que ya usa el idioma a diario.','Cuidaste cada respuesta con atención, y se nota en el resultado.'],t:'En tu nivel, lo que suma es conversación sin esfuerzo, registro y precisión.'}];
+{m:['Tu resultado es de nivel avanzado: dominaste casi todo el test, incluidas las estructuras más difíciles.','Llegaste al nivel más alto del test: acertaste {t} de {T}, un resultado muy sólido.'],s:'Tu dominio de {x} destaca incluso dentro de un nivel avanzado.',w:'Podemos afinar {x} hasta que suene totalmente natural.',p:['Mantuviste un ritmo muy ágil, como alguien que ya usa el idioma a diario.','Cuidaste cada respuesta con atención, y se nota en el resultado.'],t:'En tu nivel, lo que suma es conversación sin esfuerzo, registro y precisión.'}];
 const SN={g:'la gramática en contexto',v:'el vocabulario',r:'la lectura',l:'la comprensión auditiva'}, SN2={g:'Gramática',v:'Vocabulario',r:'Lectura',l:'Comprensión auditiva'};
 function count(id,to,ms){const el=document.getElementById(id),t0=performance.now();(function f(t){const p=Math.min((t-t0)/ms,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)}
 function confetti(){const c=document.getElementById('cf'),x=c.getContext('2d');if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;c.width=innerWidth;c.height=innerHeight;const cols=['#ffc400','#ffe27a','#f3efe8','#ff9f1c'];const ps=Array.from({length:130},()=>({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,s:Math.random()*7+3,c:cols[Math.random()*4|0],r:Math.random()*6}));let n=0;(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++n<170)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
@@ -383,23 +339,16 @@ function bindAudio(f){
  a.onended=()=>{pl.classList.remove('on');pg.style.width='0';pb.textContent='▶';pb.disabled=left()<1;lab()};
  pb.onclick=()=>{if(left()<1)return;S.plays[f]=(S.plays[f]||0)+1;pb.disabled=true;pb.textContent='♪';pl.classList.add('on');lab();a.currentTime=0;a.playbackRate=SPEED[f.slice(0,2)]||1;a.preservesPitch=true;a.play().catch(()=>{})};
 }
-function finish(){
- const lv=[0,0,0,0,0], sc={g:[0,0],v:[0,0],r:[0,0],l:[0,0]};
- S.order.forEach((qi,n)=>{const q=Q[qi],ok=S.ans[n];if(ok){lv[q[0]]++;sc[q[1]][0]++}sc[q[1]][1]++;});
- let k=0; while(k<5&&lv[k]>=PASS)k++; // aprueba un nivel con 6/8 o más, de forma consecutiva
- const R=RES[k], F=FB[k], total=S.ans.filter(Boolean).length, rt=x=>x[0]/x[1], adj=(c,n)=>Math.max(0,(c-n/4)/(n*.75)), pct=x=>Math.round(adj(x[0],x[1])*100); // con 4 opciones, adivinar acierta 1 de cada 4: ese 25% no cuenta como dominio
- const mins=Math.round((Date.now()-S.t0)/60000);
- const score=Math.round(lv.reduce((a,c)=>a+adj(c,PER),0)/LV.length*100); // 0-100: cada nivel vale 20 puntos, descontando el azar
- const ks=Object.keys(sc).sort((a,b)=>rt(sc[b])-rt(sc[a])), close=k<5?lv[k]>=PER/2:lv[4]===PER;
- const flat=pct(sc[ks[0]])===0, goal=k<5?{n:LV[k],have:lv[k],need:PASS}:null;
- const fb=[F.m[close?0:1].replace('{t}',total),flat?'Todavía no hay una habilidad por encima de lo que se acierta adivinando, y es normal: significa que empezamos desde la base, a tu ritmo.':F.s.replace('{x}',SN[ks[0]]),flat?'Vamos a empezar por lo más útil: frases simples que puedas usar desde la primera clase.':F.w.replace('{x}',SN[ks[3]]),F.p[mins<16?0:1],goal?`Tu siguiente meta es ${goal.n}: llevas ${goal.have} aciertos de ${goal.need} en ese nivel, así que te faltan ${goal.need-goal.have}.`:'',F.t].filter(Boolean);
- send({...S.lead,codigo:S.code,estado:'completo',nosabe:S.ns.filter(Boolean).length,nivel:R.n,puntaje:total+'/'+S.order.length,score:score,gramatica:pct(sc.g),vocabulario:pct(sc.v),lectura:pct(sc.r),escucha:pct(sc.l),porNivel:LV.map((n,i)=>n+':'+lv[i]+'/'+PER).join(' '),minutos:mins,utm:P.get('utm_source')||P.get('ref')||'',fecha:new Date().toISOString()});
+function finish(D){
+ const k=D.k, R=RES[k], F=FB[k], p=D.p, score=D.score, total=D.aciertos, tot=D.total, secs=(Date.now()-S.t0)/1000;
+ const ks=Object.keys(p).sort((a,b)=>p[b]-p[a]), close=D.cerca, flat=p[ks[0]]===0, goal=k<5?{n:LV[k],have:Math.min(6,D.a1),need:7}:null;
+ const fb=[F.m[close?0:1].replace('{t}',total).replace('{T}',tot),flat?'Todavía no hay una habilidad por encima de lo que se acierta adivinando, y es normal: significa que empezamos desde la base, a tu ritmo.':F.s.replace('{x}',SN[ks[0]]),flat?'Vamos a empezar por lo más útil: frases simples que puedas usar desde la primera clase.':F.w.replace('{x}',SN[ks[3]]),F.p[secs/tot<19?0:1],goal?`Tu siguiente meta es ${goal.n}.`:'',F.t].filter(Boolean);
  const fn=FN(), L6=['Pre-A1',...LV], link=BASE+'?ref='+encodeURIComponent(S.code)+'&n='+encodeURIComponent(fn)+'&l='+encodeURIComponent(R.n)+'&s='+score,
-  ct=`Saqué nivel ${R.n} en el test de inglés de Nica English Club 💪 ¿Te animas a superarme? Es gratis y dura unos 25 minutos: ${link}`;
+  ct=`Saqué nivel ${R.n} en el test de inglés de Nica English Club 💪 ¿Te animas a superarme? Es gratis y dura unos 15 minutos: ${link}`;
  let cmp='';if(CH){const ci=L6.indexOf(CH.l),win=k>ci||(k===ci&&score>CH.s),tie=k===ci&&score===CH.s;
   cmp=`<div class="chal">${win?`Superaste a <b>${esc(CH.n)}</b>: tu nivel es <b>${R.n}</b> (${score}%) y el suyo, ${CH.l} (${CH.s}%).`:tie?`Empataste con <b>${esc(CH.n)}</b>: los dos en <b>${R.n}</b>, con ${score}%.`:`<b>${esc(CH.n)}</b> todavía va adelante (${CH.l}, ${CH.s}%). Tú estás en <b>${R.n}</b> (${score}%): ¡pídele la revancha!`}</div>`}
  const wa='https://wa.me/'+WA+'?text='+encodeURIComponent(`Hola, soy ${S.lead.nombre}. Mi código de test es ${S.code} y mi nivel es ${R.n}. Te envío mi audio:`);
- const bar=(t,x)=>`<div class="sec"><div><span>${t}</span><span>${pct(x)>0?pct(x)+'%':'Por construir'}</span></div><div class="bar"><i style="width:0" data-w="${pct(x)}"></i></div></div>`;
+ const bar=(t,x)=>`<div class="sec"><div><span>${t}</span><span>${x>0?x+'%':'Por construir'}</span></div><div class="bar"><i style="width:0" data-w="${x}"></i></div></div>`;
  app.innerHTML = head+`<div class="in"><p>${esc(S.lead.nombre.split(' ')[0])}, tu nivel de inglés es</p>
  <div class="lvl">${R.n}</div>
  <div class="ladder">${LV.map(n=>`<span>${n}</span>`).join('')}</div>
@@ -407,8 +356,8 @@ function finish(){
  <p>${R.t}</p>
  ${cmp}
  <h2>Lo que vimos en tu test</h2><ul class="fb">${fb.map((t,i)=>`<li style="animation-delay:${.4+i*.2}s">${esc(t)}</li>`).join('')}</ul>
- <div class="card">${bar('Gramática en contexto',sc.g)}${bar('Vocabulario',sc.v)}${bar('Lectura',sc.r)}${bar('Comprensión auditiva',sc.l)}</div>
- <p style="font-size:.85rem;margin:10px 4px 0">Los porcentajes descuentan lo que se acierta por azar (con 4 opciones, adivinar acierta 1 de cada 4). “Por construir” significa que en esa habilidad tus aciertos no superaron al azar: es tu punto de partida.</p>
+ <div class="card">${bar('Gramática en contexto',p.g)}${bar('Vocabulario',p.v)}${bar('Lectura',p.r)}${bar('Comprensión auditiva',p.l)}</div>
+ <p style="font-size:.85rem;margin:10px 4px 0">Los porcentajes muestran hasta qué nivel llegaste en cada habilidad. “Por construir” significa que en esa habilidad tus aciertos no superaron al azar: es tu punto de partida.</p>
  <div class="card" style="margin-top:16px"><h2>Último paso: tu audio</h2>
  <p>Para confirmar tu nivel, un coach necesita escucharte. ${esc(fn)}, graba entre 30 y 60 segundos respondiendo esto, en inglés:</p>
  <p class="read">${esc(R.a)}</p>
@@ -420,9 +369,9 @@ function finish(){
  <div class="row"><button class="btn" id="sh">Compartir</button><button class="btn ghost" id="dl">Descargar</button></div></div>
  <div class="card" style="margin-top:16px"><h2>Reta a un amigo</h2><p>Mándale tu reto por WhatsApp: ¿se anima a superar tu nivel?</p>
  <div class="row"><button class="btn" id="rt">Retar por WhatsApp</button><button class="btn ghost" id="cp">Copiar mensaje</button></div></div>
- <div style="margin-top:18px"><a class="btn ghost" href="${ADMISION}">Aplicar a mi cupo</a></div>
+ <div class="row" style="margin-top:18px"><a class="btn ghost" href="${ADMISION}">Aplicar a mi cupo</a><a class="btn ghost" href="${SITE}" target="_blank" rel="noopener">Conoce Nica English Club</a></div>
  <p style="margin-top:22px;font-size:.85rem">Este test es una estimación inicial. Tu nivel se confirma con tu audio y con tu coach.</p></div>`;
- S.done=true; initCert({nombre:S.lead.nombre.replace(/\s+/g,' ').trim(),n:R.n,k:k,goal:goal,link:link,score:score,best:pct(sc[ks[0]])>0?SN2[ks[0]]:'',p:{g:pct(sc.g),v:pct(sc.v),r:pct(sc.r),l:pct(sc.l)},code:S.code,fecha:new Date().toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}); scrollTo(0,0);
+ S.done=true; initCert({nombre:S.lead.nombre.replace(/\s+/g,' ').trim(),n:R.n,k:k,goal:goal,link:link,score:score,best:p[ks[0]]>0?SN2[ks[0]]:'',p:{g:p.g,v:p.v,r:p.r,l:p.l},code:S.code,fecha:new Date().toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}); scrollTo(0,0);
  document.getElementById('rt').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(ct),'_blank','noopener');
  document.getElementById('cp').onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(ct)}catch(_){const t=document.createElement('textarea');t.value=ct;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(__){}t.remove()}b.textContent='¡Copiado!';setTimeout(()=>b.textContent='Copiar mensaje',2000)};
  setTimeout(()=>document.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%'),500);

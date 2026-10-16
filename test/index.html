@@ -17,6 +17,7 @@
 <meta property="og:description" content="Descubre tu nivel real de inglés de A1 a C1 en unos 15 minutos.">
 <meta name="theme-color" content="#0a0908">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0908;--card:#16130f;--line:#2a251e;--tx:#f3efe8;--mu:#a39b8f;--ac:#ffc400;--ok:#8fd6a4;--r:14px}
@@ -86,19 +87,37 @@ header,.brand{display:flex;align-items:center;gap:12px}.brand img{height:40px;wi
 .nec{max-width:720px;margin:0 auto;padding:0 20px 30px;position:relative;z-index:1;text-align:center;color:var(--mu);font-size:.8rem}.nec .ln{border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;align-items:center;gap:12px}.nec img{height:24px;width:auto;opacity:.9}.nec .btn{margin-top:0;padding:9px 18px;font-size:.85rem}
 .sec .lv{color:var(--ac);font-weight:700;margin-left:4px}.sec .few{color:var(--mu);font-size:.75rem;margin-left:6px}
 .how-pct{margin:10px 4px 0;font-size:.85rem;color:var(--mu)}.how-pct summary{cursor:pointer;color:var(--tx)}.how-pct table{width:100%;border-collapse:collapse;margin-top:8px}.how-pct td{padding:5px 0;border-bottom:1px solid var(--line)}.how-pct td:last-child{text-align:right;color:var(--tx);font-weight:700}
+.wrow{display:flex;gap:8px}.wrow select{flex:0 0 46%;width:auto}.wrow input{flex:1;min-width:0}
 .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}main:focus{outline:none}
 .opt{position:relative}.opt.on{padding-right:46px}.opt.on::after{content:"✓";position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--ac);font-weight:800}
 </style>
+<!-- TikTok Pixel -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  ttq.load('DB8MN53C77UDN3PKVOFG');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','28626219097058644');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=28626219097058644&ev=PageView&noscript=1"></noscript>
 </head>
 <body>
 <canvas id="cf"></canvas>
 <main id="app"></main>
-<footer class="nec"><div class="ln"><img src="logo.png" alt="" onerror="this.remove()"><span>Nica English Club · 2026 · Test de ubicación alineado al MCER</span><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div></footer>
+<footer class="nec"><div class="ln"><img src="logo.png" alt="" onerror="this.remove()"><span>Nica English Club · 2026 · Test de ubicación alineado al MCER · <a href="https://nicaenglishclub.com/privacidad" target="_blank" rel="noopener" style="color:inherit">Privacidad</a></span><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div></footer>
 <script>
 // ====== CONFIGURACIÓN ======
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQMsJ-EFLAqytkzQeJN2Ain2NZYoo0t3mspkfEqvw0oCbFU3qci4ujImipAkz4hsE/exec"; // pega aquí la URL de tu Apps Script (termina en /exec)
 const WA = "50583267703";
-const ADMISION = "https://app.nicaenglishclub.com/nica-english-club-admision/";
+const ADMISION = "https://nicaenglishclub.com/unirme";   // reservación de cupos
+const PRIVACIDAD = "https://nicaenglishclub.com/privacidad";
 const SITE = "https://nicaenglishclub.com";
 
 const LV = ['A1','A2','B1','B2','C1'];
@@ -117,6 +136,13 @@ const lvOf=p=>['Pre-A1',...LV][Math.max(0,Math.min(5,Math.floor((p+10)/20)))];
 
 const WV=/(FBAN|FBAV|Instagram|TikTok|musical_ly|Bytedance|Snapchat|; wv\))/i.test((typeof navigator!=='undefined'&&navigator.userAgent)||''); // navegador interno de una app (TikTok, Instagram...): suele bloquear descargas
 if(typeof CanvasRenderingContext2D!=='undefined'&&!CanvasRenderingContext2D.prototype.roundRect)CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){r=Math.min(r,w/2,h/2);this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath()}; // Safari < 16 y WebViews viejos
+
+// ====== PAÍSES Y TELÉFONO: en la hoja se guarda SOLO el número; el código de país va en su propia columna ======
+const PAISES=[['505','Nicaragua'],['506','Costa Rica'],['504','Honduras'],['503','El Salvador'],['502','Guatemala'],['507','Panamá'],['1','EE. UU. / Canadá'],['52','México'],['57','Colombia'],['58','Venezuela'],['51','Perú'],['593','Ecuador'],['56','Chile'],['54','Argentina'],['34','España'],['44','Reino Unido']];
+function normPhone(code,raw){let d=String(raw||'').replace(/\D/g,'').replace(/^0+/,'');if(d.indexOf(code)===0&&d.length>(code==='505'?8:10))d=d.slice(code.length);return d} // quita el código si la persona lo escribió ("+505 8888 8888")
+const phoneOk=(code,d)=>code==='505'?d.length===8:(d.length>=7&&d.length<=12);
+// ====== EVENTOS DE PIXEL (sin datos personales) ======
+function ev(tt,fb,custom){try{if(window.ttq&&tt)ttq.track(tt)}catch(e){}try{if(window.fbq&&fb){custom?fbq('trackCustom',fb):fbq('track',fb)}}catch(e){}}
 
 // ====== ESTADO ======
 const app = document.getElementById('app');
@@ -141,7 +167,7 @@ async function resume(sv){
  const r=await api({action:'answer',sid:sv.sid,bid:-1,picks:[]}); // un bid que no coincide hace que el servidor devuelva el bloque actual (o el resultado si ya terminó)
  if(!r.ok){b.disabled=false;b.textContent=lbl;if(r.error==='expired'){clearSaved();e.textContent='Tu sesión anterior ya expiró. Puedes empezar de nuevo.'}else e.textContent=MSG_NET;return}
  S.lead=sv.lead;S.sid=sv.sid;S.code=sv.code;S.t0=sv.t0;S.pp=sv.pp||0;S.plays=sv.plays||{};S.busy=false;
- if(r.done)return finish(r.result);
+ if(r.done){S.trk=1;return finish(r.result)} // ya se contó cuando terminó
  S.note='Retomamos donde ibas. El tiempo de esta pregunta empieza de nuevo.';ask(r.block);
 }
 
@@ -171,7 +197,7 @@ function intro(){
  ${sv?`<div class="chal"><b>${esc(sv.lead.nombre.replace(/\s+/g,' ').trim().split(' ')[0])}</b>, ${sv.done?'ya terminaste tu test.':'tienes un test sin terminar.'}<div class="row"><button class="btn" id="rsy">${sv.done?'Ver mi resultado':'Continuar donde iba'}</button><button class="btn ghost" id="rsn">Empezar de nuevo</button></div><div class="err" id="rse"></div></div>`:''}
  ${CH?`<div class="chal"><b>${esc(CH.n)}</b> te retó a superar su nivel (<b>${CH.l}</b>). ¿Aceptas?</div>`:''}
  <p>Entre 15 y 25 preguntas de gramática, vocabulario, lectura y comprensión auditiva, de A1 a C1, alineadas al Marco Común Europeo. Unos 15 minutos, gratis. Recibes tu nivel, tu NEC Score y tu plan de entrenamiento.</p>
- <div class="shots">${[['Plataforma','captura1','https://app.nicaenglishclub.com'],['Coach IA','captura2'],['Clase en vivo','captura3']].map(([t,f,u])=>`<figure><img src="${f}.jpeg" data-b="${f}" alt="${t}" onerror="nx(this)"><figcaption>${t}</figcaption>${u?`<a class="ov" href="${u}" target="_blank" rel="noopener" aria-label="Ir a la ${t}"></a>`:''}</figure>`).join('')}</div>
+ <div class="shots">${[['Plataforma','captura1','https://app.nicaenglishclub.com'],['Coach IA','captura2'],['Clase en vivo','captura3']].map(([t,f,u])=>`<figure><img src="${f}.jpeg" data-b="${f}" alt="${t}" loading="lazy" decoding="async" onerror="nx(this)"><figcaption>${t}</figcaption>${u?`<a class="ov" href="${u}" target="_blank" rel="noopener" aria-label="Ir a la ${t}"></a>`:''}</figure>`).join('')}</div>
  <ol class="how"><li><b>Haz el test.</b> Cada intento sortea preguntas y audios distintos.</li><li><b>Recibe tu nivel</b> y tu NEC Score al instante.</li><li><b>Envía un audio</b> y un coach confirma tu nivel contigo.</li></ol>
  <div class="card" style="margin-bottom:16px"><h2>Prueba tu audio</h2>
  <p>Antes de empezar, probemos tu audio. Hay preguntas de escucha y queremos asegurarnos de que puedas tomar el test sin problemas.</p>
@@ -180,11 +206,11 @@ function intro(){
  <div class="row" id="atb" style="display:none"><button class="btn" id="aty" style="margin-top:6px">Sí, lo escucho</button><button class="btn ghost" id="atn" style="margin-top:6px">No lo escucho</button></div></div>
  <div class="card"><h2>Antes de empezar</h2>
  <label for="n">Nombre completo</label><input id="n" autocomplete="name">
- <label for="w">WhatsApp (con código de país)</label><input id="w" type="tel" placeholder="+505 ..." autocomplete="tel">
+ <label for="w">WhatsApp</label><div class="wrow"><select id="wp" aria-label="País del número">${PAISES.map(([c,n])=>`<option value="${c}"${c==='505'?' selected':''}>${n} +${c}</option>`).join('')}</select><input id="w" type="tel" inputmode="numeric" placeholder="8888 8888" autocomplete="tel-national" aria-describedby="wh"></div><p class="hint" id="wh" style="margin:6px 0 0">Escribe solo tu número, sin el código de país.</p>
  <label for="c">Correo</label><input id="c" type="email" autocomplete="email">
  <label for="o">¿Para qué quieres inglés?</label><select id="o"><option value="">Elige una opción</option><option>Trabajo</option><option>Viajar</option><option>Estudios</option><option>Migrar</option><option>Crecimiento personal</option></select>
  <label for="s">¿Cómo nos conociste?</label><select id="s"><option value="">Elige una opción</option><option>TikTok</option><option>Instagram</option><option>Facebook</option><option>Un amigo</option><option>Google</option><option>Otro</option></select>
- <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo.</label></div>
+ <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo. <a href="${PRIVACIDAD}" target="_blank" rel="noopener">Política de privacidad</a></label></div>
  <div class="err" id="e" role="alert"></div>
  <button class="btn" id="go">Empezar el test</button></div>
  <p style="margin-top:18px;font-size:.9rem">Usa audífonos: en las preguntas de escucha, cada audio se puede reproducir solo 3 veces. Responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, marca «No sé». No pasa nada y nos ayuda a saber dónde empezar contigo. Cada pregunta tiene un tiempo límite que verás en una barra.</p>`;
@@ -194,20 +220,22 @@ function intro(){
  document.getElementById('aty').onclick=()=>{S.audio='ok';document.getElementById('atb').style.display='none';setAt('Listo: tu audio funciona. Ya puedes empezar.',true)};
  document.getElementById('atn').onclick=()=>{S.audio='sin-sonido';setAt('Sube el volumen, conecta audífonos y, si usas iPhone, apaga el modo silencio. Luego toca «Probar mi audio» otra vez. Si sigues sin oír, escríbenos por WhatsApp antes de empezar; aun así puedes continuar.')};
  if(CH)document.getElementById('s').value='Un amigo';
+ else{const u=(P.get('utm_source')||'').toLowerCase(),m=/tiktok/.test(u)?'TikTok':/insta|^ig$/.test(u)?'Instagram':/face|^fb$|meta/.test(u)?'Facebook':/google/.test(u)?'Google':'';if(m)document.getElementById('s').value=m} // preselecciona "cómo nos conociste" según el anuncio
 }
 async function start(){
  const v = id => document.getElementById(id).value.trim(), e = document.getElementById('e');
- const l = {nombre:v('n'),whatsapp:v('w'),correo:v('c'),objetivo:v('o'),origen:v('s')};
+ const code=document.getElementById('wp').value, num=normPhone(code,v('w')), l = {nombre:v('n'),whatsapp:num,pais:code,correo:v('c'),objetivo:v('o'),origen:v('s')};
  if(l.nombre.length<3) return e.textContent='Escribe tu nombre completo.';
- if(l.whatsapp.replace(/\D/g,'').length<8) return e.textContent='Escribe un número de WhatsApp válido.';
+ if(!phoneOk(code,num)) return e.textContent=code==='505'?'Tu número de Nicaragua debe tener 8 dígitos (sin el +505).':'Escribe un número de WhatsApp válido, sin el código de país.';
+ document.getElementById('w').value=num;
  if(!/^\S+@\S+\.\S+$/.test(l.correo)) return e.textContent='Escribe un correo válido.';
  if(!l.objetivo||!l.origen) return e.textContent='Completa todas las opciones.';
  if(!document.getElementById('k').checked) return e.textContent='Debes aceptar el uso de tus datos para continuar.';
  if(!S.audio) return e.textContent='Primero prueba tu audio (es rápido): así nos aseguramos de que puedes tomar el test.';
  const b=document.getElementById('go');b.disabled=true;b.textContent='Preparando tu test…';e.textContent='';
- const r=await api({action:'start',lead:l,audioTest:S.audio,utm:P.get('utm_source')||P.get('ref')||''});
+ const r=await api({action:'start',lead:l,audioTest:S.audio,utm:P.get('utm_source')||'',ref:P.get('ref')||'',campana:P.get('utm_campaign')||''});
  if(!r.ok||!r.block){b.disabled=false;b.textContent='Empezar el test';e.textContent=r.error==='bad'?'Revisa tus datos e inténtalo de nuevo.':MSG_NET;return}
- S.lead=l;S.t0=Date.now();S.pp=0;S.sid=r.sid;S.code=r.codigo;S.note='';S.busy=false;S.plays={};S.done=false;save();
+ S.lead=l;S.t0=Date.now();S.pp=0;S.sid=r.sid;S.code=r.codigo;S.note='';S.busy=false;S.plays={};S.done=false;S.trk=0;save();ev('SubmitForm','Lead');
  ask(r.block);
 }
 function ask(B){ // el servidor envía solo la pregunta y las opciones; nunca la respuesta correcta
@@ -400,16 +428,16 @@ function finish(D){
  <p>Para confirmar tu nivel, un coach necesita escucharte. ${esc(fn)}, graba entre 30 y 60 segundos respondiendo esto, en inglés:</p>
  <p class="read">${esc(R.a)}</p>
  <p>Tu código de test: <span class="code">${S.code}</span></p>
- <a class="btn" href="${wa}" target="_blank" rel="noopener">Enviar mi audio por WhatsApp</a></div>
+ <a class="btn" href="${wa}" target="_blank" rel="noopener" onclick="ev('Contact','Contact')">Enviar mi audio por WhatsApp</a></div>
  <div class="card" style="margin-top:16px"><h2>Tu certificado</h2><p>Compártelo en tus redes. Agrega tu foto para que se vea aún mejor; se queda en tu dispositivo y no se sube a ningún lado.</p>
  <canvas id="cv" width="1080" height="1350" style="width:100%;height:auto;border-radius:10px;background:#0a0908"></canvas><img id="ci" alt="Tu certificado de nivel de inglés" style="display:none;width:100%;height:auto;border-radius:10px"><p id="cw" class="hint" style="display:none;margin:10px 0 0"></p>
  <div class="row"><label class="btn ghost"><input type="file" accept="image/*" capture="user" id="f1" hidden>Tomarme una foto</label><label class="btn ghost"><input type="file" accept="image/*" id="f2" hidden>Elegir de galería</label></div>
  <div class="row"><button class="btn" id="sh">Compartir</button><button class="btn ghost" id="dl">Descargar</button></div></div>
  <div class="card" style="margin-top:16px"><h2>Reta a un amigo</h2><p>Mándale tu reto por WhatsApp: ¿se anima a superar tu nivel?</p>
  <div class="row"><button class="btn" id="rt">Retar por WhatsApp</button><button class="btn ghost" id="cp">Copiar mensaje</button></div></div>
- <div class="row" style="margin-top:18px"><a class="btn ghost" href="${ADMISION}">Aplicar a mi cupo</a><a class="btn ghost" href="${SITE}" target="_blank" rel="noopener">Conoce Nica English Club</a></div>
+ <div class="row" style="margin-top:18px"><a class="btn ghost" href="${ADMISION}" onclick="ev('ClickButton','ClickAplicarCupo',1)">Aplicar a mi cupo</a><a class="btn ghost" href="${SITE}" target="_blank" rel="noopener">Conoce Nica English Club</a></div>
  <p style="margin-top:22px;font-size:.85rem">Este test es una estimación inicial. Tu nivel se confirma con tu audio y con tu coach.</p></div>`;
- S.done=true; save(); initCert({nombre:S.lead.nombre.replace(/\s+/g,' ').trim(),n:R.n,k:k,goal:goal,link:link,score:score,best:(!flat&&!even)?SN2[top]:'',p:{g:p.g,v:p.v,r:p.r,l:p.l},code:S.code,fecha:new Date().toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}); scrollTo(0,0);
+ S.done=true; save(); if(!S.trk){S.trk=1;ev('CompleteRegistration','CompleteRegistration')} initCert({nombre:S.lead.nombre.replace(/\s+/g,' ').trim(),n:R.n,k:k,goal:goal,link:link,score:score,best:(!flat&&!even)?SN2[top]:'',p:{g:p.g,v:p.v,r:p.r,l:p.l},code:S.code,fecha:new Date().toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}); scrollTo(0,0);
  document.getElementById('rt').onclick=()=>window.open('https://wa.me/?text='+encodeURIComponent(ct),'_blank','noopener');
  document.getElementById('cp').onclick=async e=>{const b=e.currentTarget;try{await navigator.clipboard.writeText(ct)}catch(_){const t=document.createElement('textarea');t.value=ct;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(__){}t.remove()}b.textContent='¡Copiado!';setTimeout(()=>b.textContent='Copiar mensaje',2000)};
  setTimeout(()=>document.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%'),500);

@@ -91,27 +91,11 @@ header,.brand{display:flex;align-items:center;gap:12px}.brand img{height:40px;wi
 .sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}main:focus{outline:none}
 .opt{position:relative}.opt.on{padding-right:46px}.opt.on::after{content:"✓";position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--ac);font-weight:800}
 </style>
-<!-- TikTok Pixel -->
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-  ttq.load('DB8MN53C77UDN3PKVOFG');
-  ttq.page();
-}(window, document, 'ttq');
-</script>
-<!-- Meta Pixel -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','28626219097058644');fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=28626219097058644&ev=PageView&noscript=1"></noscript>
 </head>
 <body>
 <canvas id="cf"></canvas>
 <main id="app"></main>
-<footer class="nec"><div class="ln"><img src="logo.png" alt="" onerror="this.remove()"><span>Nica English Club · 2026 · Test de ubicación alineado al MCER · <a href="https://nicaenglishclub.com/privacidad" target="_blank" rel="noopener" style="color:inherit">Privacidad</a></span><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div></footer>
+<footer class="nec"><div class="ln"><img src="logo.png" alt="" onerror="this.remove()"><span>Nica English Club · 2026 · Test de ubicación alineado al MCER · <a href="https://nicaenglishclub.com/terminos" target="_blank" rel="noopener" style="color:inherit">Términos</a></span><a class="btn ghost" href="https://nicaenglishclub.com" target="_blank" rel="noopener">Conoce Nica English Club</a></div></footer>
 <script>
 // ====== CONFIGURACIÓN ======
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQMsJ-EFLAqytkzQeJN2Ain2NZYoo0t3mspkfEqvw0oCbFU3qci4ujImipAkz4hsE/exec"; // pega aquí la URL de tu Apps Script (termina en /exec)
@@ -142,6 +126,18 @@ const PAISES=[['505','Nicaragua'],['506','Costa Rica'],['504','Honduras'],['503'
 function normPhone(code,raw){let d=String(raw||'').replace(/\D/g,'').replace(/^0+/,'');if(d.indexOf(code)===0&&d.length>(code==='505'?8:10))d=d.slice(code.length);return d} // quita el código si la persona lo escribió ("+505 8888 8888")
 const phoneOk=(code,d)=>code==='505'?d.length===8:(d.length>=7&&d.length<=12);
 // ====== EVENTOS DE PIXEL (sin datos personales) ======
+function initPixels(){ // TikTok y Meta se cargan SOLO cuando la persona acepta el uso de sus datos (casilla) o retoma un test que ya aceptó
+ if(window.__px)return;window.__px=1;
+ try{!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  ttq.load('DB8MN53C77UDN3PKVOFG');
+  ttq.page();
+}(window, document, 'ttq')}catch(e){}
+ try{!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+ fbq('init','28626219097058644');fbq('track','PageView')}catch(e){}
+}
 function ev(tt,fb,custom){try{if(window.ttq&&tt)ttq.track(tt)}catch(e){}try{if(window.fbq&&fb){custom?fbq('trackCustom',fb):fbq('track',fb)}}catch(e){}}
 
 // ====== ESTADO ======
@@ -166,7 +162,7 @@ async function resume(sv){
  const b=document.getElementById('rsy'),e=document.getElementById('rse'),lbl=b.textContent;b.disabled=true;b.textContent='Un momento…';e.textContent='';
  const r=await api({action:'answer',sid:sv.sid,bid:-1,picks:[]}); // un bid que no coincide hace que el servidor devuelva el bloque actual (o el resultado si ya terminó)
  if(!r.ok){b.disabled=false;b.textContent=lbl;if(r.error==='expired'){clearSaved();e.textContent='Tu sesión anterior ya expiró. Puedes empezar de nuevo.'}else e.textContent=MSG_NET;return}
- S.lead=sv.lead;S.sid=sv.sid;S.code=sv.code;S.t0=sv.t0;S.pp=sv.pp||0;S.plays=sv.plays||{};S.busy=false;
+ initPixels();S.lead=sv.lead;S.sid=sv.sid;S.code=sv.code;S.t0=sv.t0;S.pp=sv.pp||0;S.plays=sv.plays||{};S.busy=false;
  if(r.done){S.trk=1;return finish(r.result)} // ya se contó cuando terminó
  S.note='Retomamos donde ibas. El tiempo de esta pregunta empieza de nuevo.';ask(r.block);
 }
@@ -211,7 +207,7 @@ function intro(){
  <label for="c">Correo</label><input id="c" type="email" autocomplete="email">
  <label for="o">¿Para qué quieres inglés?</label><select id="o"><option value="">Elige una opción</option><option>Trabajo</option><option>Viajar</option><option>Estudios</option><option>Migrar</option><option>Crecimiento personal</option></select>
  <label for="s">¿Cómo nos conociste?</label><select id="s"><option value="">Elige una opción</option><option>TikTok</option><option>Instagram</option><option>Facebook</option><option>Un amigo</option><option>Google</option><option>Otro</option></select>
- <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo. <a href="${PRIVACIDAD}" target="_blank" rel="noopener">Política de privacidad</a></label></div>
+ <div class="chk"><input id="k" type="checkbox"><label for="k" style="margin:0">Acepto que Nica English Club use mis datos para enviarme mi resultado y contactarme sobre mi cupo. <a href="${PRIVACIDAD}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Política de privacidad</a></label></div>
  <div class="err" id="e" role="alert"></div>
  <button class="btn" id="go">Empezar el test</button></div>
  <p style="margin-top:18px;font-size:.9rem">Usa audífonos: en las preguntas de escucha, cada audio se puede reproducir solo 3 veces. Responde sin ayuda ni traductor: así tu resultado será real. Si no sabes una respuesta, marca «No sé». No pasa nada y nos ayuda a saber dónde empezar contigo. Cada pregunta tiene un tiempo límite que verás en una barra.</p>`;
@@ -233,7 +229,7 @@ async function start(){
  if(!l.objetivo||!l.origen) return e.textContent='Completa todas las opciones.';
  if(!document.getElementById('k').checked) return e.textContent='Debes aceptar el uso de tus datos para continuar.';
  if(!S.audio) return e.textContent='Primero prueba tu audio (es rápido): así nos aseguramos de que puedes tomar el test.';
- const b=document.getElementById('go');b.disabled=true;b.textContent='Preparando tu test…';e.textContent='';
+ const b=document.getElementById('go');b.disabled=true;b.textContent='Preparando tu test…';e.textContent='';initPixels(); // ya marcó la casilla de aceptación
  const r=await api({action:'start',lead:l,audioTest:S.audio,utm:P.get('utm_source')||'',ref:P.get('ref')||'',campana:P.get('utm_campaign')||''});
  if(!r.ok||!r.block){b.disabled=false;b.textContent='Empezar el test';e.textContent=r.error==='bad'?'Revisa tus datos e inténtalo de nuevo.':MSG_NET;return}
  S.lead=l;S.t0=Date.now();S.pp=0;S.sid=r.sid;S.code=r.codigo;S.note='';S.busy=false;S.plays={};S.done=false;S.trk=0;save();ev('SubmitForm','Lead');

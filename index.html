@@ -723,6 +723,14 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
 #ritmos .rt-vcover.has-img{background:#0f0d0b}
 #ritmos .rt-vcover.has-img::after{background:linear-gradient(to top,rgba(0,0,0,.28),transparent 38%)}
 #ritmos .rt-vcap{margin-top:12px;font-size:15px;font-weight:600;line-height:1.4;color:#f4efe6}
+/* barra de controles propia (oscura, siempre visible aunque el video sea blanco) */
+#ritmos .rt-vbar{display:flex;align-items:center;gap:10px;margin-top:10px;padding:6px 8px;border:1px solid #2a2520;border-radius:14px;background:#131110}
+#ritmos .rt-vbar[hidden]{display:none}
+#ritmos .rt-vb{flex:none;width:38px;height:38px;border-radius:50%;border:0;display:grid;place-items:center;background:transparent;color:#f4efe6;cursor:pointer}
+#ritmos .rt-vb:hover{background:rgba(240,180,41,.12);color:#ffd966}
+#ritmos .rt-vprog{position:relative;flex:1;height:22px;cursor:pointer;display:flex;align-items:center}
+#ritmos .rt-vprog::before{content:"";position:absolute;left:0;right:0;height:4px;border-radius:99px;background:#38322b}
+#ritmos .rt-vprog i{position:relative;display:block;height:4px;width:0;border-radius:99px;background:linear-gradient(90deg,#f0b429,#ffd966)}
 #ritmos .rt-vlink{display:inline-block;margin-top:6px;font-size:13.5px;color:#9a948a}
 #ritmos .rt-vlink:hover{color:#ffd966}
 </style>
@@ -1999,17 +2007,55 @@ document.querySelectorAll('[data-car]').forEach(function(tr){
 })();
 </script>
 <script>
-/* Videos de TikTok: portada propia, el reproductor de TikTok solo carga al tocar */
+/* Videos de TikTok: portada propia; el reproductor carga al tocar, arranca con sonido y trae su propia barra de controles */
 (function(){
-  var covers=document.querySelectorAll('#ritmos .rt-vcover[data-vid]');
-  covers.forEach(function(c,i){
+  var ORIGIN='https://www.tiktok.com',players=[];
+  var IC={play:'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>',
+    pause:'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+    vol:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg>',
+    mute:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>'};
+  function send(pl,type,value){try{pl.win.postMessage({'x-tiktok-player':true,type:type,value:value},ORIGIN)}catch(e){}}
+  function build(card,iframe,idx){
+    var pl={win:null,playing:false,muted:false,dur:0,ready:false,idx:idx};
+    var bar=document.createElement('div');bar.className='rt-vbar';bar.hidden=true;
+    bar.innerHTML='<button type="button" class="rt-vb rt-vb-pp" aria-label="Pausar"></button><div class="rt-vprog" role="slider" aria-label="Progreso del video" tabindex="0"><i></i></div><button type="button" class="rt-vb rt-vb-mu" aria-label="Quitar sonido"></button>';
+    card.appendChild(bar);
+    var pp=bar.querySelector('.rt-vb-pp'),mu=bar.querySelector('.rt-vb-mu'),pg=bar.querySelector('.rt-vprog'),fill=pg.firstChild;
+    function paint(){pp.innerHTML=pl.playing?IC.pause:IC.play;pp.setAttribute('aria-label',pl.playing?'Pausar':'Reproducir');
+      mu.innerHTML=pl.muted?IC.mute:IC.vol;mu.setAttribute('aria-label',pl.muted?'Activar sonido':'Quitar sonido')}
+    pp.addEventListener('click',function(){send(pl,pl.playing?'pause':'play')});
+    mu.addEventListener('click',function(){pl.muted=!pl.muted;send(pl,pl.muted?'mute':'unMute');paint()});
+    pg.addEventListener('click',function(e){if(!pl.dur)return;var r=pg.getBoundingClientRect();send(pl,'seekTo',Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*pl.dur)});
+    pl.onReady=function(){if(pl.ready)return;pl.ready=true;bar.hidden=false;pl.muted=false;paint();send(pl,'unMute');send(pl,'play')};
+    pl.onState=function(v){var st=(typeof v==='object'&&v)?(v.state!==undefined?v.state:v.value):v;
+      pl.playing=(st===1||st==='playing'||st==='play');paint();
+      if(pl.playing)players.forEach(function(o){if(o!==pl&&o.playing)send(o,'pause')})};
+    pl.onMute=function(v){pl.muted=!!(v&&v.muted!==undefined?v.muted:v);paint()};
+    pl.onTime=function(v){if(!v)return;var t=v.currentTime,d=v.duration;if(d)pl.dur=d;if(d&&t>=0)fill.style.width=Math.min(100,t/d*100)+'%'};
+    paint();return pl}
+  window.addEventListener('message',function(e){
+    if(String(e.origin).indexOf('tiktok.com')<0)return;
+    var d=e.data;if(typeof d==='string'){try{d=JSON.parse(d)}catch(_){return}}
+    if(!d||d['x-tiktok-player']!==true)return;
+    var pl=null;for(var k=0;k<players.length;k++){if(players[k].win===e.source){pl=players[k];break}}
+    if(!pl)return;
+    if(d.type==='onPlayerReady')pl.onReady();
+    else if(d.type==='onStateChange')pl.onState(d.value);
+    else if(d.type==='onMute')pl.onMute(d.value);
+    else if(d.type==='onCurrentTime')pl.onTime(d.value);
+  });
+  document.querySelectorAll('#ritmos .rt-vcover[data-vid]').forEach(function(c,i){
     c.addEventListener('click',function(){
-      if(c.classList.contains('is-playing'))return;
+      var wrap=c.parentNode;
       var f=document.createElement('iframe');
-      f.src='https://www.tiktok.com/player/v1/'+c.getAttribute('data-vid')+'?autoplay=1&music_info=0&description=0&rel=0';
+      f.src=ORIGIN+'/player/v1/'+c.getAttribute('data-vid')+'?autoplay=1&music_info=0&description=0&rel=0';
       f.title='Video de TikTok: '+c.getAttribute('data-title');
       f.allow='autoplay; fullscreen; encrypted-media';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';
-      var box=document.createElement('div');box.className='rt-vcover is-playing';box.appendChild(f);c.replaceWith(box);   /* un <iframe> no puede ir dentro de un <button> */
+      var box=document.createElement('div');box.className='rt-vcover is-playing';box.appendChild(f);   /* un <iframe> no puede ir dentro de un <button> */
+      c.replaceWith(box);
+      var pl=build(wrap,f,i);pl.win=f.contentWindow;players.push(pl);
+      box.after(wrap.querySelector('.rt-vbar'));
+      f.addEventListener('load',function(){pl.win=f.contentWindow;send(pl,'unMute');send(pl,'play')});
       if(window.necEv)necEv('video_tiktok_play',{video_n:i+1});
     });
   });

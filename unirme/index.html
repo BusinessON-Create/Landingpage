@@ -120,6 +120,9 @@ $('fecha_cita').min=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toIS
 // Viene del test: ?code=NEC-2026-XXXX&n=Nombre&l=B1
 const nm=(P.get('n')||'').replace(/[^\p{L} '-]/gu,'').trim().slice(0,40),lv=(P.get('l')||'').replace(/[^A-Za-z0-9-]/g,'').slice(0,6),cd=(P.get('code')||'').replace(/[^A-Za-z0-9-]/g,'').slice(0,16);
 if(nm)$('nombre').value=nm;
+// Viene de /planes/: ?plan=solo | duo | vip  -> deja el plan elegido ya seleccionado
+const PL={solo:'Solo elite',duo:'Duo dinamico',vip:'VIP 1 a 1'},pl=PL[(P.get('plan')||'').toLowerCase()];
+if(pl)$('plan').value=pl;
 if(lv){$('tst').style.display='block';$('tst').innerHTML='Tu nivel en el test fue <b>'+lv+'</b>. Lo confirmamos contigo cuando te contactemos.'}
 $('f').addEventListener('submit',async ev=>{
  ev.preventDefault();const e=$('e'),v=id=>$(id).value.trim(),c=C[$('pais').value],d=v('tel').replace(/\D/g,'');e.textContent='';

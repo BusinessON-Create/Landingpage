@@ -734,6 +734,205 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
 #ritmos .rt-vlink{display:inline-block;margin-top:6px;font-size:13.5px;color:#9a948a}
 #ritmos .rt-vlink:hover{color:#ffd966}
 </style>
+<style id="fix-ej">
+/* ===== Hero: video interactivo con motion graphics (reemplaza la foto) ===== */
+.ej-stage{position:relative;aspect-ratio:4/5;container-type:inline-size;border-radius:24px;overflow:hidden;isolation:isolate;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(120% 70% at 88% -10%,rgba(240,180,41,.17),transparent 60%),radial-gradient(90% 60% at 0% 110%,rgba(255,106,26,.11),transparent 60%),#0d0b09;
+  border:1px solid #2a2520;box-shadow:0 30px 80px -30px #000;font-family:Figtree,system-ui,sans-serif;color:#f4efe6}
+:where(.ej-stage) p{margin:0}
+.ej-bg{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:8cqw 8cqw;-webkit-mask-image:radial-gradient(75% 60% at 50% 40%,#000,transparent);mask-image:radial-gradient(75% 60% at 50% 40%,#000,transparent);animation:ejGrid 14s linear infinite}
+@keyframes ejGrid{to{background-position:8cqw 8cqw}}
+.ej-top{position:absolute;z-index:5;left:5.5cqw;right:5.5cqw;top:4.2cqw;display:flex;justify-content:space-between;gap:2cqw;font-size:3cqw;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#f0b429;pointer-events:none}
+.ej-pz{display:none;color:#0a0908;background:#f0b429;border-radius:99px;padding:.7cqw 2.4cqw;letter-spacing:.04em;white-space:nowrap}
+.paused .ej-pz{display:inline-block}
+/* escenas */
+.ej-sc{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility 0s .2s}
+.ej-sc.on{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .25s ease .18s}
+.ej-sc.leaving{opacity:0;visibility:visible}
+.vis{position:absolute;left:6%;right:6%;top:11%;height:60%}
+.ej-sc .ejA{opacity:0}
+.ej-sc.on .ejA,.ej-sc.leaving .ejA{animation:var(--an,ejUp) var(--d,.7s) cubic-bezier(.16,1,.3,1) both;animation-delay:var(--t,0s)}
+.ej-sc:not(.on):not(.leaving) *{animation:none!important}
+.paused *,.paused *::before,.paused *::after{animation-play-state:paused!important}
+@keyframes ejUp{from{opacity:0;transform:translateY(4cqw)}to{opacity:1;transform:none}}
+@keyframes ejDown{from{opacity:0;transform:translateY(-4cqw)}to{opacity:1;transform:none}}
+@keyframes ejLeft{from{opacity:0;transform:translateX(-8cqw)}to{opacity:1;transform:none}}
+@keyframes ejRight{from{opacity:0;transform:translateX(8cqw)}to{opacity:1;transform:none}}
+@keyframes ejFade{from{opacity:0}to{opacity:1}}
+@keyframes ejPop{0%{opacity:0;transform:scale(.55) rotate(var(--r,0deg))}60%{opacity:1;transform:scale(1.07) rotate(var(--r,0deg))}100%{opacity:1;transform:scale(1) rotate(var(--r,0deg))}}
+@keyframes ejStamp{0%{opacity:0;transform:scale(2.2) rotate(-6deg)}55%{opacity:1;transform:scale(.94) rotate(-6deg)}100%{opacity:1;transform:scale(1) rotate(-6deg)}}
+@keyframes ejHold{0%{opacity:0;transform:translateY(3cqw)}10%,86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-2cqw)}}
+@keyframes ejDraw{to{stroke-dashoffset:0}}
+@keyframes ejSpin{to{transform:rotate(360deg)}}
+@keyframes ejFloat{from{transform:translate(0,0)}to{transform:translate(1.4cqw,-1.8cqw)}}
+@keyframes ejDot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-1cqw)}}
+@keyframes ejWave{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+@keyframes ejFly{from{opacity:0;transform:translate(var(--fx),var(--fy)) rotate(var(--r)) scale(.8)}to{opacity:1;transform:none}}
+@keyframes ejSnap{from{gap:3cqw}to{gap:.8cqw}}
+@keyframes ejGold{to{border-color:#f0b429;background:rgba(240,180,41,.2);color:#ffd966;box-shadow:0 0 6cqw rgba(240,180,41,.35)}}
+@keyframes ejW{from{width:0}to{width:100%}}
+@keyframes ejLit{to{background:#f0b429;border-color:#ffd966;color:#0a0908;box-shadow:0 0 0 1.4cqw rgba(240,180,41,.18),0 0 6cqw rgba(240,180,41,.5);transform:translate(-50%,-50%) scale(1.15)}}
+@keyframes ejStrike{to{transform:scaleX(1)}}
+@keyframes ejWavy{to{text-decoration-color:#ff6a1a}}
+@keyframes ejOut{to{opacity:0;transform:translateY(-2cqw)}}
+@keyframes ejIn{from{opacity:0;transform:translateY(2cqw)}to{opacity:1;transform:none}}
+@keyframes ejShine{to{background-position:-200% 0}}
+/* subtítulos */
+.cap{position:absolute;left:7%;right:7%;bottom:6.5%;text-align:center;font-size:4.5cqw;line-height:1.35;font-weight:600;color:#fff;text-shadow:0 .4cqw 2cqw rgba(0,0,0,.9);opacity:0}
+.cap.cv{animation:ejCap .35s ease both}
+@keyframes ejCap{from{opacity:0;transform:translateY(1.5cqw)}to{opacity:1;transform:none}}
+@keyframes ejTile{0%{opacity:.18;transform:scale(.97)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:none}}
+@keyframes ejHold2{0%{opacity:0;transform:translateY(3cqw)}3%,92%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-2cqw)}}
+@keyframes ejLoop{0%{stroke-dashoffset:100}22.58%{stroke-dashoffset:75}53.23%{stroke-dashoffset:50}75.81%{stroke-dashoffset:25}100%{stroke-dashoffset:0}}
+.ej-sc.on .lp .prg,.ej-sc.leaving .lp .prg{animation:ejLoop var(--d,12.4s) linear both;animation-delay:var(--t,0s)}
+/* burbujas */
+.bub{position:absolute;display:flex;align-items:center;gap:2.4cqw;max-width:100%;padding:3cqw 4cqw;border-radius:5cqw 5cqw 5cqw 1.2cqw;background:#101a26;border:1px solid #1e3148;color:#e6eef8;font-size:4.3cqw;font-weight:600;line-height:1.25}
+.spk{flex:none;width:7.4cqw;height:7.4cqw;border-radius:50%;background:rgba(90,169,255,.2);color:#5aa9ff;display:grid;place-items:center}
+.bub.ejme,.bub.me2{border-radius:5cqw 5cqw 1.2cqw 5cqw;background:#221d17;border-color:#2f2921;color:#f4efe6}
+.bub.ejme{min-width:16cqw;justify-content:center}
+.typ{display:flex;gap:1.3cqw;padding:1cqw 0}
+.typ i{width:1.9cqw;height:1.9cqw;border-radius:50%;background:#9a948a;animation:ejDot 1.3s infinite ease-in-out}
+.typ i:nth-child(2){animation-delay:.18s}.typ i:nth-child(3){animation-delay:.36s}
+.ejchip{position:absolute;display:block}
+.ejchip .fl{display:block;font-style:normal;padding:1.6cqw 3.2cqw;border-radius:99px;border:1px dashed #5a5246;color:#b9ae9d;font-size:4cqw;font-weight:600;background:rgba(255,255,255,.03);animation:ejFloat 2.6s ease-in-out var(--f,0s) infinite alternate;transform:rotate(var(--r,0deg))}
+.ejring{position:absolute;width:22cqw;height:22cqw}
+.ejring svg{position:absolute;inset:0;width:100%;height:100%}
+.trk{fill:none;stroke:#2e2822;stroke-width:5}
+.prg{fill:none;stroke:#ff6a1a;stroke-width:5;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100}
+.ej-sc.on .prg,.ej-sc.leaving .prg{animation:ejDraw var(--d,4s) linear both;animation-delay:var(--t,0s)}
+.ejring b{position:absolute;left:0;right:0;top:50%;transform:translateY(-62%);text-align:center;font:800 7.6cqw/1 'Bricolage Grotesque',system-ui,sans-serif;color:#fff}
+.ejring small{position:absolute;left:0;right:0;top:50%;margin-top:2.4cqw;text-align:center;font-size:2.8cqw;color:#9a948a}
+/* escena 2 */
+.ejrow{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:1.4cqw}
+.tk{padding:1.7cqw 2.7cqw;border-radius:99px;border:1px solid #38322b;background:rgba(255,255,255,.03);font-size:3.9cqw;font-weight:600;white-space:nowrap}
+.ejrow.en .tk{border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.07);color:#ffd966}
+.mid{position:absolute;left:0;right:0;text-align:center;font-size:3.4cqw;color:#9a948a;letter-spacing:.02em}
+.dots i{display:inline-block;width:.9cqw;height:.9cqw;margin-left:.8cqw;border-radius:50%;background:#9a948a;animation:ejDot 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+.clock{position:absolute;left:3%;bottom:2%;width:24cqw;height:24cqw}
+.clock svg{width:100%;height:100%;display:block}
+.hand{transform-origin:50px 50px}
+.ej-sc.on .hand,.ej-sc.leaving .hand{animation:ejSpin var(--d,5s) linear both;animation-delay:var(--t,0s)}
+.clk-n{position:absolute;left:32%;bottom:8%;font:800 10cqw/1 'Bricolage Grotesque',system-ui,sans-serif;color:#ff6a1a}
+.late{position:absolute;right:0;bottom:9%;max-width:30cqw;text-align:center;padding:1.6cqw 3cqw;border:.7cqw solid #ff6a1a;border-radius:2cqw;color:#ff8a5c;font:800 4.2cqw/1.1 'Bricolage Grotesque',system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;background:rgba(255,106,26,.08)}
+/* escena 3 */
+.lbl{position:absolute;left:0;right:0;text-align:center;font-size:3.5cqw;color:#9a948a;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.chain{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:3cqw}
+.ej-sc.on .chain,.ej-sc.leaving .chain{animation:ejSnap .6s cubic-bezier(.16,1,.3,1) var(--tc,1.9s) both}
+.blk{opacity:0;padding:2.2cqw 3cqw;border-radius:3cqw;border:1px solid #38322b;background:rgba(255,255,255,.04);font-size:4.3cqw;font-weight:700;white-space:nowrap}
+.ej-sc.on .blk,.ej-sc.leaving .blk{animation:ejFly .8s cubic-bezier(.16,1,.3,1) var(--t,0s) both,ejGold .5s ease var(--tg,2.4s) forwards}
+.tm{position:absolute;left:8%;right:8%;display:flex;align-items:center;gap:3cqw}
+.tbar{flex:1;height:2.2cqw;border-radius:99px;background:#2a2520;overflow:hidden}
+.tbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#f0b429,#ffd966)}
+.ej-sc.on .tbar i,.ej-sc.leaving .tbar i{animation:ejW 1.5s linear both;animation-delay:var(--tb,2.6s)}
+.tm b{font:800 8cqw/1 'Bricolage Grotesque',system-ui,sans-serif;color:#ffd966}
+.ejwave{position:absolute;left:0;right:0;height:12cqw;display:flex;align-items:center;justify-content:center;gap:1.6cqw}
+.ejwave i{display:block;width:1.2cqw;height:100%;border-radius:99px;background:#f0b429;opacity:.85;animation:ejWave .7s ease-in-out var(--k,0s) infinite alternate}
+/* escena 4 */
+.sw{position:relative;display:inline-block;min-width:13.5cqw;text-align:center}
+.go{text-decoration:underline wavy transparent;text-decoration-thickness:.5cqw;text-underline-offset:1cqw;font-weight:700}
+.went{position:absolute;left:0;right:0;top:0;opacity:0;color:#ffd966;text-shadow:0 0 3cqw rgba(240,180,41,.55)}
+.ej-sc.on .go,.ej-sc.leaving .go{animation:ejWavy .4s ease var(--tw,1.3s) forwards,ejOut .4s ease var(--to,3.4s) forwards}
+.ej-sc.on .went,.ej-sc.leaving .went{animation:ejIn .5s cubic-bezier(.16,1,.3,1) var(--ti,3.5s) forwards}
+.coach{display:block;background:#14110d;border-color:rgba(240,180,41,.35);color:#f4efe6;line-height:1.5}
+.coach em{display:inline-block;margin-right:2cqw;font-style:normal;font-size:3cqw;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0a0908;background:#f0b429;border-radius:99px;padding:.6cqw 2.2cqw}
+.ok{position:absolute;width:11cqw;height:11cqw;border-radius:50%;background:#f0b429;color:#0a0908;display:grid;place-items:center;font-size:6.4cqw;font-weight:800;box-shadow:0 0 6cqw rgba(240,180,41,.5)}
+/* escena 5 */
+.old{position:absolute;left:0;right:0;text-align:center;font-size:3.9cqw;color:#8d877c}
+.old span{position:relative;display:inline-block}
+.old span::after{content:"";position:absolute;left:-1cqw;right:-1cqw;top:55%;height:.6cqw;background:#ff6a1a;transform:scaleX(0);transform-origin:left}
+.ej-sc.on .old span::after,.ej-sc.leaving .old span::after{animation:ejStrike .6s ease var(--ts,1s) forwards}
+.lp{position:absolute;left:50%;top:14%;width:60cqw;height:60cqw;margin-left:-30cqw}
+.lp svg{position:absolute;inset:0;width:100%;height:100%}
+.lp .prg{stroke:#f0b429;filter:drop-shadow(0 0 1.4cqw rgba(240,180,41,.55))}
+.nd{position:absolute;width:8.6cqw;height:8.6cqw;transform:translate(-50%,-50%);border-radius:50%;border:1px solid #3a3326;background:#1a1610;color:#d8cdbb;display:grid;place-items:center;font:700 4.2cqw/1 'Bricolage Grotesque',system-ui,sans-serif}
+.ej-sc.on .nd,.ej-sc.leaving .nd{animation:ejLit .4s ease var(--t,0s) forwards}
+.nl{position:absolute;font-size:4cqw;font-weight:600;color:#e8e2d6;white-space:nowrap}
+.ctr{position:absolute;left:50%;top:50%;width:21cqw;margin-left:-10.5cqw;margin-top:-4.2cqw;text-align:center;font:800 4.8cqw/1.1 'Bricolage Grotesque',system-ui,sans-serif;color:#fff}
+.ctr.g{color:#ffd966}
+/* escena 6 */
+.ejgrid{position:absolute;left:0;right:0;top:2%;display:grid;grid-template-columns:1fr 1fr;gap:3.4cqw}
+.tl{padding:3cqw;border-radius:4cqw;border:1px solid #2f2921;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015))}
+.tl .ic{display:grid;place-items:center;width:8cqw;height:8cqw;border-radius:50%;background:rgba(240,180,41,.14);color:#f0b429;margin-bottom:1.8cqw}
+.tl b{display:block;white-space:nowrap;font:700 4.2cqw/1.15 'Bricolage Grotesque',system-ui,sans-serif;color:#fff}
+.tl small{display:block;margin-top:1cqw;font-size:3.2cqw;line-height:1.35;color:#a89f8f}
+/* escena 7 */
+.fin{position:absolute;left:7%;right:7%;top:16%;text-align:center}
+.fh1{font:800 7.6cqw/1.1 'Bricolage Grotesque',system-ui,sans-serif;color:#fff;letter-spacing:-.02em}
+.fh2{font:800 15cqw/1.05 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.03em;background:linear-gradient(100deg,#c8891a 20%,#ffe9a6 45%,#f0b429 55%,#c8891a 80%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;margin-top:2.6cqw}
+.ej-sc.on .fh2,.ej-sc.leaving .fh2{animation:ejPop .9s cubic-bezier(.16,1,.3,1) var(--t,.8s) both,ejShine 2.6s linear calc(var(--t,.8s) + 1s) infinite}
+.fsub{margin-top:3cqw;font-size:3.9cqw;color:#c9bfae}
+.fb{display:flex;align-items:center;justify-content:center;height:13cqw;min-height:44px;margin-top:3cqw;border-radius:3.4cqw;font:700 4.5cqw Figtree,system-ui,sans-serif;text-decoration:none;color:#0a0908}
+.fb.gold{margin-top:9cqw;background:linear-gradient(135deg,#ffd966,#f0b429 55%,#c8891a)}
+.fb.ghost{color:#ffd966;border:1px solid rgba(240,180,41,.55);background:rgba(240,180,41,.06)}
+/* controles */
+.ej-ctl{display:flex;align-items:center;gap:10px;margin-top:12px}
+.ej-pp,.ej-snd{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:1px solid #38322b;background:rgba(255,255,255,.04);color:#e8e2d6}
+.ej-pp{background:linear-gradient(135deg,#ffd966,#f0b429 55%,#c8891a);border:0;color:#0a0908}
+.ej-snd:hover{border-color:rgba(240,180,41,.5);color:#fff}
+.ej-snd{width:34px;height:34px;background:none;color:#a89f8f;border-color:#2f2921}
+.ej-snd[aria-pressed=true]{color:#ffd966;border-color:rgba(240,180,41,.45)}
+@keyframes ejHint{0%{box-shadow:0 0 0 0 rgba(240,180,41,.55)}100%{box-shadow:0 0 0 9px rgba(240,180,41,0)}}
+.ej-snd.hint{color:#ffd966;border-color:rgba(240,180,41,.65);animation:ejHint 1.6s ease-out infinite}
+@media(prefers-reduced-motion:reduce){.ej-snd.hint{animation:none}}
+.ej-segs{flex:1;display:flex;gap:5px}
+.ej-seg{flex:1;height:44px;position:relative;background:none;border:0;padding:0;cursor:pointer}
+.ej-seg span{position:absolute;left:0;right:0;top:20px;height:4px;border-radius:99px;background:#2a2520;overflow:hidden;transition:background .2s}
+.ej-seg:hover span{background:#3a332b}
+.ej-seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f0b429,#ffd966)}
+.ej-stage button:focus-visible,.ej-stage a:focus-visible,.ej-ctl button:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+/* movimiento reducido: escenas estáticas */
+.rm .ej-sc *,.rm .ej-bg{animation:none!important}
+.rm .ej-sc .ejA,.rm .blk,.rm .went,.rm .nd,.rm .cap{opacity:1!important}
+.rm .go{display:none}.rm .prg{stroke-dashoffset:0}.rm .ctr:not(.g){display:none}
+</style>
+<style id="hero-slider-css">
+/* ===== Hero: foto -> método (un solo hero, dos slides) ===== */
+.ej{width:100%;margin:0 auto}
+.hv-view{position:relative;overflow:hidden}
+.hv-view.anim{transition:height .75s cubic-bezier(.65,0,.2,1)}
+.hv-track{display:flex;align-items:flex-start;transition:transform .75s cubic-bezier(.65,0,.2,1)}
+.hv.slid .hv-track{transform:translate3d(-100%,0,0)}
+.hv-slide{flex:0 0 100%;min-width:0;transition:visibility 0s linear .85s}
+.hv-photo{visibility:visible}
+.hv-video{visibility:hidden}
+.hv.slid .hv-photo{visibility:hidden}
+.hv.slid .hv-video{visibility:visible;transition-delay:0s}
+.hv:not(.slid) .hv-photo{transition-delay:0s}
+.ej-back{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:1px solid #38322b;background:rgba(255,255,255,.04);color:#e8e2d6}
+.ej-back:hover{border-color:rgba(240,180,41,.5);color:#fff}
+.ej-back:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+/* los elementos sobre la foto se apartan antes de deslizar y vuelven al regresar */
+.hv-photo .hchip,.hv-photo .hsign,.hv-photo .loop{transition:translate .6s cubic-bezier(.2,.8,.2,1) calc(.5s + var(--hd,0s)),opacity .45s ease calc(.5s + var(--hd,0s)),transform .18s ease,border-color .2s ease}
+.hv-photo.out .hchip,.hv-photo.out .hsign,.hv-photo.out .loop{translate:var(--ox,0px) var(--oy,0px);opacity:0;pointer-events:none;transition:translate .5s cubic-bezier(.55,0,.85,.35) var(--hd,0s),opacity .35s ease var(--hd,0s)}
+.hv-photo .hsign{--ox:-44px;--oy:-26px;--hd:0s}
+.hv-photo .hc1{--ox:44px;--oy:-26px;--hd:.06s}
+.hv-photo .hc2,.hv-photo .hc3{--ox:-44px;--oy:26px;--hd:.12s}
+.hv-photo .loop{--ox:44px;--oy:44px;--hd:.18s}
+/* invitación a deslizar: la foto se asoma hacia el video y regresa, sin cambiar de slide */
+.hv.peeking .hv-video{visibility:visible;transition-delay:0s}
+.hv.peeking .hv-track{animation:hvPeek 1.6s cubic-bezier(.45,0,.25,1) both}
+@keyframes hvPeek{0%,100%{translate:0 0}38%,60%{translate:-44px 0}}
+.hv-hint{position:absolute;z-index:6;right:10px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;padding:10px 12px 10px 16px;border-radius:99px;border:1px solid rgba(240,180,41,.55);background:rgba(19,17,16,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#ffd966;font-weight:700;font-size:13px;line-height:1;cursor:pointer;box-shadow:0 10px 26px -10px #000;transition:opacity .35s ease,border-color .2s ease,background .2s ease}
+.hv-hint:hover{border-color:rgba(240,180,41,.9);background:rgba(30,26,20,.94)}
+.hv-hint svg{flex:none;animation:hvNudge 1.6s ease-in-out infinite}
+@keyframes hvNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+@media(hover:none) and (pointer:coarse){.hv-hint{display:none}}   /* en táctiles se desliza con el dedo */
+.hv-photo.out .hv-hint{opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.hv-hint svg{animation:none}}
+/* tableta: que el círculo no se salga de la foto (ahora la caja recorta) */
+@media(min-width:768px) and (max-width:1023px){.hero-photo .loop{right:12px;bottom:12px}}
+/* celular */
+@media(max-width:767px){
+ .hv-video{padding:0 20px 12px}
+ .ej-stage{border-radius:22px}
+ #hero .h-hero{transition:margin-top .75s cubic-bezier(.65,0,.2,1)}
+ #hero.hv-slid .h-hero{margin-top:0}
+}
+@media(prefers-reduced-motion:reduce){
+ .hv-track,.hv-view.anim,#hero .h-hero,.hv-photo .hchip,.hv-photo .hsign,.hv-photo .loop{transition:none!important}
+}
+</style>
 </head>
 <body class="bg-bg text-ink font-sans antialiased min-h-screen">
 
@@ -753,7 +952,7 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
     </nav>
 
     <div class="flex items-center gap-2">
-      <a href="https://app.nicaenglishclub.com/" target="_blank" rel="noopener" class="inline-flex items-center btn-ghost rounded-full px-4 sm:px-5 py-2.5 text-[13px] font-medium text-ink whitespace-nowrap">
+      <a href="https://app.nicaenglishclub.com/" class="inline-flex items-center btn-ghost rounded-full px-4 sm:px-5 py-2.5 text-[13px] font-medium text-ink whitespace-nowrap">
         Iniciar sesión
       </a>
       <button id="menu-btn" type="button" class="md:hidden btn-ghost w-11 h-11 rounded-full grid place-items-center text-ink" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
@@ -823,12 +1022,16 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
       </div>
     </div>
 
-    <div class="hero-visual">
+    <div class="hero-visual hv" id="hv">
+      <div class="hv-view" id="hv-view">
+        <div class="hv-track" id="hv-track">
+          <div class="hv-slide hv-photo" id="hv-s1">
 <div class="hero-photo">
   <img src="data:image/webp;base64,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" alt="Coach de Nica English Club sonriendo" width="800" height="1200" decoding="async">
   <span class="hchip hc1"><small>Corrección del coach</small>I <b>went</b> to the market</span>
   <span class="hchip hc3"><small>Bloque del día</small><em>How's it going?</em><strong>Not bad, you?</strong></span>
   <span class="hsign"><b>Gustavo Martinez</b><small>Fundador y Coach</small></span>
+  <button type="button" class="hv-hint" id="hv-hint" aria-label="Ver el video: cómo funciona el método">Ver video<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
   <button type="button" class="hchip hc2" data-demo-open aria-haspopup="dialog"><i></i>Clase - <b>Demo Gratis</b></button>
   <div class="loop" id="loop" aria-label="El ciclo de entrenamiento de Nica English Club, en cuatro pasos">
         <svg class="loop-svg" viewBox="0 0 400 400" aria-hidden="true">
@@ -859,37 +1062,409 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="loop-toggle-ico"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
         </button>
       </div>
+
+          </div>
+          <div class="hv-slide hv-video" id="hv-s2" aria-hidden="true" inert>
+<div class="ej" id="ej">
+  <div class="ej-stage" id="ej-stage" role="region" aria-roledescription="video interactivo" aria-label="Video: cómo funciona el método de Nica English Club">
+    <div class="ej-bg" aria-hidden="true"></div>
+    <div class="ej-top"><span id="ej-ch">01 / 07 · Te quedas en blanco</span><span class="ej-pz" id="ej-pz">En pausa</span></div>
+
+    <!-- 1 · El problema -->
+    <div class="ej-sc"><div class="vis">
+      <div class="bub q ejA" style="--an:ejLeft;--t:.3s;left:0;top:0"><span class="spk"><svg viewBox="0 0 24 24" width="4cqw" height="4cqw" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>What did you do yesterday?</div>
+      <div class="bub ejme ejA" style="--an:ejRight;--t:1.9s;right:0;top:24%"><span class="typ"><i></i><i></i><i></i></span></div>
+      <span class="ejchip ejA" style="--an:ejPop;--t:3.9s;left:4%;top:41%;--r:-5deg"><i class="fl" style="--f:0s">ayer</i></span>
+      <span class="ejchip ejA" style="--an:ejPop;--t:4.3s;left:74%;top:41%;--r:6deg"><i class="fl" style="--f:.4s">yo</i></span>
+      <span class="ejchip ejA" style="--an:ejPop;--t:4.7s;left:6%;top:57%;--r:-2deg"><i class="fl" style="--f:.8s">¿cómo se dice?</i></span>
+      <span class="ejchip ejA" style="--an:ejPop;--t:5.1s;left:40%;top:41%;--r:3deg"><i class="fl" style="--f:1.2s">ir…</i></span>
+      <span class="ejchip ejA" style="--an:ejPop;--t:5.5s;left:57%;top:57%;--r:-3deg"><i class="fl" style="--f:1.6s">mercado</i></span>
+      <div class="ejring ejA" style="--an:ejPop;--t:5.4s;left:50%;bottom:0;margin-left:-11cqw">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="trk" cx="50" cy="50" r="44"/><circle class="prg" cx="50" cy="50" r="44" pathLength="100" style="--d:5s;--t:5.6s" transform="rotate(-90 50 50)"/></svg>
+        <b>5 s</b><small>en blanco</small>
+      </div>
+    </div><p class="cap">Llevas años estudiando inglés… y cuando te hablan, te quedas en blanco.</p></div>
+
+    <!-- 2 · Tu cerebro traduce -->
+    <div class="ej-sc"><div class="vis">
+      <div class="ejrow" style="top:2%"><span class="tk ejA" style="--an:ejDown;--t:2s">Ayer</span><span class="tk ejA" style="--an:ejDown;--t:2.2s">fui</span><span class="tk ejA" style="--an:ejDown;--t:2.4s">al</span><span class="tk ejA" style="--an:ejDown;--t:2.6s">mercado</span></div>
+      <p class="mid ejA" style="--an:ejFade;--t:4.3s;top:25%">traduciendo en tu cabeza<span class="dots"><i></i><i></i><i></i></span></p>
+      <div class="ejrow en" style="top:36%"><span class="tk ejA" style="--an:ejUp;--t:8.05s">Yesterday</span><span class="tk ejA" style="--an:ejUp;--t:9.45s">I went</span><span class="tk ejA" style="--an:ejUp;--t:10.75s">to the</span><span class="tk ejA" style="--an:ejUp;--t:12.05s">market</span></div>
+      <div class="clock ejA" style="--an:ejPop;--t:8s"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="trk" cx="50" cy="50" r="44"/><g class="hand" style="--t:8s"><line x1="50" y1="50" x2="50" y2="14" stroke="#ff6a1a" stroke-width="5" stroke-linecap="round"/></g><circle cx="50" cy="50" r="5" fill="#ff6a1a"/></svg></div>
+      <b class="clk-n ejA" style="--an:ejFade;--t:8s">5 s</b>
+      <div class="late ejA" style="--an:ejStamp;--t:16s">Demasiado tarde</div>
+    </div><p class="cap">No es falta de vocabulario. Tu cerebro traduce antes de responder.</p></div>
+
+    <!-- 3 · En bloque -->
+    <div class="ej-sc"><div class="vis">
+      <p class="lbl ejA" style="--an:ejFade;--t:.2s;top:2%">La misma frase, pero en bloque</p>
+      <div class="chain" style="top:20%;--tc:3.7s;--tg:4s"><span class="blk" style="--fx:-34cqw;--fy:-8cqw;--r:-8deg;--t:1.7s">Yesterday</span><span class="blk" style="--fx:30cqw;--fy:-12cqw;--r:7deg;--t:1.95s">I went</span><span class="blk" style="--fx:-12cqw;--fy:22cqw;--r:-5deg;--t:2.2s">to the market</span></div>
+      <div class="tm ejA" style="--an:ejUp;--t:8.6s;top:46%;--tb:8.8s"><div class="tbar"><i></i></div><b>0.5 s</b></div>
+      <div class="ejwave ejA" style="--an:ejFade;--t:5.2s;top:68%"><i style="--k:0s"></i><i style="--k:.1s"></i><i style="--k:.2s"></i><i style="--k:.05s"></i><i style="--k:.25s"></i><i style="--k:.15s"></i><i style="--k:.3s"></i><i style="--k:.08s"></i><i style="--k:.22s"></i><i style="--k:.12s"></i><i style="--k:.02s"></i></div>
+    </div><p class="cap">Practicas frases completas, en bloque, para que salgan enteras y a tiempo.</p></div>
+
+    <!-- 4 · Corrección -->
+    <div class="ej-sc"><div class="vis">
+      <div class="bub me2 ejA" style="--an:ejRight;--t:.3s;right:0;top:0"><span>Yesterday I <span class="sw" style="--tw:6.5s;--to:13.9s;--ti:14s"><s class="go">go</s><b class="went">went</b></span> to the market.</span></div>
+      <div class="bub coach ejA" style="--an:ejLeft;--t:8.8s;left:0;top:28%;max-width:74%"><em>Coach</em>Casi. Fue ayer, así que va en pasado.</div>
+      <span class="ok ejA" style="--an:ejPop;--t:15.9s;right:0;top:31%">✓</span>
+      <div class="bub coach ejA" style="--an:ejLeft;--t:16.2s;left:0;top:60%;max-width:74%"><em>Coach</em>Eso. Ahora dilo otra vez, entero.</div>
+    </div><p class="cap">Un coach te corrige directo, para que la próxima vez lo digas bien.</p></div>
+
+    <!-- 5 · El ciclo -->
+    <div class="ej-sc"><div class="vis">
+      <p class="old ejA" style="--an:ejFade;--t:.3s;top:0;--ts:1.8s"><span>Regla → Memorizar → Examen → Olvidar</span></p>
+      <div class="lp">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="trk" cx="50" cy="50" r="30"/><circle class="prg" cx="50" cy="50" r="30" pathLength="100" style="--d:12.4s;--t:4.9s" transform="rotate(-90 50 50)"/></svg>
+        <span class="nd" style="left:50%;top:20%;--t:4.9s">1</span><span class="nl" style="left:50%;top:20%;transform:translate(-50%,-215%)">Bloque</span>
+        <span class="nd" style="left:80%;top:50%;--t:7.7s">2</span><span class="nl" style="left:80%;top:50%;transform:translate(6cqw,-50%)">Situación</span>
+        <span class="nd" style="left:50%;top:80%;--t:11.5s">3</span><span class="nl" style="left:50%;top:80%;transform:translate(-50%,110%)">Corrección</span>
+        <span class="nd" style="left:20%;top:50%;--t:14.3s">4</span><span class="nl" style="left:20%;top:50%;transform:translate(calc(-100% - 6cqw),-50%)">Respuesta</span>
+        <div class="ctr ejA" style="--an:ejHold2;--d:14.4s;--t:2.8s">Entrenas</div>
+        <div class="ctr g ejA" style="--an:ejUp;--t:17.3s">Sale solo</div>
+      </div>
+    </div><p class="cap">Aquí no estudias inglés. Lo entrenas, hasta que sale solo.</p></div>
+
+    <!-- 6 · Plataforma -->
+    <div class="ej-sc"><div class="vis"><div class="ejgrid">
+      <div class="tl ejA" style="--an:ejTile;--t:4.25s"><span class="ic"><svg viewBox="0 0 24 24" width="5cqw" height="5cqw" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/></svg></span><b>Coach IA</b><small>Te corrige cuando quieras</small></div>
+      <div class="tl ejA" style="--an:ejTile;--t:7.75s"><span class="ic"><svg viewBox="0 0 24 24" width="5cqw" height="5cqw" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z"/></svg></span><b>Training Room</b><small>Escuchas, repites y usas frases</small></div>
+      <div class="tl ejA" style="--an:ejTile;--t:12.45s"><span class="ic"><svg viewBox="0 0 24 24" width="5cqw" height="5cqw" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><b>Clases en vivo</b><small>Grupos reducidos con tu coach</small></div>
+      <div class="tl ejA" style="--an:ejTile;--t:16.55s"><span class="ic"><svg viewBox="0 0 24 24" width="5cqw" height="5cqw" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14a5 5 0 0 1 5 5"/></svg></span><b>NECLUB</b><small>Comunidad para practicar</small></div>
+    </div></div><p class="cap">Todo en un solo lugar: Coach IA, Training Room, clases en vivo y comunidad.</p></div>
+
+    <!-- 7 · Cierre -->
+    <div class="ej-sc"><div class="fin">
+      <p class="fh1 ejA" style="--an:ejUp;--t:.3s">No estudies inglés.</p>
+      <p class="fh2 ejA" style="--an:ejPop;--d:.9s;--t:2.1s">Entrénalo.</p>
+      <p class="fsub ejA" style="--an:ejFade;--t:5.4s">Grupos reducidos y corrección personalizada</p>
+      <a class="fb gold ejA" id="ej-apply" href="https://nicaenglishclub.com/unirme" style="--an:ejUp;--t:10.5s">Aplicar a mi cupo</a>
+      <a class="fb ghost ejA" id="ej-test" href="https://nicaenglishclub.com/test" style="--an:ejUp;--t:8.95s">Test gratis · 15 min</a>
+    </div></div>
+  </div>
+
+  <div class="ej-ctl">
+    <button type="button" class="ej-pp" id="ej-pp" aria-label="Pausar el video"><svg id="ej-pp-i" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+    <div class="ej-segs" id="ej-segs" role="group" aria-label="Capítulos del video"></div>
+    <button type="button" class="ej-snd" id="ej-snd" aria-label="Activar el audio" aria-pressed="false"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor" stroke="none"/><path class="ejw" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" style="display:none"/><path class="ejx" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+    <button type="button" class="ej-back" id="ej-back" aria-label="Volver a la foto" title="Volver a la foto"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg></button>
+  </div>
+
+<script>
+(function(){
+  var root=document.getElementById('ej'); if(!root) return;
+
+  /* ============ AUDIO + SUBTÍTULOS, todo en el mismo reloj ============
+     f = archivo en audio/ · d = duración real (s) · at = segundo de la escena en que entra la voz
+     c = subtítulos [segundo relativo al clip, texto]; [0,''] limpia el subtítulo (ejemplos en inglés).
+     dur = duración de la escena (s) = fin del último clip + cola.                                   */
+  var AB='audio/';
+  var SC=[
+    {dur:10.8,cues:[
+      {f:'1a',d:1.52,at:.3,c:[[0,'']]},
+      {f:'1b',d:6.95,at:2,c:[[0,'Una pregunta simple.'],[1.78,'Y llevas años estudiando inglés…'],[4.84,'pero te quedas en blanco.']]}]},
+    {dur:18.1,cues:[
+      {f:'2a',d:7.47,at:.4,c:[[0,'¿Por qué pasa?'],[1.51,'No es falta de vocabulario.'],[3.84,'Tu cerebro traduce antes de responder.']]},
+      {f:'2b',d:5.33,at:8,c:[[0,'']]},
+      {f:'2c',d:3.94,at:13.4,c:[[0,'Cuando terminas la frase, la conversación ya siguió.']]}]},
+    {dur:12.2,cues:[
+      {f:'3a',d:4.78,at:.3,c:[[0,'La solución:'],[1.3,'practicar frases completas, en bloque.']]},
+      {f:'3b',d:2.4,at:5.2,c:[[0,'']]},
+      {f:'3c',d:3.84,at:7.7,c:[[0,'Entera.'],[1.13,'En medio segundo.'],[2.56,'Y a tiempo.']]}]},
+    {dur:20.3,cues:[
+      {f:'4a',d:4.49,at:.3,c:[[0,'Pero hablar no basta.'],[2.25,'Necesitas que te corrijan.']]},
+      {f:'4b',d:3.79,at:4.9,c:[[0,'']]},
+      {f:'4c',d:5.09,at:8.8,c:[[0,'Tu coach te dice: casi.'],[1.4,'Fue ayer, así que va en pasado.']]},
+      {f:'4d',d:2.12,at:14,c:[[0,'']]},
+      {f:'4e',d:3.37,at:16.2,c:[[0,'Eso.'],[.91,'Ahora dilo otra vez, entero.']]}]},
+    {dur:19.9,cues:[
+      {f:'5a',d:4.55,at:.3,c:[[0,'Por eso aquí no estudias para un examen.'],[2.57,'Entrenas en ciclo.']]},
+      {f:'5b',d:2.69,at:4.9,c:[[0,'Uno: aprendes un bloque.']]},
+      {f:'5c',d:3.71,at:7.7,c:[[0,'Dos: lo usas en una situación real.']]},
+      {f:'5d',d:2.74,at:11.5,c:[[0,'Tres: recibes corrección.']]},
+      {f:'5e',d:4.91,at:14.3,c:[[0,'Y cuatro: respondes.'],[2.1,'Lo repites, hasta que sale solo.']]}]},
+    {dur:20.3,cues:[
+      {f:'6a',d:3.94,at:.3,c:[[0,'Y todo esto vive en un solo lugar.']]},
+      {f:'6b',d:3.42,at:4.3,c:[[0,'Coach IA: te corrige cuando quieras.']]},
+      {f:'6c',d:4.6,at:7.8,c:[[0,'Training Room: escuchas, repites y usas frases.']]},
+      {f:'6d',d:4.02,at:12.5,c:[[0,'Clases en vivo, en grupos reducidos con tu coach.']]},
+      {f:'6e',d:3,at:16.6,c:[[0,'Y NECLUB: la comunidad para practicar.']]}]},
+    {dur:13.4,cues:[
+      {f:'7a',d:3,at:.3,c:[[0,'']]},
+      {f:'7b',d:8.91,at:3.4,c:[[0,'Nica English Club.'],[2.03,'Grupos reducidos y corrección personalizada.'],[5.57,'Haz el test gratis y aplica a tu cupo.']]}]}
+  ];
+  var DUR=SC.map(function(x){return Math.round(x.dur*1000)});
+  /* VELOCIDAD del video (1 = original). Acelera reloj, voz y animaciones juntos.
+     Si la cambias, hay que regenerar audio/fondo.mp3 (su duración = suma de escenas / SPEED). */
+  var SPEED=1.15, START=[], TOT=0;
+  DUR.forEach(function(d){ START.push(TOT); TOT+=d; }); TOT=TOT/SPEED/1000;   /* TOT = segundos reales del video */
+
+  var clk=root.querySelector('.clk-n'), rb=root.querySelector('.ejring b'), tmb=root.querySelector('.tm b');
+  function tick(){
+    if(idx===0&&rb){ rb.textContent=Math.min(5,Math.max(0,Math.floor((t-5600)/1000)))+' s'; }
+    else if(idx===1&&clk){ clk.textContent=Math.ceil(Math.max(0,5-Math.max(0,t-8000)/1000))+' s'; }
+    else if(idx===2&&tmb){ tmb.textContent=(Math.min(1,Math.max(0,(t-8800)/1500))*0.5).toFixed(1)+' s'; }
+  }
+  var NAMES=['Te quedas en blanco','Tu cerebro traduce','Practicas en bloque','Te corrigen directo','Lo entrenas hasta que sale solo','Todo en un solo lugar','Tu cupo te espera'];
+  var $=function(s){return root.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(root.querySelectorAll(s))};
+  var stage=$('#ej-stage'), scs=$$('.ej-sc'), N=scs.length;
+  var idx=-1, t=0, last=0, raf=0, playing=false, userPaused=false, inView=false, seen=false;
+  var rm=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(rm){ stage.classList.add('rm'); userPaused=true; }
+
+  var segsBox=$('#ej-segs'), fills=[], segs=[];
+  scs.forEach(function(_,i){
+    var b=document.createElement('button'); b.type='button'; b.className='ej-seg'; b.setAttribute('aria-label','Capítulo '+(i+1)+' de '+N+': '+NAMES[i]);
+    b.innerHTML='<span><i></i></span>'; fills.push(b.querySelector('i')); segs.push(b);
+    b.addEventListener('click',function(){ userPaused=false; setScene(i); refresh(); ev('hero_video_capitulo',{n:i+1}); });
+    segsBox.appendChild(b);
+  });
+
+  var ch=$('#ej-ch'), pp=$('#ej-pp'), ppi=$('#ej-pp-i'), snd=$('#ej-snd');
+  var ICON_PAUSE='<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>', ICON_PLAY='<path d="M8 5v14l11-7L8 5Z"/>';
+  function ev(n,p){ if(window.necEv) try{ necEv(n,p||{}); }catch(e){} }
+  function pad(n){return (n<10?'0':'')+n}
+
+  /* ---------- subtítulos (siempre visibles, con o sin sonido) ---------- */
+  var caps=scs.map(function(s){return s.querySelector('.cap')});
+  caps.forEach(function(c){ if(c) c.textContent=''; });
+  function showCap(txt){
+    var c=caps[idx]; if(!c) return;
+    c.classList.remove('cv');
+    if(!txt){ c.textContent=''; return; }
+    void c.offsetWidth; c.textContent=txt; c.classList.add('cv'); speedEl(c);
+  }
+
+  /* ---------- audio: un solo reproductor, la voz entra por el reloj de la escena ---------- */
+  var pl=new Audio(); pl.preload='auto'; pl.defaultPlaybackRate=SPEED; pl.playbackRate=SPEED; pl.preservesPitch=pl.webkitPreservesPitch=pl.mozPreservesPitch=true;
+  var KEY='nec_hv_sound', wantSound=true, blocked=false, loops=0, cur=null, tok=0, jUn=false;
+  try{ if(sessionStorage.getItem(KEY)==='off') wantSound=false; }catch(e){}
+  pl.addEventListener('ended',function(){ cur=null; });
+  function eff(){ return wantSound && loops===0; }
+  function paintSnd(){
+    var on=eff() && !blocked;
+    snd.setAttribute('aria-pressed',on);
+    snd.setAttribute('aria-label',on?'Silenciar el audio':'Activar el audio');
+    snd.title=on?'Silenciar':'Activar sonido';
+    snd.querySelector('.ejw').style.display=on?'':'none'; snd.querySelector('.ejx').style.display=on?'none':'';
+    snd.classList.toggle('hint',eff() && blocked);
+  }
+  function stopAudio(){ tok++; cur=null; try{ pl.pause(); }catch(e){} }
+  function tryPlay(){
+    var p; try{ p=pl.play(); }catch(e){ blocked=true; paintSnd(); return; }
+    if(p&&p.then) p.then(function(){ if(blocked){ blocked=false; paintSnd(); } }).catch(function(){ blocked=true; paintSnd(); });
+  }
+  function playCue(cue,off){
+    var my=++tok; cur=cue;
+    if(pl.getAttribute('data-f')!==cue.f){ pl.src=AB+cue.f+'.mp3'; pl.setAttribute('data-f',cue.f); pl.defaultPlaybackRate=SPEED; pl.playbackRate=SPEED; }
+    var go=function(){ if(my!==tok) return; try{ pl.currentTime=off||0; }catch(e){} tryPlay(); };
+    if(pl.readyState>=1) go(); else pl.addEventListener('loadedmetadata',go,{once:true});
+  }
+  function startCurrent(){   /* si ya va a la mitad de un clip, entra desde el punto exacto */
+    if(!eff()||idx<0) return;
+    var cs=SC[idx].cues;
+    for(var k=0;k<cs.length;k++){ var a=cs[k].at*1000; if(t>=a && t<a+cs[k].d*1000-150){ playCue(cs[k],(t-a)/1000); return; } }
+  }
+  function resumeAudio(){ if(cur&&!pl.ended&&eff()) tryPlay(); }
+  /* acelera las animaciones CSS del escenario al mismo ritmo que el reloj */
+  function speedEl(el){ try{ el.getAnimations({subtree:true}).forEach(function(a){ if(a.playbackRate!==SPEED) a.playbackRate=SPEED; }); }catch(e){} }
+  /* música de fondo: audio/fondo.mp3 ya trae el volumen (20 %) y los fades; dura lo mismo que el video */
+  var bg=new Audio(); bg.preload='none'; bg.loop=false;
+  function bgSync(hard){
+    if(!playing||!eff()||idx<0){ try{ bg.pause(); }catch(e){} return; }
+    var want=(START[idx]+t)/SPEED/1000;
+    if(want>=TOT-.05){ try{ bg.pause(); }catch(e){} return; }
+    if(!bg.getAttribute('src')) bg.src=AB+'fondo.mp3';
+    if(hard||Math.abs(bg.currentTime-want)>.6){ try{ bg.currentTime=want; }catch(e){} }
+    var p; try{ p=bg.play(); }catch(e){ blocked=true; paintSnd(); return; }
+    if(p&&p.then) p.then(function(){ if(blocked){ blocked=false; paintSnd(); } }).catch(function(){ blocked=true; paintSnd(); });
+  }
+  function warm(i){   /* precarga los clips de la escena para que entren sin retraso */
+    var s=SC[(i+N)%N]; s.cues.forEach(function(c){ if(!c.w){ c.w=new Audio(); c.w.preload='auto'; c.w.src=AB+c.f+'.mp3'; } });
+  }
+
+  /* ---------- línea de tiempo de cada escena ---------- */
+  var EVS=[], ei=0;
+  function build(i){
+    var e=[]; SC[i].cues.forEach(function(c){
+      e.push({ms:c.at*1000,k:'a',c:c});
+      c.c.forEach(function(x){ e.push({ms:(c.at+x[0])*1000,k:'c',x:x[1]}); });
+    });
+    e.sort(function(a,b){return a.ms-b.ms}); return e;
+  }
+  function fire(e){ if(e.k==='c') showCap(e.x); else if(eff()) playCue(e.c,0); }
+
+  function setScene(i,auto){
+    i=(i+N)%N;
+    if(auto && idx===N-1 && i===0) loops++; else if(!auto) loops=0;
+    paintSnd();
+    if(idx>=0 && idx!==i){ var p=scs[idx]; p.classList.remove('on'); p.classList.add('leaving'); setTimeout(function(){ p.classList.remove('leaving'); },480); }
+    var s=scs[i]; s.classList.remove('on','leaving'); void s.offsetWidth; s.classList.add('on');
+    s.querySelectorAll('a,button').forEach(function(x){ x.tabIndex=0; });
+    scs.forEach(function(x,j){ if(j!==i) x.setAttribute('aria-hidden','true'); else x.removeAttribute('aria-hidden'); });
+    idx=i; t=0;
+    ch.textContent=pad(i+1)+' / '+pad(N)+' · '+NAMES[i];
+    fills.forEach(function(f,j){ f.style.width=(j<i?'100%':'0'); });
+    segs.forEach(function(b,j){ if(j===i) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current'); });
+    stopAudio(); EVS=build(i); ei=0; showCap('');
+    if(rm){ var cs=SC[i].cues; for(var k=0;k<cs.length;k++){ if(cs[k].c[0]&&cs[k].c[0][1]){ showCap(cs[k].c[0][1]); break; } } }
+    speedEl(stage); if(playing){ warm(i); warm(i+1); bgSync(!auto); }
+    tick();
+    if(i===N-1 && !seen){ seen=true; ev('hero_video_visto'); }
+  }
+
+  function frame(now){
+    raf=requestAnimationFrame(frame);
+    var dt=Math.min(now-last,100); last=now; t+=dt*SPEED;
+    while(ei<EVS.length && t>=EVS[ei].ms){ fire(EVS[ei++]); }
+    if(t>=DUR[idx]){ setScene(idx+1,true); return; }
+    fills[idx].style.width=(t/DUR[idx]*100)+'%'; tick();
+  }
+  function setPlaying(on){
+    if(on===playing) return; playing=on;
+    stage.classList.toggle('paused',!on);
+    ppi.innerHTML=on?ICON_PAUSE:ICON_PLAY; pp.setAttribute('aria-label',on?'Pausar el video':'Reproducir el video');
+    if(on){ last=performance.now(); raf=requestAnimationFrame(frame); resumeAudio(); bgSync(true); warm(idx); warm(idx+1); }
+    else { cancelAnimationFrame(raf); try{ pl.pause(); }catch(e){} try{ bg.pause(); }catch(e){} }
+  }
+  function refresh(){ setPlaying(inView && !userPaused && !document.hidden); }
+
+  pp.addEventListener('click',function(){ userPaused=!userPaused; refresh(); ev('hero_video_'+(userPaused?'pausa':'play')); });
+  stage.addEventListener('click',function(e){ if(jUn||e.target.closest('a,button')) return; userPaused=!userPaused; refresh(); });
+  $('#ej-apply').addEventListener('click',function(){ ev('hero_video_aplicar'); });
+  $('#ej-test').addEventListener('click',function(){ ev('hero_video_test'); });
+
+  /* El navegador bloquea el audio con voz hasta que la persona toca la página.
+     Si lo bloquea, el video sigue con subtítulos y el primer toque activa la voz en el punto exacto. */
+  function unlock(){
+    if(!blocked||!wantSound||loops>0) return;
+    blocked=false; jUn=true; setTimeout(function(){ jUn=false; },450);
+    if(playing){ startCurrent(); bgSync(true); } paintSnd();
+  }
+  ['pointerup','touchend','keydown','click'].forEach(function(n){ document.addEventListener(n,unlock,true); });
+
+  snd.addEventListener('click',function(){
+    if(jUn) return;                       /* este mismo toque ya activó el sonido */
+    if(loops>0){ loops=0; wantSound=true; blocked=false; }
+    else wantSound=!wantSound;
+    try{ sessionStorage.setItem(KEY,wantSound?'on':'off'); }catch(e){}
+    if(wantSound){ if(playing){ startCurrent(); bgSync(true); } } else { stopAudio(); try{ bg.pause(); }catch(e){} }
+    paintSnd(); ev('hero_video_sonido',{on:wantSound});
+  });
+  paintSnd();
+
+  /* deslizar en el celular y flechas del teclado para cambiar de capítulo */
+  var sx=0, sy=0;
+  stage.addEventListener('touchstart',function(e){ var q=e.touches[0]; sx=q.clientX; sy=q.clientY; },{passive:true});
+  stage.addEventListener('touchend',function(e){ var q=e.changedTouches[0], dx=q.clientX-sx, dy=q.clientY-sy; if(Math.abs(dx)>55 && Math.abs(dy)<40){ setScene(idx+(dx<0?1:-1)); ev('hero_video_capitulo',{n:idx+1}); } },{passive:true});
+  root.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'){ setScene(idx+1); } else if(e.key==='ArrowLeft'){ setScene(idx-1); } });
+
+  /* se llama dentro del gesto (deslizar / tocar): deja el audio listo para sonar en cuanto arranque el video */
+  function prime(){
+    if(!eff()) return;
+    if(pl.getAttribute('data-f')!=='1a'){ pl.src=AB+'1a.mp3'; pl.setAttribute('data-f','1a'); pl.defaultPlaybackRate=SPEED; pl.playbackRate=SPEED; }
+    if(!bg.getAttribute('src')) bg.src=AB+'fondo.mp3';
+    [pl,bg].forEach(function(el){
+      var was=el.muted, p; el.muted=true;
+      try{ p=el.play(); }catch(e){ el.muted=was; return; }
+      if(p&&p.then) p.then(function(){ if(!playing){ try{ el.pause(); el.currentTime=0; }catch(e){} } el.muted=was; }).catch(function(){ el.muted=was; });
+    });
+  }
+  document.addEventListener('visibilitychange',refresh);
+  root.ejApi={play:function(restart){ if(restart&&!rm){ userPaused=false; setScene(0); } inView=true; refresh(); },pause:function(){ inView=false; refresh(); },prime:prime};
+  setScene(0); playing=true; setPlaying(false); refresh();
+})();
+</script>
+
+</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<script id="hero-slider">
+(function(){
+  var hero=document.getElementById('hero'), hv=document.getElementById('hv'); if(!hv||!hero) return;
+  var view=document.getElementById('hv-view'), s1=document.getElementById('hv-s1'), s2=document.getElementById('hv-s2'), ej=document.getElementById('ej');
+  var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var state=1, timers=[], autoT=0, visible=false;
+  function later(fn,ms){ timers.push(setTimeout(fn,ms)); }
+  function clearT(){ timers.forEach(clearTimeout); timers=[]; }
+  function fit(n){ var h=(n===2?s2:s1).offsetHeight; if(h) view.style.height=h+'px'; }
+  function api(){ return ej && ej.ejApi; }
+  function mark(n){
+    s1.inert=(n===2); s2.inert=(n!==2);
+    if(n===2){ s1.setAttribute('aria-hidden','true'); s2.removeAttribute('aria-hidden'); } else { s2.setAttribute('aria-hidden','true'); s1.removeAttribute('aria-hidden'); }
+  }
+  function slide(on){ hv.classList.toggle('slid',on); hero.classList.toggle('hv-slid',on); fit(on?2:1); }
+  function startVideo(){ var a=api(); if(!a) return; if(visible) a.play(true); else a.pause(); }
+  function sync(){ var a=api(); if(!a) return; if(state===2 && visible) a.play(false); else a.pause(); }
+
+  /* ya no avanza solo: cada tanto la foto "se asoma" hacia el video para invitar a deslizar */
+  var peeks=0, peekEnd=0;
+  function peekStop(){ clearTimeout(autoT); clearTimeout(peekEnd); hv.classList.remove('peeking'); }
+  function peekLoop(ms){
+    clearTimeout(autoT); if(reduce) return;
+    autoT=setTimeout(function(){
+      if(state!==1 || peeks>=6) return;
+      if(!visible || document.hidden){ peekLoop(1500); return; }
+      peeks++; hv.classList.add('peeking');
+      peekEnd=setTimeout(function(){ hv.classList.remove('peeking'); },1700);
+      peekLoop(5500);
+    },ms);
+  }
+  function openVideo(){ var a=api(); if(a&&a.prime) a.prime(); goTo(2); }
+
+  function goTo(n){
+    if(n===state) return;
+    clearT(); peekStop(); state=n;
+    view.classList.toggle('anim',!reduce);
+    mark(n);
+    if(n===2){
+      if(reduce){ s1.classList.add('out'); slide(true); startVideo(); return; }
+      s1.classList.add('out');                       /* 1) salen los elementos sobre la foto */
+      later(function(){ slide(true); },420);         /* 2) desliza el hero */
+      later(startVideo,780);                         /* 3) arranca el video interactivo */
+    } else {
+      var a=api(); if(a) a.pause();
+      slide(false);
+      if(reduce) s1.classList.remove('out'); else later(function(){ s1.classList.remove('out'); },450);
+      peeks=0; peekLoop(2500);
+    }
+    later(function(){ view.classList.remove('anim'); },1100);
+  }
+
+  /* botón "Ver video" (en computadora y como alternativa en el celular) */
+  var hint=document.getElementById('hv-hint');
+  if(hint) hint.addEventListener('click',function(e){ e.stopPropagation(); if(state===1) openVideo(); });
+  /* volver a la foto */
+  var back=document.getElementById('ej-back'); if(back) back.addEventListener('click',function(e){ e.stopPropagation(); goTo(1); });
+  /* swipe en el celular: de la foto hacia el método */
+  var sx=0, sy=0;
+  s1.addEventListener('touchstart',function(e){ var q=e.touches[0]; sx=q.clientX; sy=q.clientY; },{passive:true});
+  s1.addEventListener('touchend',function(e){ var q=e.changedTouches[0]; if(state===1 && q.clientX-sx<-50 && Math.abs(q.clientY-sy)<40) openVideo(); },{passive:true});
+
+  /* el video solo corre cuando el hero se ve en pantalla */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ visible=es[0].isIntersecting; sync(); },{threshold:.25}).observe(view);
+  } else { visible=true; }
+  /* la altura sigue a la slide activa, así nada se pisa con el texto de abajo */
+  if('ResizeObserver' in window){ var ro=new ResizeObserver(function(){ fit(state); }); ro.observe(s1); ro.observe(s2); }
+  window.addEventListener('load',function(){ fit(state); });
+
+  mark(1); fit(1); peekLoop(1800);
+})();
+</script>
+
+
 <!-- ========================= MISMO MENSAJE, DOS RITMOS ========================= -->
 <section id="ritmos" class="max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-32" aria-labelledby="ritmos-h">
-  <h2 id="ritmos-h" class="h-section max-w-[22ch]">Mismo mensaje, dos ritmos.</h2>
-  <p class="lede mt-5">Alguien te pregunta algo en inglés. Así responde un cerebro que traduce, y así responde uno entrenado en bloques.</p>
-
-  <div class="rt-ask" aria-hidden="true"><small>Alguien te pregunta</small><span>“What did you do yesterday?”</span></div>
-
-  <div class="rt-wrap" aria-hidden="true">
-    <div class="rt-card" data-rt="a">
-      <div class="rt-head"><p class="rt-k">Traduciendo</p><p class="rt-time">0.0 s</p></div>
-      <p class="rt-line"></p>
-      <p class="rt-think">&nbsp;</p>
-      <div class="rt-bar"><i></i></div>
-      <p class="rt-note">…y la conversación ya siguió.</p>
-    </div>
-    <div class="rt-card rt-new" data-rt="b">
-      <div class="rt-head"><p class="rt-k">En bloque</p><p class="rt-time">0.0 s</p></div>
-      <p class="rt-line"><span class="rt-block">I went to the market.</span></p>
-      <p class="rt-think">&nbsp;</p>
-      <div class="rt-bar"><i></i></div>
-      <p class="rt-note">La frase sale entera y a tiempo.</p>
-    </div>
-  </div>
-  <p class="sr-only">Mismo mensaje, dos ritmos. Cuando traduces en tu cabeza, la respuesta llega palabra por palabra y tarda unos cinco segundos. Cuando la frase llega en bloque, sale entera en medio segundo.</p>
+  <h2 id="ritmos-h" class="h-section max-w-[22ch]">Así lo hacemos en el club.</h2>
+  <p class="lede mt-5">Frases reales, situaciones reales y un coach que te corrige. Míralo en video.</p>
 
   <div class="rt-videos">
-    <p class="rt-vh">El segundo ritmo se entrena. Así lo hacemos en el club:</p>
     <div class="rt-vtrack" data-car="md">
       <div class="rt-v">
         <button type="button" class="rt-vcover has-img" data-vid="7690440130435239176" data-title="Los nicas decimos “andar” para todo. ¿Cómo se dice en inglés?" aria-label="Reproducir video: Los nicas decimos “andar” para todo. ¿Cómo se dice en inglés?">
@@ -1961,49 +2536,6 @@ document.querySelectorAll('[data-car]').forEach(function(tr){
     if(!w)location.href=url;
     form.reset();close();
   });
-})();
-</script>
-<script>
-/* Mismo mensaje, dos ritmos: traduciendo (lento, con pausas) vs en bloque (rápido, entero) */
-(function(){
-  var root=document.getElementById('ritmos');if(!root)return;
-  var A=root.querySelector('[data-rt=a]'),B=root.querySelector('[data-rt=b]');if(!A||!B)return;
-  var aTime=A.querySelector('.rt-time'),bTime=B.querySelector('.rt-time'),aLine=A.querySelector('.rt-line'),aThink=A.querySelector('.rt-think'),
-      bThink=B.querySelector('.rt-think'),aBar=A.querySelector('.rt-bar i'),bBar=B.querySelector('.rt-bar i'),aNote=A.querySelector('.rt-note'),bNote=B.querySelector('.rt-note'),
-      block=B.querySelector('.rt-block');
-  var WORDS=['Yesterday','I','went','to','the','market.'],A_END=4900,B_END=500,CYCLE=9800;
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,visible=false,raf=null,T0=0,ix=0;
-  aLine.innerHTML=WORDS.map(function(w){return '<span class="w">'+w+'</span>'}).join('');
-  var ws=[].slice.call(aLine.querySelectorAll('.w'));
-  function think(el,t){el.textContent=t||'\u00a0'}
-  var EV=[
-    [150,function(){think(aThink,'ayer… ¿cómo empezaba?')}],
-    [900,function(){ws[0].classList.add('on');think(aThink,'fui… ¿“go”?')}],
-    [1800,function(){ws[1].classList.add('on');think(aThink,'no… ¿“went”?')}],
-    [3100,function(){ws[2].classList.add('on');think(aThink,'¿y “al mercado”?')}],
-    [3900,function(){ws[3].classList.add('on')}],
-    [4200,function(){ws[4].classList.add('on')}],
-    [A_END,function(){ws[5].classList.add('on');think(aThink,'')}],
-    [5300,function(){aNote.classList.add('on')}],
-    [450,function(){block.classList.add('on')}],
-    [800,function(){bNote.classList.add('on')}]
-  ].sort(function(a,b){return a[0]-b[0]});
-  function reset(){ws.forEach(function(w){w.classList.remove('on')});block.classList.remove('on');aNote.classList.remove('on');bNote.classList.remove('on');
-    think(aThink,'');think(bThink,'');aTime.textContent=bTime.textContent='0.0 s';aBar.style.width=bBar.style.width='0%';ix=0}
-  function final(){ws.forEach(function(w){w.classList.add('on')});block.classList.add('on');aNote.classList.add('on');bNote.classList.add('on');
-    aTime.textContent=(A_END/1000).toFixed(1)+' s';bTime.textContent=(B_END/1000).toFixed(1)+' s';aBar.style.width=bBar.style.width='100%'}
-  function frame(now){
-    var t=now-T0;
-    while(ix<EV.length&&t>=EV[ix][0]){EV[ix][1]();ix++}
-    aTime.textContent=(Math.min(t,A_END)/1000).toFixed(1)+' s';bTime.textContent=(Math.min(t,B_END)/1000).toFixed(1)+' s';
-    aBar.style.width=(Math.min(t/A_END,1)*100)+'%';bBar.style.width=(Math.min(t/450,1)*100)+'%';
-    if(t>=CYCLE){start();return}
-    raf=requestAnimationFrame(frame)}
-  function start(){reset();T0=performance.now();raf=requestAnimationFrame(frame)}
-  function stop(){if(raf){cancelAnimationFrame(raf);raf=null}}
-  if(reduce){final();return}
-  new IntersectionObserver(function(en){visible=en[0].isIntersecting;if(visible&&!raf)start();else if(!visible)stop()},{threshold:.35}).observe(root.querySelector('.rt-wrap'));
-  document.addEventListener('visibilitychange',function(){if(document.hidden)stop();else if(visible&&!raf)start()});
 })();
 </script>
 <script>

@@ -411,6 +411,28 @@
     .flag-card { padding:32px 10px; }
     .flag { width:92px; }
   }
+
+  /* ===== OFERTA-LANZAMIENTO (CSS) — bloque de la oferta; ver notas en CONFIG.oferta ===== */
+  .oferta { margin-top:14px; padding:12px 15px; border-radius:14px; border:1px solid rgba(240,180,41,.3); background:rgba(240,180,41,.07); font-size:13.5px; line-height:1.45; color:#e4d6ad; }
+  .oferta p + p { margin-top:3px; }
+  .oferta .of-was { color:var(--muted); }
+  .oferta .of-was s { text-decoration-color:rgba(240,180,41,.75); }
+  .oferta .of-then b { color:var(--gold3); font-weight:700; }
+  .hero-price .of-hasta { color:var(--muted); }
+  @media (min-width:860px) { .term[data-of="on"] { grid-column:1 / -1; } }
+  /* ===== fin OFERTA-LANZAMIENTO (CSS) ===== */
+
+  /* ===== EFECTOS (como en /unirme/): brillo que sigue al cursor + tarjetas que se levantan ===== */
+  body.glow::before {
+    background:
+      radial-gradient(520px circle at var(--mx, 50%) var(--my, 0%), rgba(240,180,41,.13), transparent 62%),
+      radial-gradient(70% 38% at 50% 0%, rgba(240,180,41,.14), transparent 70%),
+      radial-gradient(40% 30% at 90% 100%, rgba(200,138,26,.07), transparent 70%);
+  }
+  @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+    .plan { transition:transform .35s var(--ease), box-shadow .35s var(--ease); }
+    .plan:hover { transform:translateY(-5px); }
+  }
 </style>
 <script>document.documentElement.className += ' js';</script>
 <!-- Google Analytics 4: cambia el ID por el tuyo (Administrar > Flujos de datos). Si sigue como G-XXXXXXXXXX no se carga. -->
@@ -466,7 +488,7 @@
       <h1 class="rise" style="--d:.12s">No solo estudies inglés. Entrénalo.</h1>
       <p class="lead rise" style="--d:.18s">Sesiones en vivo por Google Meet, grupos de 5 a 8 personas y corrección directa en cada práctica.</p>
       <div class="rise" style="--d:.24s">
-        <p class="hero-price">Desde <b id="heroPrice">$56 al mes</b> por persona en Dúo</p>
+        <p class="hero-price">Desde <b id="heroPrice">$56 al mes</b> por persona en Dúo<span class="of-hasta" data-of="on" hidden> · lanzamiento hasta el <span data-b="ofHasta">30 de octubre</span></span></p>
         <div class="hero-cta">
           <a class="btn btn-gold" href="#planes">Ver planes</a>
           <a class="btn btn-line" href="#" data-wa="general" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
@@ -528,6 +550,11 @@
             <h3>Solo Élite</h3>
             <p class="desc">Para quien prefiere avanzar a su propio ritmo, con grupo y seguimiento.</p>
             <div class="price"><span class="cur">$</span><span class="p-whole" data-b="soloWhole">69</span><span class="p-cents" data-b="soloCents">.99</span><span class="per">USD / mes</span></div>
+            <!-- OFERTA-LANZAMIENTO: bloque que solo se ve con la oferta activa -->
+            <div class="oferta" data-of="on" hidden>
+              <p class="of-was"><s>$<span data-b="soloFull">70</span></s> precio regular</p>
+              <p class="of-then">Lanzamiento: <b>primeros <span data-b="ofMeses">3</span> meses</b>. Luego <b>$<span data-b="soloLuego">50</span> al mes</b> (precio fundador).</p>
+            </div>
             <p class="price-note">Pago mensual para una persona</p>
             <div class="stats one">
               <div class="stat" data-st="dia">Por día<b>$<span data-b="soloDia">2.33</span></b></div>
@@ -546,9 +573,11 @@
                 <li><span>Material de estudio y grupo de WhatsApp</span></li>
               </ul>
             </details>
-            <button type="button" class="nudge" data-goto="duo">¿Con un amigo? Cada uno paga $<span data-b="duoPP">56</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="nudge" data-goto="duo" data-of="off">¿Con un amigo? Cada uno paga $<span data-b="duoPP">56</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+            <!-- OFERTA-LANZAMIENTO: versión del aviso con la oferta activa -->
+            <button type="button" class="nudge" data-goto="duo" data-of="on" hidden>¿Con un amigo? Después, cada uno paga $<span data-b="duoLuegoPP">40</span> y no $<span data-b="soloLuego">50</span><svg class="ic"><use href="#i-arrow"/></svg></button>
             <div class="cta">
-              <a class="btn btn-line btn-block" href="#" data-wa="solo" target="_blank" rel="noopener">Aplicar a mi cupo</a>
+              <a class="btn btn-line btn-block" href="https://nicaenglishclub.com/unirme/" data-apply="solo">Aplicar a mi cupo</a>
               <div class="tlinks"><a class="tlink" href="#" data-wa="solo" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Preguntar por WhatsApp</a></div>
             </div>
           </article>
@@ -560,12 +589,19 @@
             <h3>Dúo Dinámico</h3>
             <p class="desc">Entra con un amigo, tu pareja o un colega. Mismos beneficios, cada quien en su nivel.</p>
             <div class="price"><span class="cur">$</span><span class="p-whole" data-b="duoPPWhole">49</span><span class="p-cents" data-b="duoPPCents">.50</span><span class="per">USD / mes por persona</span></div>
+            <!-- OFERTA-LANZAMIENTO: bloque que solo se ve con la oferta activa -->
+            <div class="oferta" data-of="on" hidden>
+              <p class="of-was"><s>$<span data-b="duoPPReg">56</span></s> por persona, precio regular</p>
+              <p class="of-then">Lanzamiento: <b>primeros <span data-b="ofMeses">3</span> meses</b>. Luego <b>$<span data-b="duoLuegoPP">40</span> por persona</b> (precio fundador).</p>
+            </div>
             <p class="price-note">Un solo pago de <b>$<span data-b="duoFull">99</span></b> al mes por los dos</p>
             <div class="stats one">
               <div class="stat" data-st="dia">Por día, por persona<b>$<span data-b="duoDia">1.65</span></b></div>
               <div class="stat txt" data-st="txt" hidden>Clases en vivo cada semana, con corrección personal</div>
             </div>
-            <p class="save"><strong><svg class="ic"><use href="#i-check"/></svg>Mejor precio por persona</strong>Cada uno ahorra <b>$<span data-b="duoAhorroPP">20.49</span></b> al mes frente a Solo. Entre los dos, <b>$<span data-b="duoAhorroAnio">492</span></b> menos al año.</p>
+            <p class="save" data-of="off"><strong><svg class="ic"><use href="#i-check"/></svg>Mejor precio por persona</strong>Cada uno ahorra <b>$<span data-b="duoAhorroPP">20.49</span></b> al mes frente a Solo. Entre los dos, <b>$<span data-b="duoAhorroAnio">492</span></b> menos al año.</p>
+            <!-- OFERTA-LANZAMIENTO: versión del ahorro con la oferta activa -->
+            <p class="save" data-of="on" hidden><strong><svg class="ic"><use href="#i-check"/></svg>Mejor precio por persona</strong>Pasados los <span data-b="ofMeses">3</span> meses, cada uno paga <b>$<span data-b="duoLuegoPP">40</span></b> en vez de <b>$<span data-b="soloLuego">50</span></b>. Entre los dos, <b>$<span data-b="duoAhorroLuego">20</span></b> menos cada mes.</p>
             <ul class="checks">
               <li><span><b>Dos accesos</b> individuales e independientes</span></li>
               <li><span><b>3 sesiones entre semana o 2 los fines de semana</b>, por persona, por Google Meet</span></li>
@@ -580,7 +616,7 @@
               </ul>
             </details>
             <div class="cta">
-              <a class="btn btn-gold btn-block" href="#" data-wa="duo" target="_blank" rel="noopener">Aplicar como dúo</a>
+              <a class="btn btn-gold btn-block" href="https://nicaenglishclub.com/unirme/" data-apply="duo">Aplicar como dúo</a>
               <div class="tlinks">
                 <a class="tlink" href="#" data-share target="_blank" rel="noopener"><svg class="ic"><use href="#i-userplus"/></svg>Invitar a un amigo</a>
                 <a class="tlink" href="#" data-wa="duo" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Preguntar por WhatsApp</a>
@@ -608,7 +644,7 @@
               <p class="vprice">$<span data-b="vipWhole">199</span><span data-b="vipCents">.99</span> <small>USD / mes</small></p>
               <p class="vip-day" id="vipDay" hidden>Equivale a $<span data-b="vipDia">6.67</span> por día</p>
             </div>
-            <a class="btn btn-line btn-block" href="#" data-wa="vip" target="_blank" rel="noopener">Solicitar admisión VIP</a>
+            <a class="btn btn-line btn-block" href="https://nicaenglishclub.com/unirme/" data-apply="vip">Solicitar admisión VIP</a>
           </div>
           <details class="more">
             <summary><span class="lc">Ver qué incluye</span><span class="lo">Ver menos</span></summary>
@@ -633,7 +669,7 @@
           </div>
         </div>
 
-        <div class="test-cta"><a class="btn btn-line btn-sm" href="#" data-wa="test" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Hacer mi test de nivel gratis por WhatsApp</a></div>
+        <div class="test-cta"><a class="btn btn-line btn-sm" href="https://nicaenglishclub.com/test/" data-test>Hacer mi test de nivel gratis</a></div>
 
         <p class="fine">Precio en USD según tu país. Te confirmamos el método de pago al reservar.</p>
       </div>
@@ -692,6 +728,8 @@
         <div class="term"><b>No reembolsable</b><span>El pago no se reembolsa, pero el cupo se puede transferir a otra persona.</span></div>
         <div class="term"><b>Grupos de 5 a 8 personas</b><span>Para que tengas práctica y corrección directa.</span></div>
         <div class="term"><b>Formas de pago</b><span data-pay>Transferencia o depósito en Banpro o LAFISE.</span></div>
+        <!-- OFERTA-LANZAMIENTO: condición que solo se ve con la oferta activa -->
+        <div class="term" data-of="on" hidden><b>Precio de lanzamiento</b><span>Los primeros <span data-b="ofMeses">3</span> pagos mensuales son a precio de lanzamiento (Solo $<span data-b="soloWhole">35</span>; Dúo $<span data-b="duoFull">70</span> por los dos). Desde el siguiente pago se aplica el precio fundador (Solo $<span data-b="soloLuego">50</span>; Dúo $<span data-b="duoLuegoTotal">80</span> por los dos). Válido para quienes se inscriban hasta el <span data-b="ofHasta">30 de octubre</span>.</span></div>
       </div>
     </div>
   </section>
@@ -710,7 +748,9 @@
         </details>
         <details>
           <summary>¿Cómo se paga el Plan Dúo?</summary>
-          <p>Es un solo pago mensual de <b>$<span data-b="duoFull">99</span> USD</b>. Ustedes deciden si uno paga todo o si se dividen <b>$<span data-b="duoPP">49.50</span></b> cada uno.</p>
+          <p data-of="off">Es un solo pago mensual de <b>$<span data-b="duoFull">99</span> USD</b>. Ustedes deciden si uno paga todo o si se dividen <b>$<span data-b="duoPP">49.50</span></b> cada uno.</p>
+          <!-- OFERTA-LANZAMIENTO: versión del FAQ con la oferta activa -->
+          <p data-of="on" hidden>Es un solo pago mensual: <b>$<span data-b="duoFull">70</span> USD</b> los primeros <span data-b="ofMeses">3</span> meses y <b>$<span data-b="duoLuegoTotal">80</span> USD</b> después. Ustedes deciden si uno paga todo o si se dividen <b>$<span data-b="duoPP">35</span></b> cada uno (<b>$<span data-b="duoLuegoPP">40</span></b> después).</p>
         </details>
         <details>
           <summary>¿Qué pasa si mi compañero se retira?</summary>
@@ -734,10 +774,10 @@
         <h2>¿Listo para entrenar tu inglés?</h2>
         <p>Aplica hoy y empieza con tu test de nivelación.</p>
         <div class="actions">
-          <a class="btn btn-gold" href="#" data-wa="general" target="_blank" rel="noopener">Aplicar a mi cupo</a>
+          <a class="btn btn-gold" href="https://nicaenglishclub.com/unirme/" data-apply="general">Aplicar a mi cupo</a>
           <a class="btn btn-line" href="#" data-wa="general" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
         </div>
-        <div class="test-cta"><a class="btn btn-line btn-sm" href="#" data-wa="test" target="_blank" rel="noopener"><svg class="ic f"><use href="#i-wa"/></svg>Hacer mi test de nivel gratis por WhatsApp</a></div>
+        <div class="test-cta"><a class="btn btn-line btn-sm" href="https://nicaenglishclub.com/test/" data-test>Hacer mi test de nivel gratis</a></div>
         <p class="small">Sin compromiso hasta confirmar tu cupo.</p>
       </div>
     </div>
@@ -809,6 +849,37 @@ var CONFIG = {
   paisDefault: 'nicaragua',  // se usa detrás de la pantalla de banderas
   vip: 250,                  // igual en todos los países
 
+  // Destinos de los botones (Aplicar -> formulario; test -> prueba de nivel)
+  unirmeUrl: 'https://nicaenglishclub.com/unirme/',
+  testUrl:   'https://nicaenglishclub.com/test/',
+
+  /* =====================================================================
+     OFERTA DE LANZAMIENTO (solo Nicaragua) — NOTAS PARA REVERTIR
+     ---------------------------------------------------------------------
+     APAGARLA (lo normal): cambia  activa: true  ->  activa: false
+        La página vuelve sola a los precios normales (Solo $70, Dúo $112).
+        No hay que borrar ni tocar nada más.
+     SE APAGA SOLA: pasada la fecha 'hasta' (hora de Nicaragua, ese día inclusive)
+        la oferta desaparece sin que hagas nada.
+     ALARGARLA: cambia 'hasta' (AAAA-MM-DD) y 'hastaTexto' (lo que se lee en la página).
+        Sin fecha límite: hasta: ''
+     CAMBIAR PRECIOS: solo.precio / solo.luego / duo.total / duo.luego
+        (duo = total mensual de los DOS; por persona es la mitad). Dúo regular sigue en paises.nicaragua.duo.
+     OTRO PAÍS: agrega su clave en 'paises' (ej. ['nicaragua','costarica']). Usa los mismos precios.
+     QUITARLA POR COMPLETO (opcional, no hace falta): busca el texto OFERTA-LANZAMIENTO y borra
+        esos bloques (CSS, CONFIG, JS y los elementos con data-of="on"); a los elementos con
+        data-of="off" solo quítales ese atributo.
+     ===================================================================== */
+  oferta: {                                   // OFERTA-LANZAMIENTO (CONFIG)
+    activa: true,
+    paises: ['nicaragua'],
+    hasta: '2026-10-30',
+    hastaTexto: '30 de octubre',
+    meses: 3,
+    solo: { precio: 35, luego: 50 },
+    duo:  { total: 70,  luego: 80 }
+  },
+
   // Texto de la etiqueta sobre el título ('' para ocultarla)
   estado: 'Admisión abierta, cupos limitados',
 
@@ -821,12 +892,24 @@ var CONFIG = {
 
 (function () {
   var C = CONFIG, N = C.sesionesPorMes, P = {}, duoPP = 0, v = {}, paisKey = '', ref = '';
+  var OF = null, shownSolo = 0, shownDuo = 0;   // OFERTA-LANZAMIENTO: oferta vigente y precios que se muestran en grande
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var money = function (n) { return n % 1 ? n.toFixed(2) : String(n); };
   var whole = function (n) { return String(Math.floor(n)); };
   var cents = function (n) { var c = Math.round((n - Math.floor(n)) * 100); return c ? '.' + (c < 10 ? '0' + c : c) : ''; };
+
+  /* ---------- OFERTA-LANZAMIENTO (JS): ¿hay oferta vigente en este país? ---------- */
+  function ofertaVigente(pk) {
+    var o = C.oferta;
+    if (!o || !o.activa || !o.paises || o.paises.indexOf(pk) === -1) return null;
+    if (o.hasta) {
+      var fin = new Date(o.hasta + 'T23:59:59-06:00');   // fin del día en hora de Nicaragua
+      if (!isNaN(fin.getTime()) && Date.now() > fin.getTime()) return null;
+    }
+    return o;
+  }
 
   /* ---------- Precios por país ---------- */
   function calc(pk) {
@@ -850,10 +933,35 @@ var CONFIG = {
       v.tutorHora = String(C.tutorPrivadoHora);
       v.tutorMes = String(Math.round(C.tutorPrivadoHora * N));
     }
+    // ---- OFERTA-LANZAMIENTO (JS): sobrescribe lo que se muestra mientras la oferta esté vigente ----
+    var o0 = C.oferta;
+    if (o0) {
+      v.ofMeses = String(o0.meses); v.ofHasta = o0.hastaTexto || '';
+      v.duoPPReg = money(duoPP);
+      v.soloLuego = money(o0.solo.luego);
+      v.duoLuegoTotal = money(o0.duo.luego); v.duoLuegoPP = money(o0.duo.luego / 2);
+      v.duoAhorroLuego = money(2 * o0.solo.luego - o0.duo.luego);
+    }
+    OF = ofertaVigente(pk);
+    shownSolo = P.solo; shownDuo = duoPP;
+    if (OF) {
+      var dPP = OF.duo.total / 2;
+      shownSolo = OF.solo.precio; shownDuo = dPP;
+      v.soloWhole = whole(shownSolo); v.soloCents = cents(shownSolo);
+      v.duoPP = money(dPP); v.duoPPWhole = whole(dPP); v.duoPPCents = cents(dPP);
+      v.duoFull = money(OF.duo.total);
+      v.duoPct = String(Math.round((OF.solo.luego - OF.duo.luego / 2) / OF.solo.luego * 100));
+    }
+    // ---- fin OFERTA-LANZAMIENTO (JS) ----
     $$('[data-b]').forEach(function (el) {
       var k = el.getAttribute('data-b');
       if (v[k] !== undefined) el.textContent = v[k];
     });
+    // OFERTA-LANZAMIENTO (JS): mostrar u ocultar los textos de la oferta
+    $$('[data-of="on"]').forEach(function (el) { el.hidden = !OF; });
+    $$('[data-of="off"]').forEach(function (el) { el.hidden = !!OF; });
+    var cp = $('#cupos');
+    if (cp && !C.cuposTexto) { if (OF) { cp.textContent = 'Precio de lanzamiento hasta el ' + (OF.hastaTexto || ''); cp.hidden = false; } else { cp.hidden = true; } }
     $$('[data-paisname]').forEach(function (el) { el.textContent = p.nombre; });
     $$('[data-pay]').forEach(function (el) { el.textContent = p.pago; });
     $$('[data-st="dia"]').forEach(function (el) { el.hidden = p.modo !== 'dia'; });
@@ -936,6 +1044,8 @@ var CONFIG = {
   }
   function setLinks() {
     $$('[data-wa]').forEach(function (a) { a.href = waUrl(a.getAttribute('data-wa')); });
+    $$('[data-apply]').forEach(function (a) { if (a.id === 'barCta') return; var pl = a.getAttribute('data-apply'); a.href = C.unirmeUrl + (pl && pl !== 'general' ? '?plan=' + pl : ''); });
+    $$('[data-test]').forEach(function (a) { a.href = C.testUrl; });
     var link = C.paginaUrl + '?pais=' + paisKey;
     var shareMsg = 'Mira este plan de Nica English Club: entramos juntos por $' + v.duoPP + ' al mes cada uno. ' + link;
     $$('[data-share]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(shareMsg); });
@@ -1044,16 +1154,16 @@ var CONFIG = {
     $('.p-whole', card).textContent = w;
     $('.p-cents', card).textContent = (fin && c === 0) ? '' : '.' + (c < 10 ? '0' + c : c);
   }
-  function settle() { tw++; paint(soloCard, P.solo, true); paint(duoCard, duoPP, true); }
+  function settle() { tw++; paint(soloCard, shownSolo, true); paint(duoCard, shownDuo, true); }
   function countDown() {
     if (RM) return;
     var id = ++tw, t0 = null, ms = 900;
-    paint(duoCard, P.solo, false);
+    paint(duoCard, shownSolo, false);
     (function step(ts) {
       if (id !== tw) return;
       if (t0 === null) t0 = ts;
       var p = Math.min(1, (ts - t0) / ms), e = 1 - Math.pow(1 - p, 3);
-      paint(duoCard, P.solo + (duoPP - P.solo) * e, p === 1);
+      paint(duoCard, shownSolo + (shownDuo - shownSolo) * e, p === 1);
       if (p < 1) requestAnimationFrame(step);
     })(performance.now());
   }
@@ -1108,8 +1218,8 @@ var CONFIG = {
       var desk = window.matchMedia && window.matchMedia('(min-width:860px)').matches;
       fab.classList.toggle('show', heroOut && (desk || !show));
       document.body.classList.toggle('has-fab', heroOut && !desk && !show);
-      if (past) { barCta.textContent = 'Aplicar a mi cupo'; barCta.href = waUrl('general'); barCta.target = '_blank'; barCta.rel = 'noopener'; }
-      else { barCta.textContent = 'Ver planes'; barCta.href = '#planes'; barCta.removeAttribute('target'); }
+      if (past) { barCta.textContent = 'Aplicar a mi cupo'; barCta.href = C.unirmeUrl; barCta.setAttribute('data-apply', 'general'); barCta.removeAttribute('target'); barCta.removeAttribute('rel'); }
+      else { barCta.textContent = 'Ver planes'; barCta.href = '#planes'; barCta.removeAttribute('data-apply'); barCta.removeAttribute('target'); }
     };
     window.addEventListener('resize', update);
     new IntersectionObserver(function (e) { heroOut = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; update(); }, { threshold: 0 }).observe($('#hero'));
@@ -1123,13 +1233,28 @@ var CONFIG = {
     var a = e.target.closest ? e.target.closest('a') : null;
     if (!a) return;
     var kind = a.getAttribute('data-wa');
+    if (a.hasAttribute('data-apply')) return track('apply_click', { plan: a.getAttribute('data-apply'), transport_type: 'beacon' });
+    if (a.hasAttribute('data-test')) return track('test_click', { transport_type: 'beacon' });
     if (a.hasAttribute('data-share')) return track('invite_click');
     if (kind === 'test') return track('test_click');
-    if (a.id === 'barCta' && /wa\.me/.test(a.href)) return track('apply_click', { plan: 'general' });
     if (!kind) return;
     var isApply = /^Aplicar|^Solicitar/.test((a.textContent || '').trim());
     track(isApply ? 'apply_click' : 'whatsapp_click', { plan: kind });
   });
+  /* ---------- Efecto: brillo dorado que sigue al cursor (igual que en /unirme/) ---------- */
+  if (!RM && window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    var gx = 0, gy = 0, gf = 0;
+    window.addEventListener('pointermove', function (e) {
+      gx = e.clientX; gy = e.clientY;
+      if (gf) return;
+      gf = requestAnimationFrame(function () {
+        gf = 0;
+        document.body.style.setProperty('--mx', gx + 'px');
+        document.body.style.setProperty('--my', gy + 'px');
+        document.body.classList.add('glow');
+      });
+    }, { passive: true });
+  }
 })();
 </script>
 </body>

@@ -419,6 +419,7 @@
   .hero-price .of-hasta { color:var(--muted); }
   @media (max-width:600px) { .hero-price .of-hasta { display:block; margin-top:2px; } .hero-price .of-dot { display:none; } }
   @media (min-width:860px) { .term[data-of="on"] { grid-column:1 / -1; } }
+  .launch-note { margin-top:22px; }
   /* ===== fin OFERTA-LANZAMIENTO (CSS) ===== */
 
 
@@ -666,6 +667,9 @@
           </details>
         </article>
 
+        <!-- OFERTA-LANZAMIENTO: condición del precio, debajo de los planes -->
+        <div class="term launch-note" data-of="on" hidden><b>Precio de lanzamiento</b><span>Los primeros <span data-b="ofMeses">3</span> pagos mensuales son a precio de lanzamiento (Solo $<span data-b="soloWhole">35</span>; Dúo $<span data-b="duoFull">70</span> por los dos). Desde el siguiente pago se aplica el precio fundador (Solo $<span data-b="soloLuego">50</span>; Dúo $<span data-b="duoLuegoTotal">80</span> por los dos). Válido para quienes se inscriban hasta el <span data-b="ofHasta">30 de octubre</span>.</span></div>
+
         <div class="sched">
           <button type="button" class="btn btn-line btn-sm" id="schedBtn" aria-expanded="false" aria-controls="sched"><svg class="ic"><use href="#i-cal"/></svg><span>Ver horarios</span></button>
           <div id="sched" hidden>
@@ -725,20 +729,6 @@
         <li><div><b>Haz tu test de nivelación</b><span>Te asignamos al grupo de tu nivel. Si son dos, cada quien hace el suyo.</span></div></li>
         <li><div><b>Empieza a entrenar</b><span>Sesiones en vivo (3 entre semana o 2 los fines de semana), más práctica en la plataforma cuando quieras.</span></div></li>
       </ol>
-    </div>
-  </section>
-
-  <section class="sec" id="condiciones">
-    <div class="wrap">
-      <h2>Condiciones claras</h2>
-      <div class="terms">
-        <!-- OFERTA-LANZAMIENTO: condición que solo se ve con la oferta activa -->
-        <div class="term" data-of="on" hidden><b>Precio de lanzamiento</b><span>Los primeros <span data-b="ofMeses">3</span> pagos mensuales son a precio de lanzamiento (Solo $<span data-b="soloWhole">35</span>; Dúo $<span data-b="duoFull">70</span> por los dos). Desde el siguiente pago se aplica el precio fundador (Solo $<span data-b="soloLuego">50</span>; Dúo $<span data-b="duoLuegoTotal">80</span> por los dos). Válido para quienes se inscriban hasta el <span data-b="ofHasta">30 de octubre</span>.</span></div>
-        <div class="term"><b>Pago al inicio de cada mes</b><span>Pagas tu mensualidad al comenzar cada mes.</span></div>
-        <div class="term"><b>No reembolsable</b><span>El pago no se reembolsa, pero el cupo se puede transferir a otra persona.</span></div>
-        <div class="term"><b>Grupos de 5 a 8 personas</b><span>Para que tengas práctica y corrección directa.</span></div>
-        <div class="term"><b>Formas de pago</b><span data-pay>Transferencia o depósito en Banpro o LAFISE.</span></div>
-      </div>
     </div>
   </section>
 

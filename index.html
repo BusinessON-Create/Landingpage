@@ -304,12 +304,8 @@
   .wa-float{ box-shadow:0 5px 0 #128a3e,0 18px 38px rgba(37,211,102,.24); }
 
   /* Scroll reveal — content remains identical; only presentation changes. */
-  .ne-reveal{ opacity:0; transform:translateY(18px); transition:opacity .65s ease,transform .65s cubic-bezier(.16,1,.3,1); }
-  .ne-reveal.ne-visible{ opacity:1; transform:none; }
-  .ne-delay-1{ transition-delay:.06s; } .ne-delay-2{ transition-delay:.12s; } .ne-delay-3{ transition-delay:.18s; }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{ scroll-behavior:auto !important; animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
-    .ne-reveal{ opacity:1; transform:none; }
   }
 
 </style>
@@ -341,8 +337,7 @@
 footer img{ flex:none; width:auto; max-width:none; object-fit:contain; display:block; }
 footer .flex.items-center.gap-3.mb-4{ margin-bottom:1.25rem; flex-wrap:nowrap; }
 footer .flex.items-center.gap-3.mb-4 + p{ position:relative; clear:both; line-height:1.6; }
-footer > div,
-footer .ne-reveal{ transform:none !important; }        /* evita capas por transform animado */
+footer > div{ transform:none !important; }        /* evita capas por transform animado */
 
 /* Botón de WhatsApp: ya no tapa texto.
    Más espacio al final de la página y botón más pequeño en móvil. */
@@ -363,7 +358,7 @@ section::after, body::before, .t-wrap::before, .t-wrap::after{ pointer-events:no
 /* barra fija móvil */
 .sbar{display:none}
 @media(max-width:768px){
- .wa-float{display:none}
+ .wa-float{bottom:calc(92px + env(safe-area-inset-bottom))}   /* sobre la barra fija */
  .sbar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(10,9,8,.94);backdrop-filter:blur(10px);border-top:1px solid rgba(240,180,41,.2)}
  .sbar a{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:999px;font-weight:700;font-size:16px;text-align:center}
  .sb-main{flex:1.25;color:#0a0908}.sb-sec{flex:1;color:#f4efe6;border:1px solid #4a4238}
@@ -647,7 +642,7 @@ section.pb-24:has(.steps-line)::after{display:none}
  #hero-left .mt-9 a.rounded-full{padding:0 22px;font-size:16px}
 }
 </style>
-<style id="demo-form">
+<style id="demo-form-css">
 button.hchip{font-family:inherit;text-align:left;cursor:pointer;transition:transform .18s ease,border-color .2s ease}
 button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!important}
 #demo-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,4,3,.78);backdrop-filter:blur(6px);overflow-y:auto}
@@ -933,6 +928,17 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
  .hv-track,.hv-view.anim,#hero .h-hero,.hv-photo .hchip,.hv-photo .hsign,.hv-photo .loop{transition:none!important}
 }
 </style>
+<style id="fix-agreed-1-9">
+/* Pausa del círculo del hero (solo escritorio) */
+.loop-pause{display:none}
+@media(min-width:1024px){
+ .loop-pause{display:grid;position:absolute;z-index:6;right:86px;bottom:2px;width:28px;height:28px;place-items:center;padding:0;border-radius:50%;border:1px solid #3a3326;background:rgba(10,9,8,.72);color:#d8cdbb;cursor:pointer;transition:border-color .2s,color .2s,opacity .45s ease}
+ .loop-pause:hover{border-color:#f2b53a;color:#fff}
+ .hv-photo.out .loop-pause{opacity:0;pointer-events:none}
+}
+/* WhatsApp flotante: punto "en línea" sobre el borde del botón */
+.wa-float .wa-online{top:3px;right:3px;width:14px;height:14px;border:2px solid #110f0d}
+</style>
 </head>
 <body class="bg-bg text-ink font-sans antialiased min-h-screen">
 
@@ -1050,6 +1056,9 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
           <p class="title" id="lt">Situación</p>
         </div>
       </div>
+  <button type="button" id="loop-toggle" class="loop-pause" aria-label="Pausar la animación">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" id="loop-toggle-ico" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+  </button>
 
 </div>
       <div id="loop-cap" class="mt-6 max-w-[500px] mx-auto min-h-[112px] flex items-start gap-4 rounded-2xl border border-line bg-surface/80 p-5" aria-live="off">
@@ -1058,9 +1067,6 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
           <p class="font-semibold text-white text-[15px]" id="loop-cap-title">Situación</p>
           <p class="mt-1 text-[14px] text-muted leading-relaxed" id="loop-cap-text"></p>
         </div>
-        <button type="button" id="loop-toggle" aria-label="Pausar la animación" class="flex-none w-9 h-9 rounded-full border border-line2 text-muted hover:text-white hover:border-gold/50 grid place-items-center transition">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="loop-toggle-ico"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-        </button>
       </div>
 
           </div>
@@ -1503,8 +1509,8 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
   </p>
 
   <div class="vs-grid mt-12 grid md:grid-cols-2 gap-5">
-    <div class="vs-card vs-old" data-rv><p class="vs-k">Antes</p><p class="vs-t"><s>Estudiarlo</s> como materia</p><p class="vs-s">Mucho esfuerzo, poco uso real.</p><ol><li>Regla</li><li>Memorizar</li><li>Examen</li><li>Olvidar</li></ol></div>
-    <div class="vs-card vs-new" data-rv><p class="vs-k">Ahora</p><p class="vs-t">Entrenarlo como habilidad</p><p class="vs-s">Cada paso se apoya en el anterior.</p><ol><li>Aprendes el bloque</li><li>Situación real</li><li>Corrección</li><li>Respuesta automática</li></ol></div>
+    <div class="vs-card vs-old"><p class="vs-k">Antes</p><p class="vs-t"><s>Estudiarlo</s> como materia</p><p class="vs-s">Mucho esfuerzo, poco uso real.</p><ol><li>Regla</li><li>Memorizar</li><li>Examen</li><li>Olvidar</li></ol></div>
+    <div class="vs-card vs-new"><p class="vs-k">Ahora</p><p class="vs-t">Entrenarlo como habilidad</p><p class="vs-s">Cada paso se apoya en el anterior.</p><ol><li>Aprendes el bloque</li><li>Situación real</li><li>Corrección</li><li>Respuesta automática</li></ol></div>
   </div>
   <div class="vs-dots" aria-hidden="true"><i class="on"></i><i></i></div>
 </section>
@@ -1836,7 +1842,7 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
       </div>
       <div class="flex flex-col sm:flex-row gap-3.5 flex-shrink-0">
         <a href="https://nicaenglishclub.com/unirme" class="btn-gold rounded-xl px-8 py-4 text-[14.5px] font-bold text-black whitespace-nowrap">Aplicar a mi cupo</a>
-        <a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener" class="btn-wa rounded-xl px-8 py-4 text-[14.5px] font-bold text-[#04220f] whitespace-nowrap inline-flex items-center justify-center gap-2">
+        <a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener" data-intent="apply" class="btn-wa rounded-xl px-8 py-4 text-[14.5px] font-bold text-[#04220f] whitespace-nowrap inline-flex items-center justify-center gap-2">
           <span class="ico w-4 h-4" style="color:#04220f"><svg viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></span>Escribir por WhatsApp
         </a>
       </div>
@@ -1886,7 +1892,8 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
 <!-- ========================= WHATSAPP FLOAT ========================= -->
 <a href="https://wa.me/50583267703?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Nica%20English%20Club" target="_blank" rel="noopener" class="wa-float" aria-label="Escribir por WhatsApp">
   <span class="wa-ring" aria-hidden="true"></span>
-  <span class="ico w-7 h-7" style="color:#04220f"><svg viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></span>
+  <span class="ico w-7 h-7" style="color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><g transform="translate(6.6 6.6) scale(.45)"><path stroke-width="2.7" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></g></svg></span>
+  <span class="wa-online" aria-hidden="true"></span>
   <span class="wa-tooltip">¿Dudas? Escríbenos</span>
 </a>
 
@@ -1932,7 +1939,7 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
     const toggle = document.getElementById('loop-toggle'), toggleIco = document.getElementById('loop-toggle-ico');
     const nodes = [], labels = [];
     let elapsed = 0, seg = -1, last = 0, raf = null, wrapTimer = null;
-    let manualPaused = false, hoverPaused = false, wrapping = false;
+    let manualPaused = matchMedia('(prefers-reduced-motion: reduce)').matches, hoverPaused = false, wrapping = false;
     const ease = (t)=> t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
 
     steps.forEach((s,i)=>{
@@ -2121,20 +2128,6 @@ button.hchip:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.7)!i
   })();
 </script>
 
-<script>
-/* Visual-only enhancement: reveal existing UI elements as they enter the viewport. */
-(function(){
-  const selectors = [
-    '#loop-cap', '.appwin', '.t-card', '.faq', 'footer > div'
-  ];
-  const els=[];
-  selectors.forEach(sel=>document.querySelectorAll(sel).forEach(el=>{ if(!els.includes(el)) els.push(el); }));
-  els.forEach((el,i)=>{ el.classList.add('ne-reveal'); if(i%4===1) el.classList.add('ne-delay-1'); if(i%4===2) el.classList.add('ne-delay-2'); if(i%4===3) el.classList.add('ne-delay-3'); });
-  if(!('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('ne-visible')); return; }
-  const io=new IntersectionObserver(entries=>entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.classList.add('ne-visible'); io.unobserve(entry.target); }}),{threshold:.08,rootMargin:'0px 0px -40px 0px'});
-  els.forEach(el=>io.observe(el));
-})();
-</script>
 
 <style>
 .wa-online{position:absolute;top:-1px;right:-1px;width:13px;height:13px;border-radius:50%;background:#22c55e;border:2px solid #110f0d;z-index:1}
@@ -2210,11 +2203,35 @@ function save(stage){
 }
 addEventListener('online',flush);flush();
 const first=()=>{const n=(a.name||'').trim().split(/\s+/)[0]||'';return n.charAt(0).toUpperCase()+n.slice(1)};
+const CT=[['Nicaragua','505',8,8],['Costa Rica','506',8,8],['Honduras','504',8,8],['El Salvador','503',8,8],['Guatemala','502',8,8],['Panamá','507',7,8],['México','52',10,10],['Colombia','57',10,10],['Estados Unidos','1',10,10],['Canadá','1',10,10],['España','34',9,9],['Venezuela','58',10,10],['Perú','51',9,9],['Ecuador','593',9,9],['Chile','56',9,9],['Argentina','54',10,11],['República Dominicana','1',10,10]];
+const CHAT=CT.slice(0,11).map(c=>c[0]),CC={};CT.forEach(c=>CC[c[0]]=[c[1],c[2],c[3]]);
+const nrm=x=>(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+function findC(n){n=nrm(n);if(!n)return'';for(const c of CT)if(nrm(c[0])===n)return c[0];return''}
+/* País del visitante: zona horaria del dispositivo (sin servicios externos); el idioma del navegador solo si no hay zona */
+function detectCountry(){let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+const T=[[/^America\/Managua$/,'Nicaragua'],[/^America\/Costa_Rica$/,'Costa Rica'],[/^America\/Tegucigalpa$/,'Honduras'],[/^America\/El_Salvador$/,'El Salvador'],[/^America\/Guatemala$/,'Guatemala'],[/^America\/Panama$/,'Panamá'],
+[/^America\/(Mexico_City|Cancun|Merida|Monterrey|Matamoros|Chihuahua|Ciudad_Juarez|Ojinaga|Mazatlan|Hermosillo|Tijuana|Bahia_Banderas)$/,'México'],[/^America\/Bogota$/,'Colombia'],
+[/^(America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Detroit|Boise|Juneau|Sitka|Nome|Adak|Yakutat|Menominee|Metlakatla|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)|Pacific\/Honolulu|US\/.+)$/,'Estados Unidos'],
+[/^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax|St_Johns|Regina|Montreal|Moncton|Glace_Bay|Whitehorse|Yellowknife|Iqaluit|Dawson|Dawson_Creek|Fort_Nelson|Swift_Current|Rankin_Inlet|Resolute|Cambridge_Bay|Inuvik|Goose_Bay|Thunder_Bay|Nipigon|Rainy_River|Pangnirtung|Blanc-Sablon)$/,'Canadá'],
+[/^(Europe\/Madrid|Africa\/Ceuta|Atlantic\/Canary)$/,'España'],[/^America\/Caracas$/,'Venezuela'],[/^America\/Lima$/,'Perú'],[/^America\/Guayaquil$/,'Ecuador'],[/^America\/(Santiago|Punta_Arenas)$/,'Chile'],
+[/^America\/(Argentina\/.+|Buenos_Aires|Cordoba|Mendoza|Jujuy|Catamarca|Rosario)$/,'Argentina'],[/^America\/Santo_Domingo$/,'República Dominicana']];
+for(const t of T)if(t[0].test(tz))return t[1];
+if(!tz){const R={NI:'Nicaragua',CR:'Costa Rica',HN:'Honduras',SV:'El Salvador',GT:'Guatemala',PA:'Panamá',MX:'México',CO:'Colombia',US:'Estados Unidos',CA:'Canadá',ES:'España',VE:'Venezuela',PE:'Perú',EC:'Ecuador',CL:'Chile',AR:'Argentina',DO:'República Dominicana'},m=/[-_]([A-Za-z]{2})$/.exec((navigator.language||'').replace(/@.*/,''));if(m&&R[m[1].toUpperCase()])return R[m[1].toUpperCase()]}
+return''}
+const DET=detectCountry();let pickAll=false;
+function localDigits(v,d,e){let l=d;if((v.trim().charAt(0)==='+'||d.length>e[2])&&l.indexOf(e[0])===0)l=l.slice(e[0].length);if(l.length===e[2]+1&&l.charAt(0)==='0')l=l.slice(1);return l}
+function fmt(l){return l.length===10?l.replace(/(\d{3})(\d{3})(\d{4})/,'$1 $2 $3'):l.length===8?l.replace(/(\d{4})(\d{4})/,'$1 $2'):l.length===9?l.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3'):l}
+/* Valida y deja el teléfono con su código de país: {ok,value} o {ok:false,err} */
+function phoneCheck(c,v){v=(v||'').trim().replace(/\s+/g,' ');const nm=findC(c),e=nm&&CC[nm],d=v.replace(/\D/g,'');
+const bad=()=>e?`Revisa tu número: en ${nm} lleva ${e[1]===e[2]?e[1]:e[1]+' u '+e[2]} dígitos 🤭`:'Escríbelo con el código de tu país, empezando con + 🤭';
+if(!d||!/^[\d\s+()-]+$/.test(v))return{ok:false,err:bad()};
+if(e){const l=localDigits(v,d,e);return l.length>=e[1]&&l.length<=e[2]&&!/^(\d)\1+$/.test(l)?{ok:true,value:'+'+e[0]+' '+fmt(l)}:{ok:false,err:bad()}}
+return v.charAt(0)==='+'&&d.length>=8&&d.length<=15&&!/^(\d)\1+$/.test(d)?{ok:true,value:'+'+d}:{ok:false,err:bad()}}
 const S=[
 {id:'start',t:'start',m:()=>['¡Hola! 🤗 Soy Gustavo Martinez, de Nica English Club. Antes de pasarte a WhatsApp quiero conocerte un poquito, son 30 segundos.']},
 {id:'name',t:'text',ph:'Nombre y apellido',ac:'name',m:()=>['Para empezar, ¿cómo te llamas? 😃'],ok:v=>/^[\p{L}][\p{L}\p{M}\s'.-]{1,59}$/u.test(v),err:'Necesito tu nombre para saber cómo llamarte 🤭'},
-{id:'phone',t:'text',im:'tel',ph:'Tu número de WhatsApp',ac:'tel',m:()=>[`¡Un gusto, ${first()}! 🤝 ¿Cuál es tu número de WhatsApp?`],ok:v=>{const d=v.replace(/\D/g,'');return /^[\d\s+()-]+$/.test(v)&&d.length>=7&&d.length<=15&&!/^(\d)\1+$/.test(d)},err:'Parece que falta algún número, ¿lo revisamos? 🤭'},
-{id:'country',t:'chips',o:['Nicaragua','Estados Unidos','Costa Rica','Otro'],m:()=>['Perfecto. ¿Desde qué país nos escribes?']},
+{id:'country',t:'chips',o:()=>(DET&&!pickAll)?['Sí, '+DET,'Elegir otro país']:CHAT.concat(['Otro']),m:()=>[(DET&&!pickAll)?`¡Un gusto, ${first()}! 🤝 Parece que nos escribes desde ${DET}. ¿Es correcto?`:`¡Un gusto, ${first()}! 🤝 ¿Desde qué país nos escribes?`]},
+{id:'phone',t:'text',im:'tel',ph:'Tu número de WhatsApp',ac:'tel',m:()=>['Perfecto 👌 ¿Cuál es tu número de WhatsApp?',CC[a.country]?`Escríbelo sin el código, yo le agrego el +${CC[a.country][0]} 😉`:'Escríbelo con el código de tu país, por ejemplo +34 600 000 000 😉'],ok:v=>phoneCheck(a.country,v).ok,err:v=>phoneCheck(a.country,v).err},
 {id:'age',t:'chips',o:['13–17','18–24','25–34','35–44','45+'],m:()=>['¿Qué edad tienes? 🤭 Prometo no decirle a nadie.']},
 {id:'level',t:'chips',o:['Principiante','Básico','Intermedio','Avanzado'],m:()=>['Y sin pena, ¿cómo describirías tu nivel de inglés ahorita? 😜 Aquí nadie te juzga.']},
 {id:'email',t:'text',im:'email',ph:'tucorreo@email.com',ac:'email',skip:1,m:()=>['Gracias por la confianza 🥰 Última: ¿tienes correo? Es opcional, puedes saltarla 👇🏻'],ok:v=>!v||(v.length<=100&&/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)),err:'Ese correo parece incompleto. Revísalo o toca Saltar.'},
@@ -2228,27 +2245,32 @@ const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
 function bot(t){const r=el('gm-row');r.append(mini());if(t==='GIFT'){const g=el('gm-gift');g.innerHTML='<span>🎁 Regalo de bienvenida</span><b>Ahorra Matrícula $35</b>';r.append(g)}else r.append(el('gm-b',t));log.append(r);down()}
 function me(t){const r=el('gm-row me');r.append(el('bubble-me',t));log.append(r);down()}
 async function say(list,tk){for(const t of list){if(!reduce){const d=el('gm-row');d.append(mini());d.insertAdjacentHTML('beforeend','<div class="gm-b gm-dots"><i></i><i></i><i></i></div>');log.append(d);down();await wait(500+Math.random()*300);d.remove();if(tk!==token)return false}bot(t)}return true}
-function waUrl(){const t=`¡Hola! 👋 Soy ${a.name}${a.country==='Otro'?'':', de '+a.country}. Tengo ${a.age} años y mi nivel de inglés es ${a.level}. ${intent==='apply'?'Quiero aplicar a un cupo en Nica English Club.':'Quiero información sobre Nica English Club.'} Vengo por el regalo de bienvenida: Ahorra Matrícula $35.`+(a.email?` Mi correo es ${a.email}.`:'');return`https://wa.me/${NUM}?text=${encodeURIComponent(t)}`}
-function answer(v){const k=S[i].id;a[k]=v;foot.innerHTML='';me(v||'Saltar');if(k==='phone')save('Parcial');if(k==='email')save('Completo');show(i+1)}
+function ageTxt(g){g=g||'';let m=/^(\d+)[\u2013-](\d+)$/.exec(g);if(m)return`entre ${m[1]} y ${m[2]} años`;m=/^(\d+)\+$/.exec(g);if(m)return`${m[1]} años o más`;return`${g} años`}
+function waUrl(){const t=`¡Hola! 👋 Soy ${a.name}${a.country==='Otro'?'':', de '+a.country}. Tengo ${ageTxt(a.age)} y mi nivel de inglés es ${a.level}. ${intent==='apply'?'Quiero aplicar a un cupo en Nica English Club.':'Quiero información sobre Nica English Club.'} Vengo por el regalo de bienvenida: Ahorra Matrícula $35.`+(a.email?` Mi correo es ${a.email}.`:'');return`https://wa.me/${NUM}?text=${encodeURIComponent(t)}`}
+function pick(s,o){if(s.id==='country'){if(o==='Elegir otro país'){pickAll=true;foot.innerHTML='';me(o);bot('Sin problema, elige tu país 👇');input(s);return}if(o.indexOf('Sí, ')===0)o=DET}answer(o)}
+function answer(v){const k=S[i].id;if(k==='phone')v=phoneCheck(a.country,v).value||v;if(k==='country')delete a.phone;a[k]=v;foot.innerHTML='';me(v||'Saltar');if(k==='phone')save('Parcial');if(k==='email')save('Completo');show(i+1)}
 function input(s){foot.innerHTML='';
 if(s.t==='start'){foot.innerHTML='<button type="button" class="gm-btn">Acepto y empezar</button><p class="gm-note">Guardamos tus datos solo para contactarte y responder tu solicitud. Más en la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a> y los <a href="terminos.html" target="_blank" rel="noopener">términos</a>.</p>';const b2=foot.firstChild;b2.onclick=()=>{foot.innerHTML='';show(1)};b2.focus()}
-else if(s.t==='chips'){const w=el('gm-chips');s.o.forEach(o=>{const b=document.createElement('button');b.type='button';b.className='gm-chip'+(a[s.id]===o?' sel':'');b.textContent=o;b.onclick=()=>answer(o);w.append(b)});foot.append(w);w.firstChild.focus()}
+else if(s.t==='chips'){const w=el('gm-chips');(typeof s.o==='function'?s.o():s.o).forEach(o=>{const b=document.createElement('button');b.type='button';b.className='gm-chip'+(a[s.id]===o?' sel':'');b.textContent=o;b.onclick=()=>pick(s,o);w.append(b)});foot.append(w);w.firstChild.focus()}
 else if(s.t==='text'){foot.innerHTML=`<form class="gm-f" novalidate><input class="gm-in" type="${s.im||'text'}" ${s.im==='tel'?'inputmode="tel"':''} autocomplete="${s.ac}" placeholder="${s.ph}" aria-label="${s.ph}"><input type="text" name="nec_hp_url" class="gm-hp" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="gm-send">Continuar</button></form>${s.skip?'<button type="button" class="gm-skip">Saltar</button>':''}<p class="gm-err" role="alert"></p>`;
 const inp=foot.querySelector('input'),er=foot.querySelector('.gm-err');inp.value=a[s.id]||'';
-foot.querySelector('form').onsubmit=e=>{e.preventDefault();const v=inp.value.trim().replace(/\s+/g,' ');if(foot.querySelector('.gm-hp').value)trap=true;if(!s.ok(v)){er.textContent=s.err;inp.focus();return}answer(v)};
+foot.querySelector('form').onsubmit=e=>{e.preventDefault();const v=inp.value.trim().replace(/\s+/g,' ');if(foot.querySelector('.gm-hp').value)trap=true;if(!s.ok(v)){er.textContent=typeof s.err==='function'?s.err(v):s.err;inp.focus();return}answer(v)};
 if(s.skip)foot.querySelector('.gm-skip').onclick=()=>answer('');inp.focus()}
 else{foot.innerHTML=`<a class="gm-go btn-wa" href="${waUrl()}" target="_blank" rel="noopener">Abrir WhatsApp</a>`;const g=foot.firstChild;g.onclick=()=>{save('Abrió WhatsApp');setTimeout(close,300)};g.focus()}}
 async function show(n){i=n;const tk=++token;back.hidden=n<2;foot.innerHTML='';if(await say(S[n].m(),tk))input(S[n])}
-function rebuild(n){token++;i=n;back.hidden=n<2;log.innerHTML='';for(let j=0;j<n;j++){S[j].m().forEach(bot);if(j>0)me(a[S[j].id]||'Saltar')}S[n].m().forEach(bot);input(S[n])}
+function rebuild(n){token++;i=n;if(S[n].id==='country')pickAll=true;back.hidden=n<2;log.innerHTML='';for(let j=0;j<n;j++){S[j].m().forEach(bot);if(j>0)me(a[S[j].id]||'Saltar')}S[n].m().forEach(bot);input(S[n])}
 back.onclick=()=>{if(i>=2)rebuild(i-1)};
 function fit(){const v=window.visualViewport;if(v){ov.style.top=v.offsetTop+'px';ov.style.height=v.height+'px'}down()}
-function open(from,it){opener=from;intent=it;a={};trap=false;if(window.necEv)necEv('chat_inicio');sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);ov.hidden=false;document.body.style.overflow='hidden';log.innerHTML='';fit();show(0)}
+function open(from,it){opener=from;intent=it;a={};pickAll=false;trap=false;if(window.necEv)necEv('chat_inicio');sid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);ov.hidden=false;document.body.style.overflow='hidden';log.innerHTML='';fit();show(0)}
 function close(){token++;ov.hidden=true;document.body.style.overflow='';if(opener&&opener.focus)opener.focus()}
 document.getElementById('gm-x').onclick=close;
 ov.addEventListener('click',e=>{if(e.target===ov)close()});
 ov.addEventListener('keydown',e=>{if(e.key==='Escape'){close();return}if(e.key!=='Tab')return;const f=[...ov.querySelectorAll('button,input,a[href]')].filter(x=>!x.hidden&&x.offsetParent);if(!f.length)return;const s=f[0],l=f[f.length-1];if(e.shiftKey&&document.activeElement===s){e.preventDefault();l.focus()}else if(!e.shiftKey&&document.activeElement===l){e.preventDefault();s.focus()}});
 if(window.visualViewport){visualViewport.addEventListener('resize',fit);visualViewport.addEventListener('scroll',fit)}
-document.addEventListener('click',e=>{const l=e.target.closest&&e.target.closest('a[href*="wa.me/'+NUM+'"]');if(!l||l.closest('#gm'))return;e.preventDefault();open(l,/aplicar/i.test(decodeURIComponent(l.href))?'apply':'info')},true);
+document.addEventListener('click',e=>{const l=e.target.closest&&e.target.closest('a[href*="wa.me/'+NUM+'"]');if(!l||l.closest('#gm'))return;e.preventDefault();open(l,(l.getAttribute('data-intent')==='apply'||/aplicar/i.test(decodeURIComponent(l.href)))?'apply':'info')},true);
+/* Envío de leads desde otros formularios (clase demo): misma hoja y misma cola de respaldo */
+window.necGeo={detect:DET,find:findC,dial:n=>{const x=CC[findC(n)];return x?x[0]:''},phone:phoneCheck};
+window.necLead=function(f){if(!LEADS_URL)return;const p=Object.assign({token:LEADS_TOKEN,id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),stage:'Completo',age:'',level:''},f);post(p).catch(()=>qSet(qGet().concat([p])))};
 })();
 </script>
 <style>
@@ -2272,7 +2294,7 @@ window.necCookies=function(){b.hidden=false;document.getElementById('nec-yes').f
 if(necNeed&&!necSaved)b.hidden=false})();
 </script>
 <script>
-(function(){var q='section:not(:first-of-type) h2,section .lede,.vs-card,.pr-card,.phone-wrap,.max-w-7xl.pb-24 .grid > .relative,.faq,#cta-box';
+(function(){var q='section:not(:first-of-type) h2,section .lede,.vs-card,.pr-card,.phone-wrap,.max-w-7xl.pb-24 .grid > .relative,.faq';
 var els=[].slice.call(document.querySelectorAll(q));if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 els.forEach(function(e,i){e.classList.add('rv');e.style.transitionDelay=(i%3)*70+'ms'});
 var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('rv-in');io.unobserve(x.target)}})},{threshold:.12});
@@ -2488,13 +2510,13 @@ document.querySelectorAll('[data-car]').forEach(function(tr){
       </label>
       <label for="dm-pais">País
         <input id="dm-pais" name="country" type="text" autocomplete="country-name" required list="dm-paises" placeholder="Ej. Nicaragua">
-        <datalist id="dm-paises"><option value="Nicaragua"><option value="Costa Rica"><option value="Honduras"><option value="El Salvador"><option value="Guatemala"><option value="Panamá"><option value="México"><option value="Colombia"><option value="Venezuela"><option value="Perú"><option value="Ecuador"><option value="Chile"><option value="Argentina"><option value="República Dominicana"><option value="España"><option value="Estados Unidos"></datalist>
+        <datalist id="dm-paises"><option value="Nicaragua"><option value="Canadá"><option value="Costa Rica"><option value="Honduras"><option value="El Salvador"><option value="Guatemala"><option value="Panamá"><option value="México"><option value="Colombia"><option value="Venezuela"><option value="Perú"><option value="Ecuador"><option value="Chile"><option value="Argentina"><option value="República Dominicana"><option value="España"><option value="Estados Unidos"></datalist>
       </label>
       <label for="dm-correo">Correo electrónico
         <input id="dm-correo" name="email" type="email" autocomplete="email" required placeholder="tucorreo@ejemplo.com">
       </label>
       <label for="dm-wa">WhatsApp
-        <input id="dm-wa" name="phone" type="tel" autocomplete="tel" inputmode="tel" required minlength="7" placeholder="Con código de país, ej. +505 8888 8888">
+        <input id="dm-wa" name="phone" type="tel" autocomplete="tel" inputmode="tel" required minlength="7" placeholder="Tu número de WhatsApp">
       </label>
       <button type="submit" class="dm-go btn-gold">Enviar solicitud por WhatsApp</button>
       <p class="dm-fine">Se abrirá WhatsApp con tus datos listos; solo falta que envíes el mensaje.<br>Usamos tus datos solo para coordinar tu clase. <a href="privacidad.html">Política de privacidad</a></p>
@@ -2507,7 +2529,13 @@ document.querySelectorAll('[data-car]').forEach(function(tr){
   var WA='50583267703',modal=document.getElementById('demo-modal'),form=document.getElementById('demo-form');
   if(!modal||!form)return;
   var lastBtn=null;
-  function open(btn){lastBtn=btn||null;modal.hidden=false;modal.classList.add('open');document.body.style.overflow='hidden';
+  /* País detectado y código de país automático (si el campo está vacío o solo tiene el código anterior) */
+  var G=window.necGeo,fc=form.elements.country,fp=form.elements.phone,lastAuto='';
+  function autoPhone(){var d=G&&G.dial(fc.value);if(!d)return;var p='+'+d+' ',cur=fp.value.trim();if(!cur||(lastAuto&&cur===lastAuto.trim())){fp.value=p;lastAuto=p}}
+  function prefill(){if(G&&G.detect&&!fc.value)fc.value=G.detect;autoPhone()}
+  fc.addEventListener('input',function(){if(G&&G.find(fc.value))autoPhone()});
+  fp.addEventListener('input',function(){fp.setCustomValidity('')});
+  function open(btn){lastBtn=btn||null;modal.hidden=false;modal.classList.add('open');document.body.style.overflow='hidden';prefill();
     setTimeout(function(){document.getElementById('dm-nombre').focus()},50);
     if(window.necEv)necEv('clic_demo_abrir')}
   function close(){modal.classList.remove('open');modal.hidden=true;document.body.style.overflow='';if(lastBtn)lastBtn.focus()}
@@ -2525,16 +2553,20 @@ document.querySelectorAll('[data-car]').forEach(function(tr){
   form.addEventListener('submit',function(e){
     e.preventDefault();
     var v=function(n){return (form.elements[n].value||'').trim()};
+    var pc=G?G.phone(v('country'),v('phone')):{ok:true,value:v('phone')};
+    if(!pc.ok){fp.setCustomValidity(pc.err.replace(/\s*🤭$/,''));fp.reportValidity();return}
     var msg='Hola, quiero solicitar mi clase demo gratis de Nica English Club.\n\n'
       +'Nombre completo: '+v('name')+'\n'
       +'País: '+v('country')+'\n'
       +'Correo: '+v('email')+'\n'
-      +'WhatsApp: '+v('phone');
+      +'WhatsApp: '+pc.value;
     var url='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
     if(window.necEv)necEv('solicitud_demo_enviada',{transport_type:'beacon'});
-    var w=window.open(url,'_blank','noopener');
-    if(!w)location.href=url;
-    form.reset();close();
+    var w=window.open(url,'_blank');
+    if(w){try{w.opener=null}catch(_){}}else location.href=url;
+    /* la solicitud de demo también se guarda en la hoja, igual que el mini-chat */
+    if(window.necLead)window.necLead({name:v('name'),phone:pc.value,country:v('country'),email:v('email'),source:'Clase demo'});
+    form.reset();lastAuto='';close();
   });
 })();
 </script>

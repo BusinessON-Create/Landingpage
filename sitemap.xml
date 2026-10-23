@@ -6,9 +6,15 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Portal de la App / Red Social -->
+  <!-- Portal / Login de App -->
   <url>
     <loc>https://app.nicaenglishclub.com/</loc>
     <priority>0.8</priority>
+  </url>
+
+  <!-- Vista Pública de Visitante (Red Social) -->
+  <url>
+    <loc>https://app.nicaenglishclub.com/?ver=neclub</loc>
+    <priority>0.7</priority>
   </url>
 </urlset>

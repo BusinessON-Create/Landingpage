@@ -3319,15 +3319,16 @@ hit.addEventListener('wheel',function(e){if(!e.ctrlKey)return;e.preventDefault()
 function bt(id,fn){var b=document.getElementById(id);if(b)b.addEventListener('click',function(e){e.stopPropagation();fn(b)})}
 bt('bb-snd',function(b){sndOn=!sndOn;b.classList.toggle('on',sndOn);if(!sndOn&&cur){cur.pause();cur=null}});
 
-function resize(){var hp=box.clientHeight,br=box.getBoundingClientRect();if(!hp||!br.width)return;
+var zf=1;
+function resize(){var hp=box.clientHeight,br=box.getBoundingClientRect();if(!hp||!br.width)return;zf=br.height/hp||1;
   var cx=br.left+br.width/2,cy=br.top+br.height/2,L=0,T=0,Rr=innerWidth,B=innerHeight;
   [document.getElementById('hero'),box.closest('.dk')].forEach(function(el){if(!el)return;var r=el.getBoundingClientRect();L=Math.max(L,r.left);T=Math.max(T,r.top);Rr=Math.min(Rr,r.right);B=Math.min(B,r.bottom)});
-  var hw=Math.max(br.width/2,Math.min(cx-L,Rr-cx)),hh=Math.max(hp/2,Math.min(cy-T,B-cy));
-  availHW=hw;availHH=hh;boxHp=hp;
-  var w=Math.round(hw*2),h=Math.round(hh*2);
-  canvas.style.left=(br.width/2-hw)+'px';canvas.style.top=(hp/2-hh)+'px';canvas.style.width=w+'px';canvas.style.height=h+'px';
+  var hw=Math.max(br.width/2,Math.min(cx-L,Rr-cx)),hh=Math.max(br.height/2,Math.min(cy-T,B-cy));
+  availHW=hw;availHH=hh;boxHp=br.height;
+  var w=Math.round(hw*2/zf),h=Math.round(hh*2/zf);
+  canvas.style.left=((br.width/2-hw)/zf)+'px';canvas.style.top=((br.height/2-hh)/zf)+'px';canvas.style.width=w+'px';canvas.style.height=h+'px';
   renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=2*Math.atan(Math.tan(24*Math.PI/180)*h/hp)*180/Math.PI;camera.updateProjectionMatrix();clampZ()}
-if('ResizeObserver' in window)new ResizeObserver(resize).observe(box);addEventListener('resize',resize);resize();
+if('ResizeObserver' in window)new ResizeObserver(resize).observe(box);addEventListener('resize',resize);addEventListener('deckfit',resize);resize();
 
 var vis=true,running=false,last=performance.now();
 function frame(now){
@@ -3342,7 +3343,7 @@ function frame(now){
   if(sel>=0){popT+=dt;var sc=0.26+0.07*Math.sin(now*0.006)+0.6*Math.max(0,1-popT*2.5);spr.scale.set(sc,sc,1);
     group.updateMatrixWorld();tmp.set(P[sel*3],P[sel*3+1],P[sel*3+2]).applyMatrix4(group.matrixWorld).project(camera);
     var cr=canvas.getBoundingClientRect(),br=box.getBoundingClientRect(),w=box.clientWidth,bw=bub.offsetWidth,bh=bub.offsetHeight;
-    var px=(tmp.x+1)/2*cr.width+cr.left-br.left,py=(1-tmp.y)/2*cr.height+cr.top-br.top;
+    var px=((tmp.x+1)/2*cr.width+cr.left-br.left)/zf,py=((1-tmp.y)/2*cr.height+cr.top-br.top)/zf;
     var bx=Math.max(8+bw/2,Math.min(w-8-bw/2,px)),by=Math.max(8,py-bh-18);
     bub.style.transform='translate('+(bx-bw/2)+'px,'+by+'px)';
     if(now>hideAt){bub.classList.remove('show');spr.visible=false;sel=-1}}
@@ -3520,6 +3521,37 @@ html.deck .dk{overscroll-behavior-x:none}
     addEventListener('scroll',function(){ if(window.scrollX!==0) window.scrollTo(0,window.scrollY); },{passive:true});
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script id="deck-fit">
+/* PC: si una diapositiva no cabe en la altura de la ventana, se reduce lo justo (zoom) para que quepa entera y no haya scroll por dentro. Preguntas frecuentes se queda con scroll normal porque se abre y se cierra. */
+(function(){
+  var MQ=window.matchMedia('(min-width:1024px)'),tm=0,MINZ=.55;
+  function fitAll(){
+    [].slice.call(document.querySelectorAll('body > .dk')).forEach(function(dk){
+      var secs=[].filter.call(dk.children,function(c){return c.tagName==='SECTION'});
+      secs.forEach(function(c){c.style.zoom=''});
+      if(!MQ.matches||dk.querySelector('#preguntas'))return;
+      var z=1;
+      for(var k=0;k<4;k++){
+        var ch=dk.clientHeight,sh=dk.scrollHeight;
+        if(!ch||sh<=ch+1)break;
+        /* lo que no se reduce (p. ej. la franja de plataforma bajo el hero) se descuenta */
+        var secVis=0;secs.forEach(function(c){secVis+=c.getBoundingClientRect().height});
+        var others=Math.max(0,sh-secVis);
+        if(secVis<=0)break;
+        z=Math.max(MINZ,z*Math.max(0.1,(ch-others))/secVis);
+        secs.forEach(function(c){c.style.zoom=z});
+        if(z<=MINZ)break;
+      }
+    });
+    window.dispatchEvent(new Event('deckfit'));
+  }
+  function later(){clearTimeout(tm);tm=setTimeout(fitAll,120)}
+  addEventListener('resize',later);
+  addEventListener('load',function(){fitAll();setTimeout(fitAll,700);setTimeout(fitAll,2000)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(later);
+  if(document.readyState!=='loading')later();else document.addEventListener('DOMContentLoaded',later);
 })();
 </script>
 </body>

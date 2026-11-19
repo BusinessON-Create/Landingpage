@@ -106,6 +106,7 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .pf-b svg{width:22px;height:22px;flex:none;margin-top:1px}.pf-b.pf-ok{background:rgba(5,150,105,.1);color:var(--tx)}.pf-b.pf-wait{background:rgba(245,158,11,.12);color:var(--tx)}
 .pf-r{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--bd);font-size:14px}.pf-r span:first-child{color:var(--mu);flex:none}.pf-r span:last-child{font-weight:600;text-align:right;word-break:break-word}
 .pf-a{padding:6px 16px 16px;display:grid;gap:8px}.pf-a .btn{margin:0}
+.av-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}.av-b{aspect-ratio:1;border-radius:50%;border:3px solid transparent;font-size:32px;display:grid;place-items:center;padding:0;cursor:pointer}.av-b.on{border-color:var(--ac);box-shadow:0 0 0 3px var(--acs)}.pf-av.em{font-size:36px;box-shadow:none}.pf-lk{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--ac);cursor:pointer}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -394,19 +395,28 @@ function orderV(id){var demo=id==="demo",o;
 
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
-var FB={ready:false,verified:false,mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
+var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
 window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
+var AVS=[["panda","🐼","#e5e7eb"],["fox","🦊","#fed7aa"],["cat","🐱","#fde68a"],["dog","🐶","#fde4c4"],["lion","🦁","#fcd34d"],["frog","🐸","#bbf7d0"],["octopus","🐙","#fbcfe8"],["unicorn","🦄","#e9d5ff"],["tiger","🐯","#fdba74"],["monkey","🐵","#e7c9a9"],["koala","🐨","#cbd5e1"],["penguin","🐧","#bae6fd"],["owl","🦉","#d6c4a8"],["rabbit","🐰","#fecdd3"],["rocket","🚀","#c7d2fe"],["cactus","🌵","#a7f3d0"]];
+function avPick(){var old=document.getElementById("avp");if(old)old.remove();var v=document.createElement("div");v.id="avp";
+ v.style.cssText="position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.6);overflow:auto;padding:16px;display:flex;align-items:center;justify-content:center";
+ v.onclick=function(e){if(e.target===v)v.remove()};
+ v.innerHTML='<div class="box" style="width:100%;max-width:420px;margin:0"><b>Elige tu avatar</b><div class="mu" style="margin-top:4px">Toca el que más te guste.</div><div class="av-g">'
+ +AVS.map(function(a){return'<button class="av-b'+(FB.avatar===a[0]?' on':'')+'" style="background:'+a[2]+'" onclick="avSet(\''+a[0]+'\')" aria-label="'+a[0]+'">'+a[1]+'</button>'}).join("")
+ +'</div><button class="btn o" onclick="avSet(\'\')">Usar mis iniciales</button><button class="btn o" onclick="document.getElementById(\'avp\').remove()">Cancelar</button></div>';
+ document.body.appendChild(v)}
+function avSet(k){var o=document.getElementById("avp");if(o)o.remove();FB.setAvatar(k).catch(function(){alert("No se pudo guardar tu avatar. Inténtalo de nuevo.")})}
 var SEAL_OK='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 SEAL_WAIT='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#f59e0b"/><path d="M12 6.5V12l3.5 2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function profBox(){
  var adm=!FB.phone,v=FB.verified,nm=(FB.name||"").trim(),ws=nm.split(/\s+/).filter(Boolean),ini=ws.length?(ws[0][0]+(ws[1]?ws[1][0]:"")).toUpperCase():"",
- av=ini?esc(ini):ic("user"),row=function(a,b){return'<div class="pf-r"><span>'+a+'</span><span>'+b+'</span></div>'};
- var h='<div class="box pf"><div class="pf-h"><div class="pf-av">'+av+(adm?'':'<span class="bd">'+(v?SEAL_OK:SEAL_WAIT)+'</span>')+'</div><div style="min-width:0"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(!adm&&v?SEAL_OK:'')+'</div>'
- +(adm?'<div class="pf-pill pf-ok">Administrador</div>':v?'<div class="pf-pill pf-ok">Cuenta verificada</div>':'<div class="pf-pill pf-wait">Pendiente de verificación</div>')+'</div></div>';
- if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'">'+(v?SEAL_OK:SEAL_WAIT)+'<div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Estamos verificando tu cuenta.</b> Mientras tanto, tus pedidos se envían directo por WhatsApp y te atendemos por ahí.')+'</div></div>'
+ ao=AVS.filter(function(a){return a[0]===FB.avatar})[0],av=ao?ao[1]:(ini?esc(ini):ic("user")),row=function(a,b){return'<div class="pf-r"><span>'+a+'</span><span>'+b+'</span></div>'};
+ var h='<div class="box pf"><div class="pf-h"><div class="pf-av'+(ao?' em':'')+'"'+(ao?' style="background:'+ao[2]+'"':'')+(adm?'':' onclick="avPick()"')+'>'+av+'</div><div style="min-width:0"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(adm?'':(v?SEAL_OK:SEAL_WAIT))+'</div>'
+ +(adm?'<div class="pf-pill pf-ok">Administrador</div>':v?'<div class="pf-pill pf-ok">Cuenta verificada</div>':'<div class="pf-pill pf-wait">Pendiente de verificación</div>')+(adm?'':'<div><span class="pf-lk" onclick="avPick()">Cambiar avatar</span></div>')+'</div></div>';
+ if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'"><div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Estamos verificando tu cuenta.</b> Mientras tanto, tus pedidos se envían directo por WhatsApp y te atendemos por ahí.')+'</div></div>'
   +'<div style="height:10px"></div>'+row("WhatsApp",fmtPh(FB.phone))+(FB.addr?row("Entrega",esc(FB.addr)):'')+row("Pedidos",String(getOrders().length));
  h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div></div>';
  return h}
@@ -555,6 +565,7 @@ Object.assign(window.FB,{
  login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
  logout:()=>signOut(auth),
  changePw:async(cur,pw)=>{const u=auth.currentUser;if(cur)await reauthenticateWithCredential(u,EmailAuthProvider.credential(u.email,cur));await updatePassword(u,pw);if(FB.mustChange)await updateDoc(doc(db,"usuarios",u.uid),{mustChange:false,tempExp:0})},
+ setAvatar:k=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{avatar:k}),
  resetMark:(uid,h)=>updateDoc(doc(db,"usuarios",uid),{mustChange:true,tempExp:Date.now()+h*36e5}),
  cleanTasks:async()=>{try{const s=await getDocs(query(collection(db,"tareas"),where("type","==","reset")));const now=Date.now();for(const d of s.docs){const x=d.data(),t=x.createdAt&&x.createdAt.toMillis?x.createdAt.toMillis():0;if(x.done===true||(t&&now-t>864e5))await deleteDoc(d.ref)}}catch(e){}},
  saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
@@ -572,11 +583,11 @@ Object.assign(window.FB,{
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(FB.isAdmin)FB.cleanTasks();if(!u&&window.PWF){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
- if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.addr="";
+ if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";
  if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
   const d=s.data(),v=d.verified===true;FB.mustChange=d.mustChange===true;FB.tempExp=d.tempExp||0;
   if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
-  FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;if(ch||fill){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
+  FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];
  if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;

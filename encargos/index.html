@@ -95,6 +95,17 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .tl b{display:block;font-size:15px}.tl .pe b{color:var(--mu);font-weight:600}
 .tl span{display:block;color:var(--mu);font-size:13px;margin-top:2px;line-height:1.4}.tl small{display:block;color:var(--ac);font-weight:700;font-size:12px;margin-top:4px}
 .dm{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+
+.pf{padding:0!important;overflow:hidden}.pf-h{display:flex;gap:14px;align-items:center;padding:18px 16px;background:linear-gradient(135deg,var(--acs),transparent)}
+.pf-av{position:relative;flex:none;width:68px;height:68px;border-radius:50%;display:grid;place-items:center;font-size:26px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--ac),#7c3aed);box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.pf-av .bd{position:absolute;right:-3px;bottom:-3px;width:26px;height:26px;border-radius:50%;background:var(--bg);display:grid;place-items:center}.pf-av .bd svg{width:22px;height:22px}
+.pf-n{display:flex;align-items:center;gap:6px;font-size:19px;font-weight:800;line-height:1.2;word-break:break-word}.pf-n svg{width:20px;height:20px;flex:none}
+.pf-pill{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px}
+.pf-ok{background:rgba(5,150,105,.14);color:#059669}.pf-wait{background:rgba(245,158,11,.16);color:#d97706}
+.pf-b{display:flex;gap:10px;align-items:flex-start;margin:0 16px 4px;padding:12px;border-radius:14px;font-size:14px;line-height:1.4}
+.pf-b svg{width:22px;height:22px;flex:none;margin-top:1px}.pf-b.pf-ok{background:rgba(5,150,105,.1);color:var(--tx)}.pf-b.pf-wait{background:rgba(245,158,11,.12);color:var(--tx)}
+.pf-r{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--bd);font-size:14px}.pf-r span:first-child{color:var(--mu);flex:none}.pf-r span:last-child{font-weight:600;text-align:right;word-break:break-word}
+.pf-a{padding:6px 16px 16px;display:grid;gap:8px}.pf-a .btn{margin:0}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -383,20 +394,49 @@ function orderV(id){var demo=id==="demo",o;
 
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
-var FB={ready:false,verified:false,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
+var FB={ready:false,verified:false,mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
 window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
+var SEAL_OK='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#059669"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+SEAL_WAIT='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#f59e0b"/><path d="M12 6.5V12l3.5 2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function profBox(){
+ var adm=!FB.phone,v=FB.verified,nm=(FB.name||"").trim(),ws=nm.split(/\s+/).filter(Boolean),ini=ws.length?(ws[0][0]+(ws[1]?ws[1][0]:"")).toUpperCase():"",
+ av=ini?esc(ini):ic("user"),row=function(a,b){return'<div class="pf-r"><span>'+a+'</span><span>'+b+'</span></div>'};
+ var h='<div class="box pf"><div class="pf-h"><div class="pf-av">'+av+(adm?'':'<span class="bd">'+(v?SEAL_OK:SEAL_WAIT)+'</span>')+'</div><div style="min-width:0"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(!adm&&v?SEAL_OK:'')+'</div>'
+ +(adm?'<div class="pf-pill pf-ok">Administrador</div>':v?'<div class="pf-pill pf-ok">Cuenta verificada</div>':'<div class="pf-pill pf-wait">Pendiente de verificación</div>')+'</div></div>';
+ if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'">'+(v?SEAL_OK:SEAL_WAIT)+'<div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Estamos verificando tu cuenta.</b> Mientras tanto, tus pedidos se envían directo por WhatsApp y te atendemos por ahí.')+'</div></div>'
+  +'<div style="height:10px"></div>'+row("WhatsApp",fmtPh(FB.phone))+(FB.addr?row("Entrega",esc(FB.addr)):'')+row("Pedidos",String(getOrders().length));
+ h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div></div>';
+ return h}
 function authBox(){
  if(!FB.ready)return'<div class="box mu">'+(FB.fail?"No hay conexión con el servidor.":"Cargando…")+'</div>';
- if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+(FB.phone?fmtPh(FB.phone):"Administrador")+'</div>'+(FB.phone?(FB.verified?'<div class="mu" style="margin-top:6px;color:#065f46">Cuenta verificada: puedes hacer pedidos en la app.</div>':'<div class="mu" style="margin-top:6px;color:#92400e">Cuenta pendiente de verificación. Mientras tanto, tus pedidos se envían directo por WhatsApp.</div>'):'')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
+ if(FB.user)return profBox();
  var up=AM==="up";
  return'<div class="box"><b>'+(up?"Crear cuenta":"Entrar")+'</b><div class="mu" style="margin-top:4px">Usa tu número de WhatsApp de Nicaragua.</div>'
  +(up?'<input id="a_n" placeholder="Tu nombre completo (obligatorio)" autocomplete="name">':'')
  +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp, 8 dígitos (obligatorio)" autocomplete="tel-national">'+(up?'<input id="a_d" placeholder="Ciudad o dirección de entrega (obligatorio)" autocomplete="street-address">':'')+'<input id="a_w" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="'+(up?"new-password":"current-password")+'">'
  +'<label class="mu" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" style="width:auto;margin:0;padding:0" onchange="$(\'a_w\').type=this.checked?\'text\':\'password\'">Mostrar contraseña</label><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
  +'<button class="btn o" onclick="AM=\''+(up?"in":"up")+'\';acct()">'+(up?"Ya tengo cuenta":"Crear una cuenta")+'</button></div>'}
+function pwBad(w){if(w.length<8)return"La contraseña debe tener al menos 8 caracteres.";if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||(FB.phone&&w.indexOf(FB.phone)>-1))return"Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return""}
+function pwBox(forced){
+ var old=document.getElementById("pw");if(old&&forced&&window.PWF===1)return;if(old)old.remove();window.PWF=forced?1:0;
+ var v=document.createElement("div");v.id="pw";v.style.cssText="position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.85);overflow:auto;padding:16px;display:flex;align-items:center;justify-content:center";
+ v.innerHTML='<div class="box" style="width:100%;max-width:420px;margin:0"><b>'+(forced?"Crea tu contraseña nueva":"Cambiar contraseña")+'</b>'
+ +(forced?'<div class="mu" style="margin-top:6px">Entraste con una clave temporal. Por seguridad, elige una contraseña nueva para continuar.</div>':'')
+ +(forced?'':'<input id="pw_c" type="password" placeholder="Contraseña actual" autocomplete="current-password">')
+ +'<input id="pw_n" type="password" placeholder="Contraseña nueva (mínimo 8)" autocomplete="new-password"><input id="pw_r" type="password" placeholder="Repite la contraseña nueva" autocomplete="new-password">'
+ +'<div id="pw_m" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="pwGo()">Guardar contraseña</button>'
+ +(forced?'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button>':'<button class="btn o" onclick="document.getElementById(\'pw\').remove();window.PWF=0">Cancelar</button>')+'</div>';
+ document.body.appendChild(v)}
+function pwGo(){var m=document.getElementById("pw_m"),n=document.getElementById("pw_n").value,r=document.getElementById("pw_r").value,ce=document.getElementById("pw_c"),c=ce?ce.value:"",f=window.PWF===1;
+ if(!f&&!c){m.textContent="Escribe tu contraseña actual.";return}
+ var b=pwBad(n);if(b){m.textContent=b;return}
+ if(n!==r){m.textContent="Las contraseñas no coinciden.";return}
+ if(!f&&n===c){m.textContent="La nueva contraseña debe ser distinta a la actual.";return}
+ m.textContent="Guardando…";
+ FB.changePw(f?"":c,n).then(function(){var o=document.getElementById("pw");if(o)o.remove();window.PWF=0;alert("Contraseña actualizada.")},function(e){var k=(e&&e.code)||"";m.textContent=/invalid-credential|wrong-password/.test(k)?"La contraseña actual no es correcta.":k==="auth/requires-recent-login"?"Por seguridad, cierra sesión, entra de nuevo e inténtalo otra vez.":k==="auth/weak-password"?"Esa contraseña es muy débil.":"No se pudo guardar. Inténtalo de nuevo."})}
 function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"",ad=up?$("a_d").value.trim():"";
  if(!p){m.textContent="Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
  if(!up){}else if(w.length<8){m.textContent="La contraseña debe tener al menos 8 caracteres.";return}else if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||w.indexOf(p)>-1){m.textContent="Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return}
@@ -434,9 +474,9 @@ function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=A
 function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
 function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.name)<String(b.name)?-1:1});
  return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="admVer(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
-function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?"))return;
+function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?\n\nAntes confirma que es el dueño: pídele el número de su último pedido o su dirección de entrega."))return;
  var a="abcdefghjkmnpqrstuvwxyz23456789",r=new Uint32Array(10),t="";crypto.getRandomValues(r);for(var i=0;i<10;i++)t+=a[r[i]%a.length];
- FB.task({type:"reset",phone:u.phone,temp:t}).then(function(){prompt("Clave temporal. Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
+ FB.task({type:"reset",phone:u.phone,uid:u._id,temp:t,exp:Date.now()+432e5}).then(function(){return FB.resetMark(u._id,12)}).then(function(){prompt("Clave temporal (vence en 12 horas). Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave. Vence en 12 horas y al entrar te pedirá crear una contraseña nueva."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
 
 /* ===== Aprobar productos (admin) ===== */
 var AP_E={},EDP={},ED=null,CATL=["Audio","Moda","Tecnología","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=5,COM_DEF=10;
@@ -506,14 +546,17 @@ fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).c
 </script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,updatePassword,reauthenticateWithCredential,EmailAuthProvider}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,getDocs,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
 const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null,unU=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
  register:async(p,pw,name,addr)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",addr:addr||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
  login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
  logout:()=>signOut(auth),
+ changePw:async(cur,pw)=>{const u=auth.currentUser;if(cur)await reauthenticateWithCredential(u,EmailAuthProvider.credential(u.email,cur));await updatePassword(u,pw);if(FB.mustChange)await updateDoc(doc(db,"usuarios",u.uid),{mustChange:false,tempExp:0})},
+ resetMark:(uid,h)=>updateDoc(doc(db,"usuarios",uid),{mustChange:true,tempExp:Date.now()+h*36e5}),
+ cleanTasks:async()=>{try{const s=await getDocs(query(collection(db,"tareas"),where("type","==","reset")));const now=Date.now();for(const d of s.docs){const x=d.data(),t=x.createdAt&&x.createdAt.toMillis?x.createdAt.toMillis():0;if(x.done===true||(t&&now-t>864e5))await deleteDoc(d.ref)}}catch(e){}},
  saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
  adminLogin:(e,pw)=>signInWithEmailAndPassword(auth,e,pw),
  addLinks:async us=>{for(const u of us)await addDoc(collection(db,"links"),{url:u,st:"pendiente",createdAt:serverTimestamp()})},
@@ -528,13 +571,16 @@ Object.assign(window.FB,{
  editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
- if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.addr="";
+ if(FB.isAdmin)FB.cleanTasks();if(!u&&window.PWF){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
+ if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.addr="";
  if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
-  const d=s.data(),v=d.verified===true;FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;if(ch||fill){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
+  const d=s.data(),v=d.verified===true;FB.mustChange=d.mustChange===true;FB.tempExp=d.tempExp||0;
+  if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
+  FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;if(ch||fill){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];
  if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
-  unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}
+  unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|cuenta|o-)/.test(location.hash.slice(1)))route()},()=>{})}
  var cu=u?u.uid:null;
  if(window.CUID!==cu){if(unC){unC();unC=null}if(window.CUID)S.cart=[];window.CUID=cu;window.CR=null;window.CFIRST=true;
   if(u)unC=onSnapshot(doc(db,"carritos",u.uid),s=>{if(s.metadata.hasPendingWrites)return;window.CR={items:s.exists()?(s.data().items||[]):[]};cartApply()},()=>{})}

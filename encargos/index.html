@@ -166,7 +166,7 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}var N=p.img&&p.img.l
  +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
  +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="addC('+p.id+',S.qty,1);go(\'carrito\')">'+ic("zap")+' Comprar ahora</button></div></div>')}
-function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null;var c=S.cart.filter(function(x){return x.id===id})[0];if(c)c.q+=q;else S.cart.push({id:id,q:q,m:"sea"});S.qty=1;nav();if(!quiet)addFx(id,btn)}
+function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null;var c=S.cart.filter(function(x){return x.id===id})[0];if(c)c.q+=q;else S.cart.push({id:id,q:q,m:"sea"});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn)}
 function soon(t,i,m){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic(i)+'</div><b>'+t+'</b>'+m+'</div>'}
 function cartOld(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var sub=0;$("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c){var p=find(c.id);sub+=sale(p)*c.q;return '<div class="box" style="display:flex;gap:12px;align-items:center"><div style="position:relative;overflow:hidden;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<br><b>'+fmt(sale(p))+'</b> × '+c.q+'</div></div>'}).join("")+'<div class="box"><div class="mu">Subtotal de productos</div><div class="big">'+fmt(sub)+'</div><div class="demo">Envío, fechas Express/Regular y checkout llegan en el siguiente paso.</div></div>'}
@@ -243,9 +243,9 @@ function sendOrder(){
  var done=function(){window.__sending=0};
  rcCanvas(o).toBlob(function(b){if(!b){done();m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
   var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
-  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),rec:rec,saved:false,err:""};
-  FB.saveOrder(rec).then(function(){RC.saved=true;done();m.textContent="";rcShow()},function(e){RC.err=(e&&e.code)||"";done();m.textContent="";rcShow()})},"image/png")}
-function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
+  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),rec:rec,saved:false,err:"",snap:JSON.stringify(cartItems())};
+  FB.saveOrder(rec).then(function(){RC.saved=true;done();m.textContent="";cartClear(RC.snap);rcShow()},function(e){RC.err=(e&&e.code)||"";done();m.textContent="";rcShow()})},"image/png")}
+function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";cartClear(RC.snap);rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
  v.style.cssText="position:fixed;inset:0;z-index:99;background:rgba(15,23,42,.78);overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px";
@@ -263,14 +263,36 @@ function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedi
 function rcSh(){navigator.share({files:[RC.file],text:"Pedido "+RC.no}).catch(function(){})}
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
 function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
-function cartV(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
+function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
  $("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c,i){var p=find(c.id),m=c.m||"sea";return '<div class="box"><div style="display:flex;gap:12px"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div></div><div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="setM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="setM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><span class="mu">Envío se cobra al recibir en Miami</span></div></div>'}).join("")
  +'<div class="box"><b>Entrega en Nicaragua</b><select onchange="S.dom=this.value;cartV()">'+CFG.dom.map(function(d){return '<option value="'+d[0]+'"'+(S.dom===d[0]?" selected":"")+'>'+d[1]+(d[2]?" (+"+fmt(d[2])+")":"")+'</option>'}).join("")+'</select><div class="mu" style="margin-top:8px">El precio de la entrega se confirma cuando tu paquete llega a Nicaragua, porque varía según el paquete. Se cobra en la segunda factura, al retirar.</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">PRIMERA FACTURA, LA PAGAS AHORA</div>'+[["Productos",q.sub]].concat(q.fee?[["Preparación del pedido",q.fee]]:[]).map(row).join("")+'<div class="lb">TOTAL A PAGAR AHORA</div><div class="big">'+fmt(now)+'</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">SEGUNDA FACTURA, SE COBRA AL RECIBIR</div><div style="margin:8px 0"><b>Envío de Miami a Nicaragua</b><div class="mu">Por peso real al llegar a Miami: Express '+fmt(CFG.air)+' por libra, Regular '+fmt(CFG.sea)+' por libra.</div></div><div style="margin:8px 0"><b>Entrega en Nicaragua</b><div class="mu">'+dn[1]+(dn[2]?" ("+fmt(dn[2])+")":": el precio se confirma al retirar, porque varía según el paquete")+'</div></div><div class="mu" style="margin-top:8px">Los días hábiles (Express '+CFG.t.air+', Regular '+CFG.t.sea+') se cuentan desde que tu paquete llega a Miami, no desde la compra.</div></div>'+orderBox()}
-function setM(i,m){S.cart[i].m=m;cartV()}
-function qtyC(i,d){S.cart[i].q+=d;if(S.cart[i].q<1)S.cart.splice(i,1);nav();cartV()}
+/* ===== Carrito guardado por cuenta, en tiempo real ===== */
+var CT=null,CINF=0;
+function cartItems(){return S.cart.map(function(c){return{id:c.id,q:c.q,m:c.m||"sea"}})}
+function cartPersist(){clearTimeout(CT);CT=setTimeout(function(){CT=null;var it=cartItems();
+ if(FB.user&&FB.cartSave){CINF++;FB.cartSave(it).then(function(){CINF--},function(){CINF--})}
+ else if(!FB.user){try{localStorage.setItem("enc_cart_guest",JSON.stringify(it))}catch(e){}}},350)}
+function cartClear(snap){if(snap&&JSON.stringify(cartItems())!==snap)return;S.cart=[];cartPersist();nav();if(location.hash==="#carrito")cartV()}
+function cartApply(){
+ if(!window.FBPREADY||!window.PB||!FB.ready)return;
+ var ok=function(a){return(a||[]).filter(function(c){return c&&c.q>0&&find(c.id)}).map(function(c){return{id:c.id,q:c.q,m:c.m||"sea"}})},out=null;
+ if(FB.user){
+  if(!window.CR||CT||CINF>0)return;
+  out=ok(CR.items);
+  if(window.CFIRST){window.CFIRST=false;var loc=ok(S.cart);
+   if(loc.length){loc.forEach(function(c){var x=out.filter(function(y){return y.id===c.id})[0];if(x)x.q+=c.q;else out.push(c)});
+    try{localStorage.removeItem("enc_cart_guest")}catch(e){}
+    S.cart=out;cartPersist();nav();if(location.hash==="#carrito")cartV();return}}
+ }else{
+  if(window.GLOADED)return;window.GLOADED=1;
+  try{out=ok(JSON.parse(localStorage.getItem("enc_cart_guest")||"[]"))}catch(e){out=[]}
+  if(!out.length)return}
+ if(JSON.stringify(out)!==JSON.stringify(cartItems())){S.cart=out;nav();if(location.hash==="#carrito")cartV()}}
+function setM(i,m){S.cart[i].m=m;cartPersist();cartV()}
+function qtyC(i,d){S.cart[i].q+=d;if(S.cart[i].q<1)S.cart.splice(i,1);cartPersist();nav();cartV()}
 function pasteBox(){return '<div class="box" style="margin:12px 14px 0"><b>¿No encuentras lo que buscas? Cotiza tu producto</b><div class="mu" style="margin-top:6px">Mándanos por WhatsApp la captura del producto o el enlace y te decimos cuánto te saldría.</div><button class="btn" onclick="quoteWa()">'+ic("msg")+' Cotizar por WhatsApp</button></div>'}
 function quoteWa(){var m="Hola, quiero cotizar un producto que no encontré en la tienda. Te envío la captura o el enlace:";window.open("https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(m),"_blank")}
 function route(){var h=location.hash.slice(1)||"inicio";window.scrollTo(0,0);
@@ -366,7 +388,7 @@ function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=
  if(up&&!n){m.textContent="Escribe tu nombre.";return}
  m.textContent="Un momento…";
  (up?FB.register(p,w,n):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
-function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route()}
+function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route();cartApply()}
 
 
 /* ===== Panel admin ===== */
@@ -471,7 +493,7 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-ap
 import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
-const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[];const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
+const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
  register:async(p,pw,name)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
  login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
@@ -486,13 +508,17 @@ Object.assign(window.FB,{
  approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
  discard:async(id,linkId)=>{await deleteDoc(doc(db,"porAprobar",String(id)));if(linkId)await deleteDoc(doc(db,"links",linkId))},
  retry:id=>updateDoc(doc(db,"links",id),{st:"pendiente"}),
+ cartSave:items=>setDoc(doc(db,"carritos",auth.currentUser.uid),{items:items,upd:serverTimestamp()}),
  editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(unO){unO();unO=null}window.ORD=[];
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
   unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}
- route()});
-onSnapshot(collection(db,"productos"),s=>{window.FBP=s.docs.map(d=>d.data());applyFBP()},()=>{});
+ var cu=u?u.uid:null;
+ if(window.CUID!==cu){if(unC){unC();unC=null}if(window.CUID)S.cart=[];window.CUID=cu;window.CR=null;window.CFIRST=true;
+  if(u)unC=onSnapshot(doc(db,"carritos",u.uid),s=>{if(s.metadata.hasPendingWrites)return;window.CR={items:s.exists()?(s.data().items||[]):[]};cartApply()},()=>{})}
+ route();cartApply()});
+onSnapshot(collection(db,"productos"),s=>{window.FBP=s.docs.map(d=>d.data());window.FBPREADY=true;applyFBP()},()=>{window.FBPREADY=true;applyFBP()});
 </script>
 </body></html>

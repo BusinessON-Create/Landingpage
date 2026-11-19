@@ -281,7 +281,7 @@ function pasteBox(){return '<div class="box" style="margin:12px 14px 0"><b>¿Ya 
 function pasteGo(){var u=$("pl").value.trim(),m=$("pm"),i=parseUrl(u),k=i&&i.id?P.filter(function(p){return p.l.indexOf(i.id)>-1})[0]:null;if(k){go("p"+k.id);return}m.textContent="Buscando…";API.importProduct(u).then(function(d){m.innerHTML='Este producto aún no está en la vitrina: <b>'+esc(d.n||d.s)+'</b>. <a style="color:var(--ac);font-weight:700" onclick="$(\'pm\').textContent=\'Solicitud registrada. Te enviaremos el precio final. (Prueba: aún no se envía.)\'">Solicitar cotización</a><div class="demo">Con el servidor conectado, aquí aparecería con fotos, reseñas y tu precio.</div>'},function(e){m.textContent=e})}
 function route(){var h=location.hash.slice(1)||"inicio";window.scrollTo(0,0);
  if(/^p\d+$/.test(h))prod(+h.slice(1));else if(h==="carrito")cartV();else if(h==="importar")importV();
- else if(h==="pedidos")ordersV();else if(/^o-/.test(h))orderV(h.slice(2));
+ else if(h==="pedidos")ordersV();else if(/^o-/.test(h))orderV(h.slice(2));else if(h==="admin")admV();
  else if(h==="cuenta")acct();
  else if(h==="soporte")soon("Soporte","msg","Aquí abriremos WhatsApp con tu consulta.");
  else home();nav(h)}
@@ -353,26 +353,56 @@ function orderV(id){var demo=id==="demo",o;
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
 var FB={ready:false,user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
-window.ORD=[];setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
+window.ORD=[];window.ADM={links:[],orders:[],users:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
 function authBox(){
  if(!FB.ready)return'<div class="box mu">'+(FB.fail?"No hay conexión con el servidor.":"Cargando…")+'</div>';
- if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+fmtPh(FB.phone)+'</div><button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
+ if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+(FB.phone?fmtPh(FB.phone):"Administrador")+'</div><button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
  var up=AM==="up";
  return'<div class="box"><b>'+(up?"Crear cuenta":"Entrar")+'</b><div class="mu" style="margin-top:4px">Usa tu número de WhatsApp de Nicaragua.</div>'
  +(up?'<input id="a_n" placeholder="Tu nombre" autocomplete="name">':'')
- +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp (8 dígitos)" autocomplete="tel-national"><input id="a_w" type="password" placeholder="Contraseña (mínimo 6)" autocomplete="'+(up?"new-password":"current-password")+'">'
- +'<div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
+ +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp (8 dígitos)" autocomplete="tel-national"><input id="a_w" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="'+(up?"new-password":"current-password")+'">'
+ +'<label class="mu" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" style="width:auto;margin:0;padding:0" onchange="$(\'a_w\').type=this.checked?\'text\':\'password\'">Mostrar contraseña</label><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
  +'<button class="btn o" onclick="AM=\''+(up?"in":"up")+'\';acct()">'+(up?"Ya tengo cuenta":"Crear una cuenta")+'</button></div>'}
 function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"";
  if(!p){m.textContent="Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
- if(w.length<6){m.textContent="La contraseña debe tener al menos 6 caracteres.";return}
+ if(!up){}else if(w.length<8){m.textContent="La contraseña debe tener al menos 8 caracteres.";return}else if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||w.indexOf(p)>-1){m.textContent="Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return}
  if(up&&!n){m.textContent="Escribe tu nombre.";return}
  m.textContent="Un momento…";
  (up?FB.register(p,w,n):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
 function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route()}
+
+
+/* ===== Panel admin ===== */
+var AT="links",LC={pendiente:["#fef3c7","#92400e"],disponible:["#d1fae5","#065f46"],agotado:["#ffedd5","#9a3412"],error:["#fee2e2","#991b1b"]};
+function admV(){
+ if(!FB.ready){soon("Cargando…","user","");return}
+ if(!FB.isAdmin){$("app").innerHTML=hdr(false)+'<h2>Administrador</h2><div class="box"><b>Entrar</b><input id="ad_e" type="email" placeholder="Correo" autocomplete="username"><input id="ad_w" type="password" placeholder="Contraseña" autocomplete="current-password"><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="admGo()">Entrar</button></div>';return}
+ var T=[["links","Links"],["pedidos","Pedidos"],["clientes","Clientes"]];
+ $("app").innerHTML=hdr(false)+'<h2>Panel</h2><div class="chips">'+T.map(function(t){return'<button class="chip'+(AT===t[0]?' on':'')+'" onclick="AT=\''+t[0]+'\';admV()">'+t[1]+'</button>'}).join("")+'</div>'+(AT==="links"?admLinks():AT==="pedidos"?admOrders():admUsers())}
+function admGo(){FB.adminLogin($("ad_e").value.trim(),$("ad_w").value).then(function(){},function(){$("am").textContent="Correo o contraseña incorrectos."})}
+function admLinks(){var L=ADM.links.slice().sort(function(a,b){return String(a.url)<String(b.url)?-1:1});
+ return'<div class="box"><b>Agregar links</b><textarea id="ad_l" rows="4" placeholder="Pega uno o varios links, uno por línea" style="width:100%;margin-top:8px;border:1px solid var(--bd);border-radius:12px;padding:12px;background:var(--sf);color:var(--tx);font:inherit"></textarea><div id="am" class="mu" style="margin-top:6px;color:#dc2626"></div><button class="btn" onclick="admAdd()">Agregar links</button><button class="btn o" onclick="admTask(\'revisar\')">Revisar ahora</button><div class="demo">El robot de tu PC procesa los links pendientes y responde a «Revisar ahora» mientras esté abierto.</div></div>'
+ +'<h2>Links ('+L.length+')</h2>'+(L.length?L.map(function(l){var c=LC[l.st]||LC.pendiente;
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+esc(l.st||"pendiente")+'</span><span class="mu">'+(l.checked?"Revisado "+ordDate(l.checked):"Sin revisar")+'</span></div><div style="margin-top:8px;font-size:14px;font-weight:600">'+esc((l.name||"Producto sin cargar").slice(0,80))+'</div><div class="mu" style="word-break:break-all;margin-top:4px">'+esc(String(l.url).slice(0,90))+'</div><button class="btn o" onclick="admDel(\''+l._id+'\')">Eliminar</button></div>'}).join(""):'<div class="empty">Aún no hay links.</div>')}
+function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){return/^https?:\/\//.test(x)});u=u.filter(function(x,i){return u.indexOf(x)===i});
+ if(!u.length){$("am").textContent="Pega al menos un link que empiece con https://";return}
+ FB.addLinks(u).then(function(){},function(){$("am").textContent="No se pudieron guardar los links."})}
+function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l||!confirm("¿Eliminar este link y su producto de la tienda?"))return;FB.delLink(id,l.pid).catch(function(){alert("No se pudo eliminar.")})}
+function admTask(t){FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
+function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1});
+ return'<h2>Pedidos ('+L.length+')</h2>'+(L.length?L.map(function(o){var u=U[o.uid]||{};
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
+  +'<select onchange="FB.setStatus(\''+o.no+'\',+this.value)">'+stIdx(o).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
+  +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button></div>'}).join(""):'<div class="empty">Aún no hay pedidos.</div>')}
+function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.name)<String(b.name)?-1:1});
+ return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="FB.verify(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
+function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?"))return;
+ var a="abcdefghjkmnpqrstuvwxyz23456789",r=new Uint32Array(10),t="";crypto.getRandomValues(r);for(var i=0;i<10;i++)t+=a[r[i]%a.length];
+ FB.task({type:"reset",phone:u.phone,temp:t}).then(function(){prompt("Clave temporal. Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
 
 /* Vitrina automática: lee productos.json (lo genera el robot) y lo suma al catálogo. */
 fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).catch(function(){return []}).then(function(a){if(a&&a.length){var ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(P.filter(function(x){return!ids[x.id]}))}PB=P.slice();applyFBP();window.addEventListener("hashchange",route);route()});
@@ -380,15 +410,22 @@ fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).c
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import{getFirestore,doc,setDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
-const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null;
+const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[];const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
  register:async(p,pw,name)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
  login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
  logout:()=>signOut(auth),
- saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o)});
-onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u?u.email.slice(3,11):"";FB.name=u?(u.displayName||""):"";
+ saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
+ adminLogin:(e,pw)=>signInWithEmailAndPassword(auth,e,pw),
+ addLinks:async us=>{for(const u of us)await addDoc(collection(db,"links"),{url:u,st:"pendiente",createdAt:serverTimestamp()})},
+ delLink:async(id,pid)=>{if(pid!=null&&pid!=="")await deleteDoc(doc(db,"productos",String(pid)));await deleteDoc(doc(db,"links",id))},
+ setStatus:(no,st)=>updateDoc(doc(db,"pedidos",no),{st:st,["h."+st]:new Date().toISOString()}),
+ verify:(uid,v)=>updateDoc(doc(db,"usuarios",uid),{verified:v}),
+ task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()})});
+onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[]};
+ if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(unO){unO();unO=null}window.ORD=[];
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
   unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}

@@ -353,7 +353,7 @@ function orderV(id){var demo=id==="demo",o;
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
 var FB={ready:false,user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
-window.ORD=[];window.ADM={links:[],orders:[],users:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
+window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
@@ -380,13 +380,13 @@ var AT="links",LC={pendiente:["#fef3c7","#92400e"],disponible:["#d1fae5","#065f4
 function admV(){
  if(!FB.ready){soon("Cargando…","user","");return}
  if(!FB.isAdmin){$("app").innerHTML=hdr(false)+'<h2>Administrador</h2><div class="box"><b>Entrar</b><input id="ad_e" type="email" placeholder="Correo" autocomplete="username"><input id="ad_w" type="password" placeholder="Contraseña" autocomplete="current-password"><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="admGo()">Entrar</button></div>';return}
- var T=[["links","Links"],["pedidos","Pedidos"],["clientes","Clientes"]];
- $("app").innerHTML=hdr(false)+'<h2>Panel</h2><div class="chips">'+T.map(function(t){return'<button class="chip'+(AT===t[0]?' on':'')+'" onclick="AT=\''+t[0]+'\';admV()">'+t[1]+'</button>'}).join("")+'</div>'+(AT==="links"?admLinks():AT==="pedidos"?admOrders():admUsers())}
+ var T=[["links","Links"],["aprobar","Aprobar"+((ADM.pend||[]).length?" ("+ADM.pend.length+")":"")],["pedidos","Pedidos"],["clientes","Clientes"]];
+ $("app").innerHTML=hdr(false)+'<h2>Panel</h2><div class="chips">'+T.map(function(t){return'<button class="chip'+(AT===t[0]?' on':'')+'" onclick="AT=\''+t[0]+'\';admV()">'+t[1]+'</button>'}).join("")+'</div>'+(AT==="links"?admLinks():AT==="aprobar"?admApprove():AT==="pedidos"?admOrders():admUsers())}
 function admGo(){FB.adminLogin($("ad_e").value.trim(),$("ad_w").value).then(function(){},function(){$("am").textContent="Correo o contraseña incorrectos."})}
 function admLinks(){var L=ADM.links.slice().sort(function(a,b){return String(a.url)<String(b.url)?-1:1});
  return'<div class="box"><b>Agregar links</b><textarea id="ad_l" rows="4" placeholder="Pega uno o varios links, uno por línea" style="width:100%;margin-top:8px;border:1px solid var(--bd);border-radius:12px;padding:12px;background:var(--sf);color:var(--tx);font:inherit"></textarea><div id="am" class="mu" style="margin-top:6px;color:#dc2626"></div><button class="btn" onclick="admAdd()">Agregar links</button><button class="btn o" onclick="admTask(\'revisar\')">Revisar ahora</button><div class="demo">El robot de tu PC procesa los links pendientes y responde a «Revisar ahora» mientras esté abierto.</div></div>'
- +'<h2>Links ('+L.length+')</h2>'+(L.length?L.map(function(l){var c=LC[l.st]||LC.pendiente;
-  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+esc(l.st||"pendiente")+'</span><span class="mu">'+(l.checked?"Revisado "+ordDate(l.checked):"Sin revisar")+'</span></div><div style="margin-top:8px;font-size:14px;font-weight:600">'+esc((l.name||"Producto sin cargar").slice(0,80))+'</div><div class="mu" style="word-break:break-all;margin-top:4px">'+esc(String(l.url).slice(0,90))+'</div><button class="btn o" onclick="admDel(\''+l._id+'\')">Eliminar</button></div>'}).join(""):'<div class="empty">Aún no hay links.</div>')}
+ +'<h2>Links ('+L.length+')</h2>'+(L.length?L.map(function(l){var por=(!l.st||l.st==="pendiente")&&l.pid,c=por?["#dbeafe","#1e40af"]:(LC[l.st]||LC.pendiente);
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+esc(por?"por aprobar":(l.st||"pendiente"))+'</span><span class="mu">'+(l.checked?"Revisado "+ordDate(l.checked):"Sin revisar")+'</span></div><div style="margin-top:8px;font-size:14px;font-weight:600">'+esc((l.name||"Producto sin cargar").slice(0,80))+'</div><div class="mu" style="word-break:break-all;margin-top:4px">'+esc(String(l.url).slice(0,90))+'</div>'+(l.st==="error"?'<button class="btn" onclick="FB.retry(\''+l._id+'\')">Reintentar</button>':'')+'<button class="btn o" onclick="admDel(\''+l._id+'\')">Eliminar</button></div>'}).join(""):'<div class="empty">Aún no hay links.</div>')}
 function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){return/^https?:\/\//.test(x)});u=u.filter(function(x,i){return u.indexOf(x)===i});
  if(!u.length){$("am").textContent="Pega al menos un link que empiece con https://";return}
  FB.addLinks(u).then(function(){},function(){$("am").textContent="No se pudieron guardar los links."})}
@@ -403,6 +403,37 @@ function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.n
 function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?"))return;
  var a="abcdefghjkmnpqrstuvwxyz23456789",r=new Uint32Array(10),t="";crypto.getRandomValues(r);for(var i=0;i<10;i++)t+=a[r[i]%a.length];
  FB.task({type:"reset",phone:u.phone,temp:t}).then(function(){prompt("Clave temporal. Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
+
+/* ===== Aprobar productos (admin) ===== */
+var AP_E={},CATL=["Audio","Moda","Tecnología","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=15;
+function apFind(id){return(ADM.pend||[]).filter(function(x){return String(x.id)===String(id)})[0]}
+function apE(p){return AP_E[p.id]||(AP_E[p.id]={pct:COM_MIN,extra:0,cat:p.c||"Hogar"})}
+function apCalc(p){var e=apE(p),pct=parseFloat(e.pct),ex=parseFloat(e.extra)||0,base=p.base||0;if(isNaN(pct))pct=0;
+ var fin=Math.round((base*(1+pct/100)+ex)*100)/100,err="";
+ if(!(p.pAmazon>0))err="El robot no pudo leer el precio de Amazon. Descarta este producto y vuelve a intentarlo.";
+ else if(pct<COM_MIN)err="La comisión mínima es "+COM_MIN+" %.";
+ else if(ex<0)err="El otro cargo no puede ser negativo.";
+ else if(fin<=base)err="El precio final no cubre tu costo.";
+ return{fin:fin,gan:Math.round((fin-base)*100)/100,err:err}}
+function apUpd(id){var p=apFind(id);if(!p)return;var r=apCalc(p);
+ $("apf_"+id).textContent="$"+r.fin.toFixed(2);$("apg_"+id).textContent="$"+r.gan.toFixed(2);$("ape_"+id).textContent=r.err;$("apb_"+id).disabled=!!r.err}
+function apIn(id,k,v){var p=apFind(id);if(!p)return;apE(p)[k]=v;apUpd(id)}
+function apMoney(n){return"$"+(Math.round((n||0)*100)/100).toFixed(2)}
+function admApprove(){var L=ADM.pend||[];
+ if(!L.length)return'<h2>Por aprobar</h2><div class="empty">No hay productos por aprobar. Enciende el robot (node scrape.js) para leer los links pendientes.</div>';
+ return'<h2>Por aprobar ('+L.length+')</h2>'+L.map(function(p){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",imp=Math.round(((p.base||0)-(p.pAmazon||0)-(p.envio||0))*100)/100;
+  return'<div class="box"><div style="display:flex;gap:12px;align-items:center">'+(img?'<img src="'+esc(img)+'" alt="" style="width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;flex:none">':'')+'<div style="font-size:14px;font-weight:600">'+esc(String(p.n||"").slice(0,90))+'</div></div>'
+  +'<div class="mu" style="margin-top:10px;line-height:1.7">Amazon: '+apMoney(p.pAmazon)+'<br>Envío en EE. UU.: '+apMoney(p.envio)+'<br>Impuesto máximo ('+((p.imp||0)*100).toFixed(2)+' %): '+apMoney(imp)+'<br><b style="color:var(--tx)">Costo real: '+apMoney(p.base)+'</b></div>'
+  +'<div style="margin-top:10px"><div class="mu">Categoría</div><select onchange="apIn(\''+p.id+'\',\'cat\',this.value)" style="width:100%;margin-top:4px">'+CATL.map(function(c){return'<option'+(c===e.cat?' selected':'')+'>'+c+'</option>'}).join("")+'</select></div>'
+  +'<div style="display:flex;gap:10px;margin-top:10px"><div style="flex:1"><div class="mu">Comisión % (mínimo '+COM_MIN+')</div><input type="number" min="'+COM_MIN+'" step="1" value="'+esc(String(e.pct))+'" oninput="apIn(\''+p.id+'\',\'pct\',this.value)"></div><div style="flex:1"><div class="mu">Otro cargo $</div><input type="number" min="0" step="0.01" value="'+esc(String(e.extra))+'" oninput="apIn(\''+p.id+'\',\'extra\',this.value)"></div></div>'
+  +'<div style="margin-top:10px;font-size:15px">Precio final del cliente: <b id="apf_'+p.id+'">$'+r.fin.toFixed(2)+'</b><br><span class="mu">Tu ganancia: <span id="apg_'+p.id+'">$'+r.gan.toFixed(2)+'</span></span></div>'
+  +'<div id="ape_'+p.id+'" style="color:#dc2626;font-size:13px;margin-top:6px">'+esc(r.err)+'</div>'
+  +'<button id="apb_'+p.id+'" class="btn" onclick="admOk(\''+p.id+'\')"'+(r.err?' disabled':'')+'>Aprobar y publicar</button><button class="btn o" onclick="admNo(\''+p.id+'\')">Descartar</button></div>'}).join("")}
+function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
+ if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
+ FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
+function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
 
 /* Vitrina automática: lee productos.json (lo genera el robot) y lo suma al catálogo. */
 fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).catch(function(){return []}).then(function(a){if(a&&a.length){var ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(P.filter(function(x){return!ids[x.id]}))}PB=P.slice();applyFBP();window.addEventListener("hashchange",route);route()});
@@ -423,9 +454,12 @@ Object.assign(window.FB,{
  delLink:async(id,pid)=>{if(pid!=null&&pid!=="")await deleteDoc(doc(db,"productos",String(pid)));await deleteDoc(doc(db,"links",id))},
  setStatus:(no,st)=>updateDoc(doc(db,"pedidos",no),{st:st,["h."+st]:new Date().toISOString()}),
  verify:(uid,v)=>updateDoc(doc(db,"usuarios",uid),{verified:v}),
- task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()})});
-onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[]};
- if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
+ task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()}),
+ approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
+ discard:async(id,linkId)=>{await deleteDoc(doc(db,"porAprobar",String(id)));if(linkId)await deleteDoc(doc(db,"links",linkId))},
+ retry:id=>updateDoc(doc(db,"links",id),{st:"pendiente"})});
+onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
+ if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(unO){unO();unO=null}window.ORD=[];
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
   unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}

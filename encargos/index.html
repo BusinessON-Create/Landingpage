@@ -27,12 +27,16 @@ header input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--sf);
 .tut small{color:var(--ac);font-weight:700;letter-spacing:.08em;font-size:11px}.tut b{display:block;font-size:16px;margin:2px 0}.tut span{font-size:13px;color:var(--mu)}
 h2{font-size:19px;margin:22px 14px 10px;letter-spacing:-.3px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}
-.tile{position:relative;overflow:hidden;border:0;border-radius:16px;padding:0;text-align:left;min-height:150px;display:block;font-weight:700;color:#fff}
-.tile .tv{position:absolute;inset:0}.tile .tsl{position:absolute;inset:0;opacity:0;transition:opacity .7s}.tile .tsl.on{opacity:1}
-.tile .tsl .pw{color:rgba(15,23,42,.45)}.tile .tsl .pw .art{width:52%;height:52%;transform:translateY(-8%)}.tile .tsl .pw img{object-fit:contain;padding:8px 8px 44px;background:transparent}
-.tile .tcap{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;background:linear-gradient(transparent,rgba(15,23,42,.82));display:flex;flex-direction:column;gap:1px;font-size:16px;line-height:1.2}
-.tile .tcap small{font-size:11px;font-weight:500;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tile .tdots{position:absolute;top:8px;right:8px;display:flex;gap:4px}.tile .tdots i{width:5px;height:5px;border-radius:50%;background:rgba(15,23,42,.25)}.tile .tdots i.on{background:rgba(15,23,42,.7)}
+.tile{position:relative;border:0;border-radius:20px;padding:12px;text-align:left;display:flex;flex-direction:column;gap:10px;color:#0f172a;font:inherit;transition:transform .15s}
+.tile:active{transform:scale(.97)}
+.tile:last-child:nth-child(odd){grid-column:1/-1}
+.tile .thd{display:flex;align-items:center;justify-content:space-between;gap:8px}.tile .thd b{font-size:17px;letter-spacing:-.3px}
+.tile .tgo{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.75);display:grid;place-items:center;font-size:16px;line-height:1}
+.tile .tcn{font-size:12px;color:rgba(15,23,42,.6);margin-top:-8px;font-weight:500}
+.tile .tv{position:relative;height:104px;border-radius:14px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.tile .tsl{position:absolute;inset:0;opacity:0;transition:opacity .7s}.tile .tsl.on{opacity:1}
+.tile .tsl .pw{color:rgba(15,23,42,.4)}.tile .tsl .pw .art{width:60%;height:60%}.tile .tsl .pw img{object-fit:contain;padding:6px;background:#fff}
+.tile .tdots{position:absolute;bottom:6px;left:0;right:0;display:flex;justify-content:center;gap:4px}.tile .tdots i{width:5px;height:5px;border-radius:50%;background:rgba(15,23,42,.18)}.tile .tdots i.on{width:14px;border-radius:3px;background:rgba(15,23,42,.6)}
 .row{display:flex;gap:12px;overflow-x:auto;padding:0 14px 6px;scrollbar-width:none}
 .pc{flex:none;width:158px;border:1px solid var(--bd);border-radius:16px;background:var(--bg);overflow:hidden;cursor:pointer;position:relative}
 .pc .im{height:130px;display:grid;place-items:center;font-size:54px;position:relative}
@@ -103,8 +107,7 @@ function quote(){var sub=0,sh=0;S.cart.forEach(function(c){var p=find(c.id);sub+
 /* Tiendas activas. Para volver a activar Shein o Temu, agrégalas aquí y en parseUrl. */
 var STORES=["Amazon"];
 var CATBG={Audio:"#ede9fe",Moda:"#fce7f3",Hogar:"#ecfccb","Tecnología":"#e0f2fe",Belleza:"#ffe4e6",Juguetes:"#fef3c7",Deportes:"#dcfce7",Mascotas:"#ffedd5",Cocina:"#fee2e2",Herramientas:"#e2e8f0"};
-var P=[
-{id:21,n:"Soundcore by Anker Q20i, auriculares con cancelación de ruido",s:"Amazon",b:"Soundcore",c:"Audio",p:39.99,w:.9,r:4.8,k:371,dist:[82,17,1,0,0],src:"soundcore.com",bg:"#e0f2fe",d:"Cancelación de ruido híbrida con 4 micrófonos (hasta 90 % del ruido), controladores de 40 mm con BassUp, 40 h de batería con ANC y 60 h sin ella, carga rápida (5 min = 4 h), conexión a dos dispositivos con Bluetooth 5.0, app con 22 ecualizaciones. Peso: 246 g.",l:"https://www.amazon.com/dp/B0C3HCD34R",v:["Único"]}];
+var P=[];
 var S={cat:"",dom:"mgua",cur:"USD",store:"Todos",q:"",cart:[],tut:true,qty:1};
 function $(i){return document.getElementById(i)}
 var ICO={home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"/>',msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',box:'<path d="m7.5 4.3 9 5.2"/><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/>',headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',shirt:'<path d="M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.1a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.3-2.2z"/>',bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>',phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.4 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.9 5.3 2.8 7.8"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',zap:'<path d="M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5L12.1 8.7A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z"/>',play:'<path d="M6 3l14 9-14 9z"/>',arrowl:'<path d="m12 19-7-7 7-7M19 12H5"/>'};
@@ -112,14 +115,13 @@ var CI={Audio:"headphones",Moda:"shirt",Hogar:"bulb","Tecnología":"phone"};
 function ic(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(ICO[n]||"")+'</svg>'}
 var SH='<ellipse cx="50" cy="90" rx="28" ry="4" fill="#0f172a" opacity=".12"/>';
 var ART={
-hp:'<svg class="art" viewBox="0 0 100 100">'+SH+'<path d="M22 58V50a28 28 0 0 1 56 0v8" fill="none" stroke="#1e293b" stroke-width="7" stroke-linecap="round"/><rect x="13" y="52" width="22" height="34" rx="10" fill="#0f172a"/><rect x="65" y="52" width="22" height="34" rx="10" fill="#0f172a"/><rect x="28" y="58" width="9" height="22" rx="4.5" fill="#334155"/><rect x="63" y="58" width="9" height="22" rx="4.5" fill="#334155"/><circle cx="22" cy="69" r="2.5" fill="#38bdf8"/></svg>',
 
 
 
 
 
 disco:'<svg class="art" viewBox="0 0 100 100"><path d="M50 4v16" stroke="#64748b" stroke-width="2"/><circle cx="50" cy="52" r="32" fill="#94a3b8"/><g stroke="#e2e8f0" stroke-width="1.5" opacity=".8"><path d="M18 52h64M24 34h52M24 70h52M50 20v64M34 22q-12 30 0 60M66 22q12 30 0 60"/></g><rect x="38" y="36" width="9" height="9" fill="#fff" opacity=".9"/><rect x="58" y="58" width="7" height="7" fill="#fff" opacity=".7"/></svg>'};
-var ARTID={21:"hp"};
+var ARTID={};
 function pic(p,i){var u=(p.img||[])[i||0];return '<span class="pw">'+(ART[ARTID[p.id]]||ic(CI[p.c]||"box"))+(u?'<img src="'+esc(u)+'" alt="" loading="lazy" onerror="this.remove()">':'')+'</span>'}
 
 function sale(p){return p.x?0:p.p+extra(p.p)}
@@ -135,7 +137,7 @@ function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Tod
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
 function recent(c){return P.filter(function(p){return p.c===c}).map(function(p,i){return{p:p,i:i}}).sort(function(a,b){var x=Date.parse(a.p.upd)||0,y=Date.parse(b.p.upd)||0;return y-x||a.i-b.i}).map(function(o){return o.p})}
 function catList(){var seen={},l=[];CATL.concat(P.map(function(p){return p.c})).forEach(function(c){if(c&&!seen[c]&&P.some(function(p){return p.c===c})){seen[c]=1;l.push(c)}});return l}
-function tiles(){return catList().map(function(c){var r=recent(c),sl=r.slice(0,4);return '<button class="tile" style="background:'+(CATBG[c]||"#e0f2fe")+'" onclick="S.cat=\''+c+'\';S.q=\'\';home()"><div class="tv">'+sl.map(function(p,i){return '<div class="tsl'+(i?'':' on')+'" data-n="'+esc(p.n)+'" style="background:'+p.bg+'">'+pic(p)+'</div>'}).join("")+'</div>'+(sl.length>1?'<div class="tdots">'+sl.map(function(p,i){return '<i'+(i?'':' class="on"')+'></i>'}).join("")+'</div>':'')+'<span class="tcap">'+c+'<small>'+r.length+(r.length===1?' producto':' productos')+' · '+esc(sl[0].n)+'</small></span></button>'}).join("")}
+function tiles(){return catList().map(function(c){var r=recent(c),sl=r.slice(0,4);return '<button class="tile" style="background:'+(CATBG[c]||"#e0f2fe")+'" onclick="S.cat=\''+c+'\';S.q=\'\';home()"><div class="thd"><b>'+c+'</b><span class="tgo">›</span></div><div class="tcn">'+r.length+(r.length===1?' producto':' productos')+'</div><div class="tv">'+sl.map(function(p,i){return '<div class="tsl'+(i?'':' on')+'">'+pic(p)+'</div>'}).join("")+(sl.length>1?'<div class="tdots">'+sl.map(function(p,i){return '<i'+(i?'':' class="on"')+'></i>'}).join("")+'</div>':'')+'</div></button>'}).join("")}
 var TT=null;
 function tileCar(){clearInterval(TT);if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  TT=setInterval(function(){var ts=document.querySelectorAll(".tile");if(!ts.length){clearInterval(TT);return}
@@ -145,7 +147,7 @@ function home(keep){
  var body=(filt?'':'<div class="ban"><h1>Compra en Estados Unidos y recibe en Managua</h1><p>Pide desde Amazon. Paga por transferencia bancaria, sin tarjeta internacional.</p><div class="banks"><span>BAC</span><span>Lafise</span><span>Ficohsa</span><span>Banpro</span></div></div>'
  +(S.tut?'<div class="tut"><div style="font-size:30px;color:var(--ac)">'+ic("play")+'</div><div style="flex:1"><small>TUTORIAL RÁPIDO</small><b>¿Primera vez comprando?</b><span>Mira cómo comprar en 1 minuto.</span></div><button class="ib" onclick="S.tut=false;home()" aria-label="Cerrar">✕</button></div>':'')
  +(catList().length?'<h2>Categorías</h2><div class="tiles">'+tiles()+'</div>':''))
- +'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>'+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Todos los productos</h2><div class="g2">'+l.map(card).join("")+'</div>'):'<div class="empty">No hay productos con ese filtro.</div>');
+ +(l.length||filt?'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>':'')+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Todos los productos</h2><div class="g2">'+l.map(card).join("")+'</div>'):'<div class="empty">'+(filt?'No hay productos con ese filtro.':'<b>Pronto habrá productos</b>Estamos preparando el catálogo.')+'</div>');
  if(keep&&$("hm")){$("hm").innerHTML=body;tileCar();return}
  $("app").innerHTML=hdr(true)+pasteBox()+chips()+'<div id="hm">'+body+'</div>';tileCar()}
 function prod(id){var p=find(id);if(!p){go("inicio");return}var N=p.img&&p.img.length?p.img.length:3;
@@ -318,7 +320,7 @@ function addFx(id,btn){
  document.body.appendChild(t);requestAnimationFrame(function(){requestAnimationFrame(function(){t.classList.add("on")})});
  clearTimeout(window.__tt);window.__tt=setTimeout(function(){t.classList.remove("on");setTimeout(function(){t.remove()},320)},2800)}
 
-try{CUS=JSON.parse(localStorage.getItem("enc_cus")||"[]")}catch(e){}P=CUS.concat(P);
+try{CUS=JSON.parse(localStorage.getItem("enc_cus")||"[]")}catch(e){}CUS=CUS.filter(function(c){return c&&c.p>0&&c.img&&c.img.length});P=CUS.concat(P);
 var th0="light";try{th0=localStorage.getItem("enc_theme")||"light"}catch(e){}
 document.documentElement.dataset.theme=th0;
 
@@ -389,32 +391,35 @@ function admGo(){FB.adminLogin($("ad_e").value.trim(),$("ad_w").value).then(func
 function admLinks(){var L=ADM.links.slice().sort(function(a,b){return String(a.url)<String(b.url)?-1:1});
  return'<div class="box"><b>Agregar links</b><textarea id="ad_l" rows="4" placeholder="Pega uno o varios links, uno por línea" style="width:100%;margin-top:8px;border:1px solid var(--bd);border-radius:12px;padding:12px;background:var(--sf);color:var(--tx);font:inherit"></textarea><div id="am" class="mu" style="margin-top:6px;color:#dc2626"></div><button class="btn" onclick="admAdd()">Agregar links</button><button class="btn o" onclick="admTask(\'revisar\')">Revisar ahora</button><div class="demo">El robot de tu PC procesa los links pendientes y responde a «Revisar ahora» mientras esté abierto.</div></div>'
  +'<h2>Links ('+L.length+')</h2>'+(L.length?L.map(function(l){var por=(!l.st||l.st==="pendiente")&&l.pid,c=por?["#dbeafe","#1e40af"]:(LC[l.st]||LC.pendiente);
-  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+esc(por?"por aprobar":(l.st||"pendiente"))+'</span><span class="mu">'+(l.checked?"Revisado "+ordDate(l.checked):"Sin revisar")+'</span></div><div style="margin-top:8px;font-size:14px;font-weight:600">'+esc((l.name||"Producto sin cargar").slice(0,80))+'</div><div class="mu" style="word-break:break-all;margin-top:4px">'+esc(String(l.url).slice(0,90))+'</div>'+(l.st==="error"?'<button class="btn" onclick="FB.retry(\''+l._id+'\')">Reintentar</button>':'')+'<button class="btn o" onclick="admDel(\''+l._id+'\')">Eliminar</button></div>'}).join(""):'<div class="empty">Aún no hay links.</div>')}
+  var ep=null;if(ED===l._id)for(var k in EDP)if(EDP[k].linkId===l._id)ep=EDP[k];if(ep)return apForm(ep,true);
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+esc(por?"por aprobar":(l.st||"pendiente"))+'</span><span class="mu">'+(l.checked?"Revisado "+ordDate(l.checked):"Sin revisar")+'</span></div><div style="margin-top:8px;font-size:14px;font-weight:600">'+esc((l.name||"Producto sin cargar").slice(0,80))+'</div><div class="mu" style="word-break:break-all;margin-top:4px">'+esc(String(l.url).slice(0,90))+'</div>'+(l.st==="error"?'<button class="btn" onclick="admRetry(\''+l._id+'\')">Reintentar</button>':'')+(hasProd(l.pid)?'<button class="btn o" onclick="admEdit(\''+l._id+'\')">Editar</button>':'')+'<button class="btn o" onclick="admDel(\''+l._id+'\')">Eliminar</button></div>'}).join(""):'<div class="empty">Aún no hay links.</div>')}
 function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){return/^https?:\/\//.test(x)});u=u.filter(function(x,i){return u.indexOf(x)===i});
  if(!u.length){$("am").textContent="Pega al menos un link que empiece con https://";return}
+ if(!confirm("¿Agregar "+u.length+(u.length===1?" link":" links")+" a la lista?"))return;
  FB.addLinks(u).then(function(){},function(){$("am").textContent="No se pudieron guardar los links."})}
-function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l||!confirm("¿Eliminar este link y su producto de la tienda?"))return;FB.delLink(id,l.pid).catch(function(){alert("No se pudo eliminar.")})}
-function admTask(t){FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
+function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l||!confirm("¿Eliminar este link y su producto de la tienda?"))return;if(ED===id){ED=null;EDP={}}FB.delLink(id,l.pid).catch(function(){alert("No se pudo eliminar.")})}
+function admTask(t){if(!confirm(t==="revisar"?"¿Enviar «Revisar ahora» al robot?":"¿Enviar esta solicitud al robot?"))return;FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
 function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1});
  return'<h2>Pedidos ('+L.length+')</h2>'+(L.length?L.map(function(o){var u=U[o.uid]||{};
   return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
-  +'<select onchange="FB.setStatus(\''+o.no+'\',+this.value)">'+stIdx(o).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
+  +'<select onchange="admSt(\''+o.no+'\',this,'+(o.st||0)+')">'+stIdx(o).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
   +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button></div>'}).join(""):'<div class="empty">Aún no hay pedidos.</div>')}
-function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
 function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.name)<String(b.name)?-1:1});
- return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="FB.verify(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
+ return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="admVer(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
 function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?"))return;
  var a="abcdefghjkmnpqrstuvwxyz23456789",r=new Uint32Array(10),t="";crypto.getRandomValues(r);for(var i=0;i<10;i++)t+=a[r[i]%a.length];
  FB.task({type:"reset",phone:u.phone,temp:t}).then(function(){prompt("Clave temporal. Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
 
 /* ===== Aprobar productos (admin) ===== */
-var AP_E={},CATL=["Audio","Moda","Tecnología","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=5,COM_DEF=10;
-function apFind(id){return(ADM.pend||[]).filter(function(x){return String(x.id)===String(id)})[0]}
+var AP_E={},EDP={},ED=null,CATL=["Audio","Moda","Tecnología","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=5,COM_DEF=10;
+function apFind(id){return(ADM.pend||[]).filter(function(x){return String(x.id)===String(id)})[0]||EDP[id]}
 function apE(p){return AP_E[p.id]||(AP_E[p.id]={imp:Math.round((p.imp==null?0.1025:p.imp)*10000)/100,pct:COM_DEF,extra:0,cat:p.c||"Hogar"})}
 function apCalc(p){var e=apE(p),imp=parseFloat(e.imp),pct=parseFloat(e.pct),ex=parseFloat(e.extra)||0;if(isNaN(imp))imp=0;if(isNaN(pct))pct=0;
- var net=(p.pAmazon||0)+(p.envio||0),base=Math.round(net*(1+imp/100)*100)/100,taxv=Math.round((base-net)*100)/100,
+ var pa=e.pAmazon!=null?parseFloat(e.pAmazon):(p.pAmazon||0),ev=e.envio!=null?parseFloat(e.envio):(p.envio||0);if(isNaN(pa))pa=0;if(isNaN(ev))ev=0;var net=pa+ev,base=Math.round(net*(1+imp/100)*100)/100,taxv=Math.round((base-net)*100)/100,
  fin=Math.round((base*(1+pct/100)+ex)*100)/100,err="";
- if(!(p.pAmazon>0))err="El robot no pudo leer el precio de Amazon. Descarta este producto y vuelve a intentarlo.";
+ if(!(pa>0))err=p.edit?"Escribe el precio de Amazon.":"El robot no pudo leer el precio de Amazon. Descarta este producto y vuelve a intentarlo.";
+ else if(ev<0)err="El envío no puede ser negativo.";
  else if(imp<0||imp>30)err="El impuesto debe estar entre 0 y 30 %.";
  else if(pct<COM_MIN)err="La comisión mínima es "+COM_MIN+" %.";
  else if(ex<0)err="El otro cargo no puede ser negativo.";
@@ -425,20 +430,47 @@ function apUpd(id){var p=apFind(id);if(!p)return;var r=apCalc(p);
  $("api_"+id).textContent=apMoney(r.taxv);$("apc_"+id).textContent=apMoney(r.base);
  $("apf_"+id).textContent=apMoney(r.fin);$("apg_"+id).textContent=apMoney(r.gan);$("ape_"+id).textContent=r.err;$("apb_"+id).disabled=!!r.err}
 function apIn(id,k,v){var p=apFind(id);if(!p)return;apE(p)[k]=v;apUpd(id)}
+function apForm(p,ed){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",id=p.id,
+ num=function(k,l,v){return'<div style="flex:1"><div class="mu">'+l+'</div><input type="number" min="0" step="0.01" value="'+esc(String(v==null?"":v))+'" oninput="apIn(\''+id+'\',\''+k+'\',this.value)"></div>'};
+ return'<div class="box">'+(ed?'<span class="st" style="background:#dbeafe;color:#1e40af;margin-bottom:10px">Editando producto publicado</span>':'')
+  +'<div style="display:flex;gap:12px;align-items:center">'+(img?'<img src="'+esc(img)+'" alt="" style="width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;flex:none">':'')
+  +(ed?'<div style="flex:1;min-width:0"><div class="mu">Nombre</div><input id="edn_'+id+'" value="'+esc(p.n||"")+'" maxlength="200"></div>':'<div style="font-size:14px;font-weight:600">'+esc(String(p.n||"").slice(0,90))+'</div>')+'</div>'
+  +(ed?(p.est?'<div class="demo" style="margin-top:10px">Este producto se aprobó antes de guardar el desglose. El precio de Amazon está estimado desde el precio final: confírmalo.</div>':'')+'<div style="display:flex;gap:10px;margin-top:10px">'+num("pAmazon","Precio en Amazon $",e.pAmazon)+num("envio","Envío en EE. UU. $",e.envio)+'</div>':'')
+  +'<div class="mu" style="margin-top:10px;line-height:1.7">'+(ed?'':'Amazon: '+apMoney(p.pAmazon)+'<br>Envío en EE. UU.: '+apMoney(p.envio)+'<br>')+'Impuesto: <span id="api_'+id+'">'+apMoney(r.taxv)+'</span><br><b style="color:var(--tx)">Costo real: <span id="apc_'+id+'">'+apMoney(r.base)+'</span></b></div>'
+  +'<div style="margin-top:10px"><div class="mu">Categoría</div><select onchange="apIn(\''+id+'\',\'cat\',this.value)" style="width:100%;margin-top:4px">'+(CATL.indexOf(e.cat)<0?[e.cat].concat(CATL):CATL).map(function(c){return'<option'+(c===e.cat?' selected':'')+'>'+esc(c)+'</option>'}).join("")+'</select></div>'
+  +'<div style="display:flex;gap:10px;margin-top:10px"><div style="flex:1"><div class="mu">Impuesto % (Florida ≈ 7)</div><input type="number" min="0" max="30" step="0.01" value="'+esc(String(e.imp))+'" oninput="apIn(\''+id+'\',\'imp\',this.value)"></div><div style="flex:1"><div class="mu">Comisión % (mín. '+COM_MIN+')</div><input type="number" min="'+COM_MIN+'" step="1" value="'+esc(String(e.pct))+'" oninput="apIn(\''+id+'\',\'pct\',this.value)"></div></div>'
+  +'<div style="margin-top:10px"><div class="mu">Otro cargo $ (opcional)</div><input type="number" min="0" step="0.01" value="'+esc(String(e.extra))+'" oninput="apIn(\''+id+'\',\'extra\',this.value)"></div>'
+  +'<div style="margin-top:10px;font-size:15px">Precio final del cliente: <b id="apf_'+id+'">'+apMoney(r.fin)+'</b><br><span class="mu">Tu ganancia: <span id="apg_'+id+'">'+apMoney(r.gan)+'</span></span></div>'
+  +'<div id="ape_'+id+'" style="color:#dc2626;font-size:13px;margin-top:6px">'+esc(r.err)+'</div>'
+  +(ed?'<button id="apb_'+id+'" class="btn" onclick="admEditSave(\''+id+'\')"'+(r.err?' disabled':'')+'>Guardar cambios</button><button class="btn o" onclick="admEditCancel(\''+id+'\')">Cancelar</button>'
+      :'<button id="apb_'+id+'" class="btn" onclick="admOk(\''+id+'\')"'+(r.err?' disabled':'')+'>Aprobar y publicar</button><button class="btn o" onclick="admNo(\''+id+'\')">Descartar</button>')+'</div>'}
 function admApprove(){var L=ADM.pend||[];
  if(!L.length)return'<h2>Por aprobar</h2><div class="empty">No hay productos por aprobar. Enciende el robot (node scrape.js) para leer los links pendientes.</div>';
- return'<h2>Por aprobar ('+L.length+')</h2>'+L.map(function(p){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"";
-  return'<div class="box"><div style="display:flex;gap:12px;align-items:center">'+(img?'<img src="'+esc(img)+'" alt="" style="width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;flex:none">':'')+'<div style="font-size:14px;font-weight:600">'+esc(String(p.n||"").slice(0,90))+'</div></div>'
-  +'<div class="mu" style="margin-top:10px;line-height:1.7">Amazon: '+apMoney(p.pAmazon)+'<br>Envío en EE. UU.: '+apMoney(p.envio)+'<br>Impuesto: <span id="api_'+p.id+'">'+apMoney(r.taxv)+'</span><br><b style="color:var(--tx)">Costo real: <span id="apc_'+p.id+'">'+apMoney(r.base)+'</span></b></div>'
-  +'<div style="margin-top:10px"><div class="mu">Categoría</div><select onchange="apIn(\''+p.id+'\',\'cat\',this.value)" style="width:100%;margin-top:4px">'+CATL.map(function(c){return'<option'+(c===e.cat?' selected':'')+'>'+c+'</option>'}).join("")+'</select></div>'
-  +'<div style="display:flex;gap:10px;margin-top:10px"><div style="flex:1"><div class="mu">Impuesto % (Florida ≈ 7)</div><input type="number" min="0" max="30" step="0.01" value="'+esc(String(e.imp))+'" oninput="apIn(\''+p.id+'\',\'imp\',this.value)"></div><div style="flex:1"><div class="mu">Comisión % (mín. '+COM_MIN+')</div><input type="number" min="'+COM_MIN+'" step="1" value="'+esc(String(e.pct))+'" oninput="apIn(\''+p.id+'\',\'pct\',this.value)"></div></div>'
-  +'<div style="margin-top:10px"><div class="mu">Otro cargo $ (opcional)</div><input type="number" min="0" step="0.01" value="'+esc(String(e.extra))+'" oninput="apIn(\''+p.id+'\',\'extra\',this.value)"></div>'
-  +'<div style="margin-top:10px;font-size:15px">Precio final del cliente: <b id="apf_'+p.id+'">'+apMoney(r.fin)+'</b><br><span class="mu">Tu ganancia: <span id="apg_'+p.id+'">'+apMoney(r.gan)+'</span></span></div>'
-  +'<div id="ape_'+p.id+'" style="color:#dc2626;font-size:13px;margin-top:6px">'+esc(r.err)+'</div>'
-  +'<button id="apb_'+p.id+'" class="btn" onclick="admOk(\''+p.id+'\')"'+(r.err?' disabled':'')+'>Aprobar y publicar</button><button class="btn o" onclick="admNo(\''+p.id+'\')">Descartar</button></div>'}).join("")}
+ return'<h2>Por aprobar ('+L.length+')</h2>'+L.map(function(p){return apForm(p,false)}).join("")}
+/* Editar un producto ya publicado (muestra lo mismo que antes de aprobar) */
+function hasProd(pid){return pid!=null&&pid!==""&&(window.FBP||[]).some(function(x){return String(x.id)===String(pid)})}
+function admEdit(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l)return;
+ var q=(window.FBP||[]).filter(function(x){return String(x.id)===String(l.pid)})[0];
+ if(!q){alert("Este link todavía no tiene un producto publicado, así que no hay nada que editar.");return}
+ if(ED&&ED!==id&&!confirm("Ya estás editando otro producto. ¿Descartar esos cambios y editar este?"))return;
+ EDP={};ED=id;
+ var est=q.pAmazon==null,imp=q.imp==null?0.1025:q.imp,pct=q.pct==null?COM_DEF:q.pct,ex=q.extra||0,ev=q.envio||0,pa=q.pAmazon;
+ if(est)pa=Math.max(0,Math.round((q.p-ex)/(1+pct/100)/(1+imp)*100)/100);
+ EDP[q.id]={id:q.id,n:q.n,img:q.img,c:q.c,edit:1,est:est,linkId:id};
+ AP_E[q.id]={imp:Math.round(imp*10000)/100,pct:pct,extra:ex,cat:q.c||"Hogar",pAmazon:pa,envio:ev};
+ admV()}
+function admEditCancel(id){if(!confirm("¿Cancelar la edición? Se perderán los cambios sin guardar."))return;delete EDP[id];delete AP_E[id];ED=null;admV()}
+function admEditSave(id){var p=EDP[id];if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
+ var n=($("edn_"+id).value||"").trim();if(!n){alert("El nombre no puede estar vacío.");return}
+ if(!confirm("¿Guardar los cambios y publicarlos en la tienda por "+apMoney(r.fin)+"?"))return;
+ var d=JSON.parse(JSON.stringify({n:n,c:e.cat,p:r.fin,pAmazon:parseFloat(e.pAmazon)||0,envio:parseFloat(e.envio)||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,edited:new Date().toISOString()}));
+ FB.editProd(id,d,p.linkId,n!==p.n?n:null).then(function(){delete EDP[id];delete AP_E[id];ED=null;admV()},function(){alert("No se pudo guardar.")})}
+function admRetry(id){if(!confirm("¿Reintentar leer este link?"))return;FB.retry(id).catch(function(){alert("No se pudo reintentar.")})}
+function admSt(no,sel,prev){var i=+sel.value;if(!confirm("¿Cambiar el pedido "+no+" a «"+STP[i][0]+"»?")){sel.value=prev;return}FB.setStatus(no,i).catch(function(){alert("No se pudo cambiar el estado.")})}
+function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
- var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:p.envio||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
  FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
 function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
 
@@ -464,7 +496,8 @@ Object.assign(window.FB,{
  task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()}),
  approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
  discard:async(id,linkId)=>{await deleteDoc(doc(db,"porAprobar",String(id)));if(linkId)await deleteDoc(doc(db,"links",linkId))},
- retry:id=>updateDoc(doc(db,"links",id),{st:"pendiente"})});
+ retry:id=>updateDoc(doc(db,"links",id),{st:"pendiente"}),
+ editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(unO){unO();unO=null}window.ORD=[];

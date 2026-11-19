@@ -107,6 +107,7 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .pf-r{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--bd);font-size:14px}.pf-r span:first-child{color:var(--mu);flex:none}.pf-r span:last-child{font-weight:600;text-align:right;word-break:break-word}
 .pf-a{padding:6px 16px 16px;display:grid;gap:8px}.pf-a .btn{margin:0}
 .av-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}.av-b{aspect-ratio:1;border-radius:50%;border:3px solid transparent;font-size:32px;display:grid;place-items:center;padding:0;cursor:pointer}.av-b.on{border-color:var(--ac);box-shadow:0 0 0 3px var(--acs)}.pf-av.em{font-size:36px;box-shadow:none}.pf-lk{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--ac);cursor:pointer}
+.vo{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}.vo button{border:2px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:12px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer}.vo button.on{border-color:var(--ac);background:var(--acs)}.vo button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -162,7 +163,7 @@ function home(keep){
  +(l.length||filt?'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>':'')+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Todos los productos</h2><div class="g2">'+l.map(card).join("")+'</div>'):'<div class="empty">'+(filt?'No hay productos con ese filtro.':'<b>Pronto habrá productos</b>Estamos preparando el catálogo.')+'</div>');
  if(keep&&$("hm")){$("hm").innerHTML=body;tileCar();return}
  $("app").innerHTML=hdr(true)+chips()+'<div id="hm">'+body+'</div>';tileCar()}
-function prod(id){var p=find(id);if(!p){go("inicio");return}var N=p.img&&p.img.length?p.img.length:3;
+function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.forEach(function(d,di){if(d.o.length===1)vSel(p.id)[di]=d.o[0]});var N=p.img&&p.img.length?p.img.length:3;
  var sub=sale(p);
  var dist=p.dist||[68,12,7,5,8];
  $("app").innerHTML=hdr(true)+'<button class="back" onclick="history.back()">'+ic("arrowl")+' Volver</button>'
@@ -172,13 +173,23 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}var N=p.img&&p.img.l
  +'<div class="box"><div class="mu">Precio del producto</div><div style="display:flex;justify-content:space-between;align-items:center"><div class="big">'+fmt(sub)+'</div>'+(p.x?'':'<div class="qty"><button onclick="S.qty=Math.max(1,S.qty-1);prod('+p.id+')">−</button><b>'+S.qty+'</b><button onclick="S.qty++;prod('+p.id+')">+</button></div>')+'</div>'
  +(p.x?'<div class="mu">Falta confirmar el precio de este enlace.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
  +'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="alert(\'Envío de Miami a Nicaragua, por libra y según el peso real al recibir. Express US$'+CFG.air+' ('+CFG.t.air+') · Regular US$'+CFG.sea+' ('+CFG.t.sea+'). Los días hábiles se cuentan desde que tu paquete llega a Miami.\')">Ver tarifas ›</button></div>'
- +'<div class="lb">VARIANTE</div><select>'+p.v.map(function(v){return '<option>'+esc(v)+'</option>'}).join("")+'</select>'
- +'<button class="btn"'+(p.x?' disabled':'')+' onclick="addC('+p.id+',S.qty,1);go(\'carrito\')">'+ic("zap")+' Comprar ahora</button><button class="btn o"'+(p.x?' disabled':'')+' onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button></div>'
+ +(p.dims&&p.dims.length?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar un poco según la opción elegida. Te lo confirmamos antes de cobrar.</div>':'')
+ +'<button class="btn"'+(p.x?' disabled':'')+' onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button><button class="btn o"'+(p.x?' disabled':'')+' onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button></div>'
  +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p><p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p></details></div>'
  +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
- +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="addC('+p.id+',S.qty,1);go(\'carrito\')">'+ic("zap")+' Comprar ahora</button></div></div>')}
-function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null;var c=S.cart.filter(function(x){return x.id===id})[0];if(c)c.q+=q;else S.cart.push({id:id,q:q,m:"sea"});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn)}
+ +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button></div></div>')}
+function vSel(id){S.vs=S.vs||{};return S.vs[id]||(S.vs[id]={})}
+function vAvail(p,di,val){if(!(p.vl&&p.vl.length))return true;var sel=vSel(p.id);return p.vl.some(function(c){var k=c.k.split("|");if(k[di]!==val)return false;return p.dims.every(function(_,j){return j===di||!sel[j]||k[j]===sel[j]})})}
+function vKey(p){var sel=vSel(p.id),a=[];for(var i=0;i<p.dims.length;i++){if(!sel[i])return"";a.push(sel[i])}return a.join("|")}
+function vLabel(p,vk){if(!vk||!p||!p.dims)return"";var k=vk.split("|");return k.map(function(v,i){return(p.dims[i]?p.dims[i].n:"Opción")+": "+v}).join(" · ")}
+function vAsin(p,vk){var c=((p&&p.vl)||[]).filter(function(x){return x.k===vk})[0];return c?c.a:""}
+function vrHtml(p){var sel=vSel(p.id);return p.dims.map(function(d,di){return'<div class="lb">'+esc(d.n.toUpperCase())+(sel[di]?': <b style="color:var(--tx)">'+esc(sel[di])+'</b>':'')+'</div><div class="vo">'+d.o.map(function(o,oi){return'<button class="'+(sel[di]===o?'on':'')+'"'+(vAvail(p,di,o)?'':' disabled')+' onclick="vPick('+p.id+','+di+','+oi+')">'+esc(o)+'</button>'}).join("")+'</div>'}).join("")+'<div id="vm" class="mu" style="color:#dc2626;margin-bottom:8px"></div>'}
+function vPick(id,di,oi){var p=find(id),sel=vSel(id),v=p.dims[di].o[oi];if(sel[di]===v)delete sel[di];else sel[di]=v;
+ p.dims.forEach(function(_,j){if(j!==di&&sel[j]&&!vAvail(p,j,sel[j]))delete sel[j]});var b=$("vrb");if(b)b.innerHTML=vrHtml(p)}
+function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null,p=find(id),vk="";
+ if(p&&p.dims&&p.dims.length){vk=vKey(p);if(!vk){var m=$("vm");if(m)m.textContent="Elige "+p.dims.map(function(d){return d.n.toLowerCase()}).join(" y ")+" antes de continuar.";var vb=$("vrb");if(vb&&vb.scrollIntoView)vb.scrollIntoView({behavior:"smooth",block:"center"});return false}}
+ var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c)c.q+=q;else S.cart.push({id:id,q:q,m:"sea",vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
 function soon(t,i,m){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic(i)+'</div><b>'+t+'</b>'+m+'</div>'}
 function cartOld(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var sub=0;$("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c){var p=find(c.id);sub+=sale(p)*c.q;return '<div class="box" style="display:flex;gap:12px;align-items:center"><div style="position:relative;overflow:hidden;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<br><b>'+fmt(sale(p))+'</b> × '+c.q+'</div></div>'}).join("")+'<div class="box"><div class="mu">Subtotal de productos</div><div class="big">'+fmt(sub)+'</div><div class="demo">Envío, fechas Express/Regular y checkout llegan en el siguiente paso.</div></div>'}
@@ -210,7 +221,7 @@ function rcDraw(x,o){
  T("PRECIO",620,304,"600 12px "+F,"#64748b","right");T("ENVÍO POR LIBRA",W-P,304,"600 12px "+F,"#64748b","right");
  L(314,"#0f172a",1.5);y=314;
  o.items.forEach(function(it){
-  x.font="500 20px "+F;var ls=wrapT(x,it.n,350).slice(0,3);
+  x.font="500 20px "+F;var ls=wrapT(x,it.vr?it.n.slice(0,60)+" · "+it.vr:it.n,350).slice(0,3);
   ls.forEach(function(s,i){T(s,P,y+32+i*26,"500 20px "+F,"#0f172a")});
   T(it.m==="air"?"Envío Express · "+CFG.t.air:"Envío Regular · "+CFG.t.sea,P,y+32+ls.length*26-2,"400 14px "+F,"#64748b");
   T("x "+it.q,470,y+32,"500 18px "+F,"#0f172a","center");
@@ -251,13 +262,13 @@ function sendOrder(){
  var ver=!!FB.verified;
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
- var items=S.cart.map(function(c){var p=find(c.id),mm=c.m||"sea";return{n:p.n,q:c.q,m:mm,l:p.l,p:sale(p)*c.q,s:CFG[mm]}});
+ var items=S.cart.map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:CFG[mm],vr:c.vk?vLabel(p,c.vk):""}});
  var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cm||"").trim(),
   items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee};
  var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\n\nProductos:\n"
-  +items.map(function(it,k){return(k+1)+". "+it.n.slice(0,70)+" (x"+it.q+", "+(it.m==="air"?"Express":"Regular")+")"+(it.l?"\n"+it.l:"")}).join("\n")
+  +items.map(function(it,k){return(k+1)+". "+it.n.slice(0,70)+(it.vr?"\n   "+it.vr:"")+" (x"+it.q+", "+(it.m==="air"?"Express":"Regular")+")"+(it.l?"\n"+it.l:"")}).join("\n")
   +"\n\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nEl envío de Miami a Nicaragua (Express "+usd(CFG.air)+"/lb, Regular "+usd(CFG.sea)+"/lb) se cobra al recibir, por peso real.\nAdjunto el comprobante (imagen descargada).";
- var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
+ var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||"",vr:it.vr||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
  var b;try{b=dataBlob(rcCanvas(o).toDataURL("image/png"))}catch(e){window.__sending=0;m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
  var wa="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),url=URL.createObjectURL(b);
  window.RC={no:no,url:url,msg:msg,wa:wa,rec:rec,ver:ver,saved:false,err:"",snap:JSON.stringify(cartItems())};
@@ -284,25 +295,25 @@ function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setI
 function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
 function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
- $("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c,i){var p=find(c.id),m=c.m||"sea";return '<div class="box"><div style="display:flex;gap:12px"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div></div><div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="setM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="setM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><span class="mu">Envío se cobra al recibir en Miami</span></div></div>'}).join("")
+ $("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c,i){var p=find(c.id),m=c.m||"sea";return '<div class="box"><div style="display:flex;gap:12px"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+(c.vk?'<div class="mu">'+esc(vLabel(p,c.vk))+'</div>':'')+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div></div><div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="setM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="setM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><span class="mu">Envío se cobra al recibir en Miami</span></div></div>'}).join("")
  +'<div class="box"><b>Entrega en Nicaragua</b><select onchange="S.dom=this.value;cartV()">'+CFG.dom.map(function(d){return '<option value="'+d[0]+'"'+(S.dom===d[0]?" selected":"")+'>'+d[1]+(d[2]?" (+"+fmt(d[2])+")":"")+'</option>'}).join("")+'</select><div class="mu" style="margin-top:8px">El precio de la entrega se confirma cuando tu paquete llega a Nicaragua, porque varía según el paquete. Se cobra en la segunda factura, al retirar.</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">PRIMERA FACTURA, LA PAGAS AHORA</div>'+[["Productos",q.sub]].concat(q.fee?[["Preparación del pedido",q.fee]]:[]).map(row).join("")+'<div class="lb">TOTAL A PAGAR AHORA</div><div class="big">'+fmt(now)+'</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">SEGUNDA FACTURA, SE COBRA AL RECIBIR</div><div style="margin:8px 0"><b>Envío de Miami a Nicaragua</b><div class="mu">Por peso real al llegar a Miami: Express '+fmt(CFG.air)+' por libra, Regular '+fmt(CFG.sea)+' por libra.</div></div><div style="margin:8px 0"><b>Entrega en Nicaragua</b><div class="mu">'+dn[1]+(dn[2]?" ("+fmt(dn[2])+")":": el precio se confirma al retirar, porque varía según el paquete")+'</div></div><div class="mu" style="margin-top:8px">Los días hábiles (Express '+CFG.t.air+', Regular '+CFG.t.sea+') se cuentan desde que tu paquete llega a Miami, no desde la compra.</div></div>'+orderBox()}
 /* ===== Carrito guardado por cuenta, en tiempo real ===== */
 var CT=null,CINF=0;
-function cartItems(){return S.cart.map(function(c){return{id:c.id,q:c.q,m:c.m||"sea"}})}
+function cartItems(){return S.cart.map(function(c){return{id:c.id,q:c.q,m:c.m||"sea",vk:c.vk||""}})}
 function cartPersist(){clearTimeout(CT);CT=setTimeout(function(){CT=null;var it=cartItems();
  if(FB.user&&FB.cartSave){CINF++;FB.cartSave(it).then(function(){CINF--},function(){CINF--})}
  else if(!FB.user){try{localStorage.setItem("enc_cart_guest",JSON.stringify(it))}catch(e){}}},350)}
 function cartClear(snap){if(snap&&JSON.stringify(cartItems())!==snap)return;S.cart=[];cartPersist();nav();if(location.hash==="#carrito")cartV()}
 function cartApply(){
  if(!window.FBPREADY||!window.PB||!FB.ready)return;
- var ok=function(a){return(a||[]).filter(function(c){return c&&c.q>0&&find(c.id)}).map(function(c){return{id:c.id,q:c.q,m:c.m||"sea"}})},out=null;
+ var ok=function(a){return(a||[]).filter(function(c){return c&&c.q>0&&find(c.id)}).map(function(c){return{id:c.id,q:c.q,m:c.m||"sea",vk:c.vk||""}})},out=null;
  if(FB.user){
   if(!window.CR||CT||CINF>0)return;
   out=ok(CR.items);
   if(window.CFIRST){window.CFIRST=false;var loc=ok(S.cart);
-   if(loc.length){loc.forEach(function(c){var x=out.filter(function(y){return y.id===c.id})[0];if(x)x.q+=c.q;else out.push(c)});
+   if(loc.length){loc.forEach(function(c){var x=out.filter(function(y){return y.id===c.id&&y.vk===c.vk})[0];if(x)x.q+=c.q;else out.push(c)});
     try{localStorage.removeItem("enc_cart_guest")}catch(e){}
     S.cart=out;cartPersist();nav();if(location.hash==="#carrito")cartV();return}}
  }else{
@@ -390,7 +401,7 @@ function orderV(id){var demo=id==="demo",o;
   +(demo?'<div class="box" style="background:var(--acs)"><b>Vista de ejemplo</b><div class="mu">Así se verá un pedido en cada estado. Elige uno para probarlo.</div><div class="dm">'+STP.map(function(s,i){return(i===4&&o.dom!=="cargo")?"":'<button class="chip'+(o.st===i?' on':'')+'" onclick="demoSet('+i+')">'+s[0]+'</button>'}).join("")+'</div><div class="dm"><button class="chip'+(o.dom!=="cargo"?' on':'')+'" onclick="demoDom(\'mgua\')">Entrega en Managua</button><button class="chip'+(o.dom==="cargo"?' on':'')+'" onclick="demoDom(\'cargo\')">Cargotrans</button></div></div>':'')
   +'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:18px">'+esc(o.no)+'</b>'+stBadge(o)+'</div><div class="mu" style="margin-top:6px">Pedido del '+ordDate(o.date)+'</div><div style="margin-top:10px;font-size:20px;font-weight:800">'+usd(o.tot)+'</div><div class="mu">'+nio(o.tot)+'</div></div>'
   +(o.st===6?'<div class="box" style="border-color:#fecaca"><b style="color:#991b1b">Pedido cancelado</b><div class="mu" style="margin-top:6px">'+STP[6][1]+(o.h&&o.h[6]?' Fecha: '+ordDate(o.h[6])+'.':'')+'</div></div>':'<div class="box"><b>Seguimiento</b><ul class="tl">'+tl+'</ul></div>')
-  +'<div class="box"><b>Productos</b>'+((o.lines&&o.lines.length)?o.lines.map(function(l){return'<div style="display:flex;gap:10px;justify-content:space-between;margin-top:10px;font-size:14px"><span>'+esc(l.n.slice(0,80))+'</span><b>x'+l.q+'</b></div>'}).join(""):'<div class="mu" style="margin-top:8px">Sin detalle guardado.</div>')+(dn?'<div class="mu" style="margin-top:12px">Entrega: '+esc(dn)+'</div>':'')+'</div>'
+  +'<div class="box"><b>Productos</b>'+((o.lines&&o.lines.length)?o.lines.map(function(l){return'<div style="display:flex;gap:10px;justify-content:space-between;margin-top:10px;font-size:14px"><span>'+esc(l.n.slice(0,80))+(l.vr?'<br><small class="mu">'+esc(l.vr)+'</small>':'')+'</span><b>x'+l.q+'</b></div>'}).join(""):'<div class="mu" style="margin-top:8px">Sin detalle guardado.</div>')+(dn?'<div class="mu" style="margin-top:12px">Entrega: '+esc(dn)+'</div>':'')+'</div>'
   +'<div style="padding:0 14px"><button class="btn" onclick="window.open(\'https://wa.me/\'+CFG.wa+\'?text=\'+encodeURIComponent(\''+msg+'\'),\'_blank\')">Preguntar por WhatsApp</button></div>'}
 
 
@@ -547,7 +558,7 @@ function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el p
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
- var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:p.envio||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:p.envio||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
  FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
 function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
 

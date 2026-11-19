@@ -233,7 +233,7 @@ function orderBox(){
  +'<div id="om" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="sendOrder()">Enviar pedido por WhatsApp</button>'
  +'<div class="mu" style="margin-top:8px">Para cerrar tu compra, envía el pedido por WhatsApp. Te confirmamos el total y los datos de pago.</div></div>'}
 function sendOrder(){
- var m=$("om");if(!(S.cn||"").trim()){m.textContent="Escribe tu nombre para continuar.";return}m.textContent="";
+ var m=$("om");if(!FB.user){m.innerHTML='Para enviar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="go(\'cuenta\')">entra o crea tu cuenta</a>.';return}if(!(S.cn||"").trim()){m.textContent="Escribe tu nombre para continuar.";return}m.textContent="";
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
  var items=S.cart.map(function(c){var p=find(c.id),mm=c.m||"sea";return{n:p.n,q:c.q,m:mm,l:p.l,p:sale(p)*c.q,s:CFG[mm]}});
@@ -242,9 +242,9 @@ function sendOrder(){
  var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+(o.phone?"\nTeléfono: "+o.phone:"")+"\n\nProductos:\n"
   +items.map(function(it,k){return(k+1)+". "+it.n.slice(0,70)+" (x"+it.q+", "+(it.m==="air"?"Express":"Regular")+")"+(it.l?"\n"+it.l:"")}).join("\n")
   +"\n\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nEl envío de Miami a Nicaragua (Express "+usd(CFG.air)+"/lb, Regular "+usd(CFG.sea)+"/lb) se cobra al recibir, por peso real.\nAdjunto el comprobante.";
- try{var L=JSON.parse(localStorage.getItem("enc_orders")||"[]");L.push({no:no,date:n.toISOString(),name:o.name,tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q}}),dom:S.dom,domN:d[1],st:0,h:[n.toISOString()]});localStorage.setItem("enc_orders",JSON.stringify(L.slice(-30)))}catch(e){}
- rcCanvas(o).toBlob(function(b){var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
-  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg)};rcShow()},"image/png")}
+ var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:FB.phone||o.phone||"",notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
+ FB.saveOrder(rec).then(function(){rcCanvas(o).toBlob(function(b){var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
+  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg)};rcShow()},"image/png")},function(){m.textContent="No se pudo guardar el pedido. Revisa tu conexión e inténtalo de nuevo."})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
  v.style.cssText="position:fixed;inset:0;z-index:99;background:rgba(15,23,42,.78);overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px";
@@ -268,7 +268,7 @@ function impSync(){var d=S.imp,g=function(i){return $(i)?$(i).value:""};d.n=g("f
 function impFile(el){var f=el.files[0];if(!f)return;var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);impSync();S.imp.img.push(c.toDataURL("image/jpeg",.82));impForm()};im.src=fr.result};fr.readAsDataURL(f)}
 function impSave(){impSync();var d=S.imp;if(!d.n){alert("Falta el nombre.");return}var BG={Amazon:"#e0f2fe",Shein:"#fce7f3",Temu:"#ffedd5"},id=100+Math.floor(Math.random()*1e6),p={id:id,n:d.n,s:d.s,b:d.s,c:d.c,p:d.p,w:d.w,r:d.r,k:d.k,bg:BG[d.s],d:"Importado desde "+d.s+".",l:d.l,v:["Único"],img:d.img,x:d.p?0:1};P.unshift(p);CUS.push(p);try{localStorage.setItem("enc_cus",JSON.stringify(CUS))}catch(e){alert("No hay espacio para guardar la foto. Usa una URL de imagen.")}go("p"+id)}
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
-function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2><div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'importar\')">Importar producto por enlace</button><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div><div class="box mu">Registro e inicio de sesión llegan en el siguiente paso.</div>'}
+function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'importar\')">Importar producto por enlace</button><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
 function cartV(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
  $("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c,i){var p=find(c.id),m=c.m||"sea";return '<div class="box"><div style="display:flex;gap:12px"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div></div><div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="setM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="setM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><span class="mu">Envío se cobra al recibir en Miami</span></div></div>'}).join("")
@@ -325,10 +325,10 @@ var STP=[["Solicitud en proceso","Recibimos tu pedido y estamos confirmando tu p
 var STC=[["#fef3c7","#92400e"],["#e0e7ff","#3730a3"],["#e0f2fe","#075985"],["#ede9fe","#5b21b6"],["#ffedd5","#9a3412"],["#d1fae5","#065f46"]];
 function stIdx(o){return[0,1,2,3,4,5].filter(function(i){return i!==4||o.dom==="cargo"})}
 function stPos(o){return stIdx(o).filter(function(i){return i<=(o.st||0)}).length-1}
-function getOrders(){try{return JSON.parse(localStorage.getItem("enc_orders")||"[]")}catch(e){return[]}}
+function getOrders(){return window.ORD||[]}
 function ordDate(iso){return new Date(iso).toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"})}
 function stBadge(o){var c=STC[o.st||0];return'<span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+STP[o.st||0][0]+'</span>'}
-function ordersV(){var L=getOrders().slice().reverse();
+function ordersV(){if(!FB.ready){soon("Cargando…","box","");return}if(!FB.user){soon("Entra a tu cuenta","user",'Para ver tus pedidos, entra con tu número de WhatsApp.<br><br><button class="btn" onclick="go(\'cuenta\')">Entrar o crear cuenta</button>');return}var L=getOrders().slice().reverse();
  if(!L.length){soon("Aún no tienes pedidos","box","Cuando envíes un pedido por WhatsApp, podrás seguirlo desde aquí.");return}
  $("app").innerHTML=hdr(false)+'<h2>Mis pedidos</h2>'+L.map(function(o){var n=typeof o.items==="number"?o.items:(o.lines||[]).length,pos=stPos(o);
   return'<button class="box oc" onclick="go(\'o-'+esc(o.no)+'\')"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div class="mu" style="margin-top:6px">'+ordDate(o.date)+'</div><div class="mu">'+n+(n===1?" producto, ":" productos, ")+usd(o.tot)+'</div><div class="seg">'+stIdx(o).map(function(_,k){return'<i'+(k<=pos?' class="on"':'')+'></i>'}).join("")+'</div></button>'}).join("")}
@@ -350,6 +350,49 @@ function orderV(id){var demo=id==="demo",o;
   +'<div class="box"><b>Productos</b>'+((o.lines&&o.lines.length)?o.lines.map(function(l){return'<div style="display:flex;gap:10px;justify-content:space-between;margin-top:10px;font-size:14px"><span>'+esc(l.n.slice(0,80))+'</span><b>x'+l.q+'</b></div>'}).join(""):'<div class="mu" style="margin-top:8px">Sin detalle guardado.</div>')+(dn?'<div class="mu" style="margin-top:12px">Entrega: '+esc(dn)+'</div>':'')+'</div>'
   +'<div style="padding:0 14px"><button class="btn" onclick="window.open(\'https://wa.me/\'+CFG.wa+\'?text=\'+encodeURIComponent(\''+msg+'\'),\'_blank\')">Preguntar por WhatsApp</button></div>'}
 
+
+/* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
+var FB={ready:false,user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
+window.ORD=[];setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
+var AM="in",PB=null;
+function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
+function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
+function authBox(){
+ if(!FB.ready)return'<div class="box mu">'+(FB.fail?"No hay conexión con el servidor.":"Cargando…")+'</div>';
+ if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+fmtPh(FB.phone)+'</div><button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
+ var up=AM==="up";
+ return'<div class="box"><b>'+(up?"Crear cuenta":"Entrar")+'</b><div class="mu" style="margin-top:4px">Usa tu número de WhatsApp de Nicaragua.</div>'
+ +(up?'<input id="a_n" placeholder="Tu nombre" autocomplete="name">':'')
+ +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp (8 dígitos)" autocomplete="tel-national"><input id="a_w" type="password" placeholder="Contraseña (mínimo 6)" autocomplete="'+(up?"new-password":"current-password")+'">'
+ +'<div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
+ +'<button class="btn o" onclick="AM=\''+(up?"in":"up")+'\';acct()">'+(up?"Ya tengo cuenta":"Crear una cuenta")+'</button></div>'}
+function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"";
+ if(!p){m.textContent="Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
+ if(w.length<6){m.textContent="La contraseña debe tener al menos 6 caracteres.";return}
+ if(up&&!n){m.textContent="Escribe tu nombre.";return}
+ m.textContent="Un momento…";
+ (up?FB.register(p,w,n):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
+function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route()}
+
 /* Vitrina automática: lee productos.json (lo genera el robot) y lo suma al catálogo. */
-fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).catch(function(){return []}).then(function(a){if(a&&a.length){var ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(P.filter(function(x){return!ids[x.id]}))}window.addEventListener("hashchange",route);route()});
-</script></body></html>
+fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).catch(function(){return []}).then(function(a){if(a&&a.length){var ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(P.filter(function(x){return!ids[x.id]}))}PB=P.slice();applyFBP();window.addEventListener("hashchange",route);route()});
+</script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import{getFirestore,doc,setDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
+const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null;
+Object.assign(window.FB,{
+ register:async(p,pw,name)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
+ login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
+ logout:()=>signOut(auth),
+ saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o)});
+onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u?u.email.slice(3,11):"";FB.name=u?(u.displayName||""):"";
+ if(unO){unO();unO=null}window.ORD=[];
+ if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
+  unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}
+ route()});
+onSnapshot(collection(db,"productos"),s=>{window.FBP=s.docs.map(d=>d.data());applyFBP()},()=>{});
+</script>
+</body></html>

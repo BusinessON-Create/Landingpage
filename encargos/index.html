@@ -224,43 +224,50 @@ function rcCanvas(o){
  var H=rcDraw(document.createElement("canvas").getContext("2d"),o),c=document.createElement("canvas");
  c.width=1600;c.height=H*2;var x=c.getContext("2d");x.scale(2,2);rcDraw(x,o);return c}
 function orderBox(){
- var i=function(ph,k){return'<input placeholder="'+ph+'" value="'+esc(S[k]||"")+'" oninput="S.'+k+'=this.value" style="margin-top:8px">'};
- return'<div class="box"><b>Datos del pedido</b>'+i("Tu nombre","cn")+i("Tu teléfono (opcional)","cp")+i("Dirección o notas (opcional)","cm")
- +'<div id="om" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="sendOrder()">Enviar pedido por WhatsApp</button>'
- +'<div class="mu" style="margin-top:8px">Para cerrar tu compra, envía el pedido por WhatsApp. Te confirmamos el total y los datos de pago.</div></div>'}
+ var i=function(ph,k,t){return'<input type="'+(t||"text")+'"'+(t==="tel"?' inputmode="numeric"':'')+' placeholder="'+ph+'" value="'+esc(S[k]||"")+'" oninput="S.'+k+'=this.value" style="margin-top:8px">'};
+ var warn=(FB.user&&!FB.verified)?'<div class="mu" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:#fef3c7;color:#92400e">Tu cuenta aún no está verificada. Tu pedido se enviará directo por WhatsApp y te atendemos por ahí.</div>':'';
+ return'<div class="box"><b>Datos del pedido</b>'+warn+i("Tu nombre (obligatorio)","cn")+i("Tu WhatsApp, 8 dígitos (obligatorio)","cp","tel")+i("Dirección o notas (opcional)","cm")
+ +'<div id="om" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="sendOrder()">Solicitar pedido</button>'
+ +'<div class="mu" style="margin-top:8px">Se descarga tu comprobante y se abre WhatsApp con los datos del pedido. Adjunta la imagen en el chat y envía.</div></div>'}
+function dataBlob(u){var p=u.split(","),bin=atob(p[1]),a=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);return new Blob([a],{type:"image/png"})}
 function sendOrder(){
- var m=$("om");if(!FB.user){m.innerHTML='Para enviar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="go(\'cuenta\')">entra o crea tu cuenta</a>.';return}if(!(S.cn||"").trim()){m.textContent="Escribe tu nombre para continuar.";return}m.textContent="";
+ var m=$("om");if(!FB.user){m.innerHTML='Para solicitar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="go(\'cuenta\')">entra o crea tu cuenta</a>.';return}
+ var nm=(S.cn||"").trim(),ph=nicaPhone(S.cp);
+ if(!nm){m.textContent="Escribe tu nombre para continuar.";return}
+ if(!ph){m.textContent="Escribe tu WhatsApp de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
+ m.textContent="";if(window.__sending)return;window.__sending=1;setTimeout(function(){window.__sending=0},4000);
+ var ver=!!FB.verified;
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
  var items=S.cart.map(function(c){var p=find(c.id),mm=c.m||"sea";return{n:p.n,q:c.q,m:mm,l:p.l,p:sale(p)*c.q,s:CFG[mm]}});
- var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:S.cn.trim(),phone:(S.cp||"").trim(),notes:(S.cm||"").trim(),
+ var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cm||"").trim(),
   items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee};
- var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+(o.phone?"\nTeléfono: "+o.phone:"")+"\n\nProductos:\n"
+ var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\n\nProductos:\n"
   +items.map(function(it,k){return(k+1)+". "+it.n.slice(0,70)+" (x"+it.q+", "+(it.m==="air"?"Express":"Regular")+")"+(it.l?"\n"+it.l:"")}).join("\n")
-  +"\n\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nEl envío de Miami a Nicaragua (Express "+usd(CFG.air)+"/lb, Regular "+usd(CFG.sea)+"/lb) se cobra al recibir, por peso real.\nAdjunto el comprobante.";
- var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:FB.phone||o.phone||"",notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
- if(window.__sending)return;window.__sending=1;m.textContent="Preparando tu pedido…";
- var done=function(){window.__sending=0};
- rcCanvas(o).toBlob(function(b){if(!b){done();m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
-  var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
-  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),rec:rec,saved:false,err:"",snap:JSON.stringify(cartItems())};
-  FB.saveOrder(rec).then(function(){RC.saved=true;done();m.textContent="";cartClear(RC.snap);rcShow()},function(e){RC.err=(e&&e.code)||"";done();m.textContent="";rcShow()})},"image/png")}
-function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";cartClear(RC.snap);rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
+  +"\n\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nEl envío de Miami a Nicaragua (Express "+usd(CFG.air)+"/lb, Regular "+usd(CFG.sea)+"/lb) se cobra al recibir, por peso real.\nAdjunto el comprobante (imagen descargada).";
+ var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
+ var b;try{b=dataBlob(rcCanvas(o).toDataURL("image/png"))}catch(e){window.__sending=0;m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
+ var wa="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),url=URL.createObjectURL(b);
+ window.RC={no:no,url:url,msg:msg,wa:wa,rec:rec,ver:ver,saved:false,err:"",snap:JSON.stringify(cartItems())};
+ /* 1 solo toque: descarga la imagen y abre WhatsApp con el mensaje */
+ rcDl();var w=window.open(wa,"_blank");if(!w)location.href=wa;
+ cartClear(RC.snap);rcShow();
+ if(ver)FB.saveOrder(rec).then(function(){RC.saved=true;rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
+function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
  v.style.cssText="position:fixed;inset:0;z-index:99;background:rgba(15,23,42,.78);overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px";
- var can=navigator.canShare&&r.file&&navigator.canShare({files:[r.file]});
+ var st=!r.ver?'<div style="color:#fde68a;font-size:13px;text-align:center">Tu cuenta aún no está verificada, por eso el pedido va solo por WhatsApp. Te confirmamos por ahí.</div>'
+  :r.saved?'<div style="color:#bbf7d0;font-size:13px;text-align:center">Pedido guardado. Lo verás en «Pedidos».</div>'
+  :r.err?'<div style="color:#fecaca;font-size:13px;text-align:center">No se pudo guardar el pedido en tu historial ('+esc(r.err)+'). Igual envía el comprobante por WhatsApp.<br><button id="rcr" class="btn" style="background:#fff;color:#0f172a;margin-top:8px" onclick="rcRetry()">Reintentar guardado</button></div>'
+  :'<div style="color:#e2e8f0;font-size:13px;text-align:center">Guardando pedido…</div>';
  v.innerHTML='<img src="'+r.url+'" alt="Comprobante" style="width:100%;max-width:520px;border-radius:12px;background:#fff">'
- +'<div style="width:100%;max-width:520px;display:grid;gap:8px"><div style="color:#e2e8f0;font-size:14px;text-align:center">1. Descarga el comprobante. 2. Abre WhatsApp. 3. Adjunta la imagen y envía para que acepten tu pedido.</div>'
- +(r.saved?'<div style="color:#bbf7d0;font-size:13px;text-align:center">Pedido guardado. Lo verás en «Pedidos».</div>':'<div style="color:#fecaca;font-size:13px;text-align:center">No se pudo guardar el pedido en tu historial'+(r.err?' ('+esc(r.err)+')':'')+'. Igual envía el comprobante por WhatsApp.<br><button id="rcr" class="btn" style="background:#fff;color:#0f172a;margin-top:8px" onclick="rcRetry()">Reintentar guardado</button></div>')
- +'<button class="btn" onclick="rcDl()">Descargar comprobante</button>'
- +(can?'<button class="btn" style="background:#fff;color:#0f172a" onclick="rcSh()">Compartir imagen por WhatsApp</button>':'')
- +'<button class="btn" style="background:#fff;color:#0f172a" onclick="window.open(RC.wa,\'_blank\')">Abrir WhatsApp con el pedido</button>'
+ +'<div style="width:100%;max-width:520px;display:grid;gap:8px"><div style="color:#e2e8f0;font-size:14px;text-align:center">Se descargó tu comprobante y se abrió WhatsApp. Adjunta la imagen en el chat y envía para que acepten tu pedido.</div>'+st
+ +'<div style="color:#cbd5e1;font-size:13px;text-align:center">¿No se abrió WhatsApp? <a style="color:#fff;font-weight:700;text-decoration:underline" onclick="window.open(RC.wa,\'_blank\')">Tócalo aquí</a></div>'
  +(r.saved?'<button class="btn" style="background:#fff;color:#0f172a" onclick="$(\'rc\').remove();go(\'o-\'+RC.no)">Ver seguimiento del pedido</button>':'')
  +'<button class="btn" style="background:transparent;color:#fff" onclick="$(\'rc\').remove()">Cerrar</button></div>';
  document.body.appendChild(v)}
 function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedido-"+RC.no+".png";document.body.appendChild(a);a.click();a.remove()}
-function rcSh(){navigator.share({files:[RC.file],text:"Pedido "+RC.no}).catch(function(){})}
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
 function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
 function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
@@ -368,26 +375,27 @@ function orderV(id){var demo=id==="demo",o;
 
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
-var FB={ready:false,user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
+var FB={ready:false,verified:false,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
 window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
 function authBox(){
  if(!FB.ready)return'<div class="box mu">'+(FB.fail?"No hay conexión con el servidor.":"Cargando…")+'</div>';
- if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+(FB.phone?fmtPh(FB.phone):"Administrador")+'</div><button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
+ if(FB.user)return'<div class="box"><b>Sesión iniciada</b><div class="mu" style="margin-top:6px">'+(FB.name?esc(FB.name)+", ":"")+(FB.phone?fmtPh(FB.phone):"Administrador")+'</div>'+(FB.phone?(FB.verified?'<div class="mu" style="margin-top:6px;color:#065f46">Cuenta verificada: puedes hacer pedidos en la app.</div>':'<div class="mu" style="margin-top:6px;color:#92400e">Cuenta pendiente de verificación. Mientras tanto, tus pedidos se envían directo por WhatsApp.</div>'):'')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div>';
  var up=AM==="up";
  return'<div class="box"><b>'+(up?"Crear cuenta":"Entrar")+'</b><div class="mu" style="margin-top:4px">Usa tu número de WhatsApp de Nicaragua.</div>'
- +(up?'<input id="a_n" placeholder="Tu nombre" autocomplete="name">':'')
- +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp (8 dígitos)" autocomplete="tel-national"><input id="a_w" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="'+(up?"new-password":"current-password")+'">'
+ +(up?'<input id="a_n" placeholder="Tu nombre completo (obligatorio)" autocomplete="name">':'')
+ +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp, 8 dígitos (obligatorio)" autocomplete="tel-national">'+(up?'<input id="a_d" placeholder="Ciudad o dirección de entrega (obligatorio)" autocomplete="street-address">':'')+'<input id="a_w" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="'+(up?"new-password":"current-password")+'">'
  +'<label class="mu" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" style="width:auto;margin:0;padding:0" onchange="$(\'a_w\').type=this.checked?\'text\':\'password\'">Mostrar contraseña</label><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
  +'<button class="btn o" onclick="AM=\''+(up?"in":"up")+'\';acct()">'+(up?"Ya tengo cuenta":"Crear una cuenta")+'</button></div>'}
-function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"";
+function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"",ad=up?$("a_d").value.trim():"";
  if(!p){m.textContent="Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
  if(!up){}else if(w.length<8){m.textContent="La contraseña debe tener al menos 8 caracteres.";return}else if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||w.indexOf(p)>-1){m.textContent="Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return}
- if(up&&!n){m.textContent="Escribe tu nombre.";return}
+ if(up&&n.length<3){m.textContent="Escribe tu nombre completo.";return}
+ if(up&&ad.length<4){m.textContent="Escribe tu ciudad o dirección de entrega.";return}
  m.textContent="Un momento…";
- (up?FB.register(p,w,n):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
+ (up?FB.register(p,w,n,ad):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
 function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route();cartApply()}
 
 
@@ -493,9 +501,9 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-ap
 import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
-const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
+const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null,unU=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
- register:async(p,pw,name)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
+ register:async(p,pw,name,addr)=>{const c=await createUserWithEmailAndPassword(auth,mail(p),pw);try{if(name)await updateProfile(c.user,{displayName:name});await setDoc(doc(db,"usuarios",c.user.uid),{phone:p,name:name||"",addr:addr||"",createdAt:serverTimestamp()})}catch(e){}return c.user},
  login:(p,pw)=>signInWithEmailAndPassword(auth,mail(p),pw),
  logout:()=>signOut(auth),
  saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
@@ -512,6 +520,9 @@ Object.assign(window.FB,{
  editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
+ if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.addr="";
+ if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
+  const d=s.data(),v=d.verified===true;FB.addr=d.addr||"";const ch=v!==FB.verified;FB.verified=v;if(ch){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
   unO=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|o-)/.test(location.hash.slice(1)))route()},()=>{})}

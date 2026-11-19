@@ -239,18 +239,24 @@ function sendOrder(){
   +items.map(function(it,k){return(k+1)+". "+it.n.slice(0,70)+" (x"+it.q+", "+(it.m==="air"?"Express":"Regular")+")"+(it.l?"\n"+it.l:"")}).join("\n")
   +"\n\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nEl envío de Miami a Nicaragua (Express "+usd(CFG.air)+"/lb, Regular "+usd(CFG.sea)+"/lb) se cobra al recibir, por peso real.\nAdjunto el comprobante.";
  var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:FB.phone||o.phone||"",notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
- FB.saveOrder(rec).then(function(){rcCanvas(o).toBlob(function(b){var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
-  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg)};rcShow()},"image/png")},function(){m.textContent="No se pudo guardar el pedido. Revisa tu conexión e inténtalo de nuevo."})}
+ if(window.__sending)return;window.__sending=1;m.textContent="Preparando tu pedido…";
+ var done=function(){window.__sending=0};
+ rcCanvas(o).toBlob(function(b){if(!b){done();m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
+  var f=null;try{f=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
+  window.RC={no:no,url:URL.createObjectURL(b),file:f,msg:msg,wa:"https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),rec:rec,saved:false,err:""};
+  FB.saveOrder(rec).then(function(){RC.saved=true;done();m.textContent="";rcShow()},function(e){RC.err=(e&&e.code)||"";done();m.textContent="";rcShow()})},"image/png")}
+function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
  v.style.cssText="position:fixed;inset:0;z-index:99;background:rgba(15,23,42,.78);overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px";
  var can=navigator.canShare&&r.file&&navigator.canShare({files:[r.file]});
  v.innerHTML='<img src="'+r.url+'" alt="Comprobante" style="width:100%;max-width:520px;border-radius:12px;background:#fff">'
- +'<div style="width:100%;max-width:520px;display:grid;gap:8px"><div style="color:#e2e8f0;font-size:14px;text-align:center">1. Descarga el comprobante. 2. Abre WhatsApp. 3. Adjunta la imagen y envía.</div>'
- +'<button class="btn" onclick="window.open(RC.wa,\'_blank\')">Abrir WhatsApp con el pedido</button>'
- +'<button class="btn" style="background:#fff;color:#0f172a" onclick="rcDl()">Descargar comprobante</button>'
- +'<button class="btn" style="background:#fff;color:#0f172a" onclick="$(\'rc\').remove();go(\'o-\'+RC.no)">Ver seguimiento del pedido</button>'
- +(can?'<button class="btn" style="background:#fff;color:#0f172a" onclick="rcSh()">Compartir imagen</button>':'')
+ +'<div style="width:100%;max-width:520px;display:grid;gap:8px"><div style="color:#e2e8f0;font-size:14px;text-align:center">1. Descarga el comprobante. 2. Abre WhatsApp. 3. Adjunta la imagen y envía para que acepten tu pedido.</div>'
+ +(r.saved?'<div style="color:#bbf7d0;font-size:13px;text-align:center">Pedido guardado. Lo verás en «Pedidos».</div>':'<div style="color:#fecaca;font-size:13px;text-align:center">No se pudo guardar el pedido en tu historial'+(r.err?' ('+esc(r.err)+')':'')+'. Igual envía el comprobante por WhatsApp.<br><button id="rcr" class="btn" style="background:#fff;color:#0f172a;margin-top:8px" onclick="rcRetry()">Reintentar guardado</button></div>')
+ +'<button class="btn" onclick="rcDl()">Descargar comprobante</button>'
+ +(can?'<button class="btn" style="background:#fff;color:#0f172a" onclick="rcSh()">Compartir imagen por WhatsApp</button>':'')
+ +'<button class="btn" style="background:#fff;color:#0f172a" onclick="window.open(RC.wa,\'_blank\')">Abrir WhatsApp con el pedido</button>'
+ +(r.saved?'<button class="btn" style="background:#fff;color:#0f172a" onclick="$(\'rc\').remove();go(\'o-\'+RC.no)">Ver seguimiento del pedido</button>':'')
  +'<button class="btn" style="background:transparent;color:#fff" onclick="$(\'rc\').remove()">Cerrar</button></div>';
  document.body.appendChild(v)}
 function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedido-"+RC.no+".png";document.body.appendChild(a);a.click();a.remove()}

@@ -111,6 +111,31 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .pf-a{padding:6px 16px 16px;display:grid;gap:8px}.pf-a .btn{margin:0}
 .av-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}.av-b{aspect-ratio:1;border-radius:50%;border:3px solid transparent;font-size:32px;display:grid;place-items:center;padding:0;cursor:pointer}.av-b.on{border-color:var(--ac);box-shadow:0 0 0 3px var(--acs)}.pf-av.em{font-size:36px;box-shadow:none}.pf-lk{display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--ac);cursor:pointer}
 .vo{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}.vo button{border:2px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:12px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer}.vo button.on{border-color:var(--ac);background:var(--acs)}.vo button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+/* ===== Ventana de entrar / crear cuenta ===== */
+.amo{position:fixed;inset:0;z-index:120;background:rgba(10,18,40,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;overflow:auto;animation:amf .2s ease}
+.amc{position:relative;width:100%;max-width:440px;max-height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);border-radius:26px 26px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);padding-bottom:env(safe-area-inset-bottom,0px);animation:amu .32s cubic-bezier(.2,.8,.2,1)}
+.amcard{margin:0 14px 14px;border:1px solid var(--bd);border-radius:22px;overflow:hidden;background:var(--bg)}
+@media(min-width:560px){.amo{align-items:center;padding:20px}.amc{border-radius:26px;animation-name:amz}}
+@keyframes amf{from{opacity:0}to{opacity:1}}
+@keyframes amu{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes amz{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+.amh{position:relative;text-align:center;padding:28px 22px 22px;color:#fff;background:radial-gradient(120% 95% at 50% 0,#2159e0 0,#032565 72%)}
+.aml{display:inline-block;background:#fff;border-radius:16px;padding:8px 18px;box-shadow:0 8px 24px rgba(0,0,0,.28)}.aml img{display:block;height:44px;width:auto}
+.amh h3{margin:16px 0 4px;font-size:23px;letter-spacing:-.4px}.amh p{margin:0;font-size:14px;opacity:.88;line-height:1.4}
+.amx{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:15px}
+.amb{padding:18px 20px 20px}
+.amt{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--sf)}.amt button{flex:1;border:0;background:none;border-radius:11px;padding:10px;font-weight:700;color:var(--mu)}.amt button.on{background:var(--bg);color:var(--ac);box-shadow:0 1px 6px rgba(0,0,0,.14)}
+.amf{display:block;margin-top:12px}.amf>span{display:block;margin:0 0 5px 2px;font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--mu)}
+.amw{display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:13px;background:var(--sf);transition:border-color .15s,box-shadow .15s}.amw:focus-within{border-color:var(--ac);background:var(--bg);box-shadow:0 0 0 4px var(--acs)}
+.amw>i{flex:none;padding:0 4px 0 13px;font-style:normal;font-size:14px;font-weight:700;color:var(--mu)}
+.amw input{flex:1;min-width:0;border:0;outline:0;background:none;padding:13px;font-size:16px;color:var(--tx)}
+.amw button{border:0;background:none;padding:0 13px;font-size:13px;font-weight:700;color:var(--ac)}
+.ame{margin-top:10px;font-size:13.5px;line-height:1.4;color:#dc2626}.ame:empty{display:none}
+.amn{display:grid;gap:3px;margin-top:10px;padding:12px 14px;border:1px solid var(--bd);border-radius:14px;background:var(--acs);color:var(--tx)}.amn b{font-size:14px}.amn span{font-size:13px;color:var(--mu)}.amn button{margin-top:8px;border:0;border-radius:10px;padding:11px;font-weight:700;color:#fff;background:var(--ac)}
+.amg{width:100%;margin-top:16px;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 8px 20px rgba(37,99,235,.35)}.amg:disabled{opacity:.6}
+.amsw{margin-top:14px;text-align:center;font-size:14px;color:var(--mu)}.amsw button{border:0;background:none;padding:2px 4px;font-weight:800;color:var(--ac)}
+.ams{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin-top:14px;font-size:12px;color:var(--mu)}.ams span{display:flex;align-items:center;gap:5px}
+@media(prefers-reduced-motion:reduce){.amo,.amc{animation:none}}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -179,11 +204,11 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.for
  +(p.x?'<div class="mu">Este producto se cotiza: te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma, se cobra por peso al entregar.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
  +'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="alert(\'Envío de Miami a Nicaragua, por libra y según el peso real al recibir. Express US$'+CFG.air+' ('+CFG.t.air+') · Regular US$'+CFG.sea+' ('+CFG.t.sea+'). Los días hábiles se cuentan desde que tu paquete llega a Miami.\')">Ver tarifas ›</button></div>'
  +(p.dims&&p.dims.length?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar según la opción elegida. ¿Dudas con el precio? <button style="background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ac);text-decoration:underline;cursor:pointer" onclick="cotAsk('+p.id+')">Pídenos una cotización</button>.</div>':'')
- +(p.x?cotBox(p):'<button class="btn" onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
+ +(p.x?cotBox(p):'<button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
  +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p><p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p></details></div>'
  +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
- +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button></div></div>')}
+ +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button></div></div>')}
 function vOut(p,o){return !!(p&&p.dims&&(p.dims.length===1||p.s==="Victoria's Secret")&&(p.agot||[]).indexOf(o)>=0)}
 function vSel(id){S.vs=S.vs||{};return S.vs[id]||(S.vs[id]={})}
 function vAvail(p,di,val){if(!(p.vl&&p.vl.length))return true;var sel=vSel(p.id);return p.vl.some(function(c){var k=c.k.split("|");if(k[di]!==val)return false;return p.dims.every(function(_,j){return j===di||!sel[j]||k[j]===sel[j]})})}
@@ -260,7 +285,7 @@ function orderBox(){
  +'<div class="mu" style="margin-top:8px">Se descarga tu comprobante y se abre WhatsApp con los datos del pedido. Adjunta la imagen en el chat y envía.</div></div>'}
 function dataBlob(u){var p=u.split(","),bin=atob(p[1]),a=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);return new Blob([a],{type:"image/png"})}
 function sendOrder(){
- var m=$("om");if(!FB.user){m.innerHTML='Para solicitar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="go(\'cuenta\')">entra o crea tu cuenta</a>.';return}
+ var m=$("om");if(!FB.user){m.innerHTML='Para solicitar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="amOpen()">entra o crea tu cuenta</a>.';return}
  var nm=(S.cn||"").trim(),ph=nicaPhone(S.cp);
  if(!cSel().length){m.textContent="Marca al menos un producto para solicitar el pedido.";return}
  if(!nm){m.textContent="Escribe tu nombre para continuar.";return}
@@ -554,15 +579,56 @@ function profBox(){
   +'<div style="height:10px"></div>'+row("WhatsApp",fmtPh(FB.phone))+(FB.addr?row("Entrega",esc(FB.addr)):'')+row("Pedidos",String(getOrders().length));
  h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div></div>';
  return h}
+/* ===== Ventana de entrar / crear cuenta ===== */
+var AMP=null,AMV={p:"",n:"",d:""};
+function buyNow(id){
+ if(!addC(id,S.qty,1))return;
+ if(FB.user||FB.fail){go("carrito");return}
+ amOpen("carrito")}
+function amE(x){return esc(x).replace(/'/g,"&#39;")}
+function amK(){return $("am_c")?"m":"a"}
+function amOpen(after){
+ AMP=after||null;AM="in";
+ var o=$("am_o");if(o)o.remove();
+ o=document.createElement("div");o.id="am_o";o.className="amo";
+ o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Entrar o crear cuenta");
+ o.onclick=function(e){if(e.target===o)amClose()};
+ o.innerHTML="<div class='amc' id='am_c'></div>";
+ document.body.appendChild(o);document.body.style.overflow="hidden";
+ $("am_c").innerHTML=amInner(true);
+ document.addEventListener("keydown",amKey)}
+function amKey(e){if(e.key==="Escape")amClose()}
+function amClose(){var o=$("am_o");if(o)o.remove();document.body.style.overflow="";document.removeEventListener("keydown",amKey);AMP=null}
+function amDone(mo){if(!mo)return;var a=AMP;amClose();if(a)go(a);else route()}
+function amEye(b){var i=b.parentNode.querySelector("input"),sh=i.type==="password";i.type=sh?"text":"password";b.textContent=sh?"Ocultar":"Ver"}
+function amBtn(mo,up){return up?"Crear mi cuenta":(mo?"Entrar y continuar":"Entrar")}
+function amInner(mo){
+ var k=mo?"m":"a",up=AM==="up",g=mo?1:0;
+ var f=function(lab,inner){return"<label class='amf'><span>"+lab+"</span><div class='amw'>"+inner+"</div></label>"};
+ return(mo?"<button class='amx' onclick='amClose()' aria-label='Cerrar'>✕</button>":"")
+ +"<div class='amh'><div class='aml'><img alt='EncarGo' src='"+LOGO_URI+"'></div><h3>"+(up?"Crea tu cuenta":"Bienvenido de vuelta")+"</h3><p>"+(up?"Es gratis, toma un minuto y tus pedidos quedan guardados.":(mo?"Entra con tu WhatsApp para continuar con tu compra.":"Entra con tu número de WhatsApp."))+"</p></div>"
+ +"<div class='amb' onkeydown='if(event.keyCode==13)authGo("+g+")'>"
+ +"<div class='amt'><button class='"+(up?"":"on")+"' onclick='amMode(0)'>Entrar</button><button class='"+(up?"on":"")+"' onclick='amMode(1)'>Crear cuenta</button></div>"
+ +(up?f("Nombre completo","<input id='"+k+"_n' placeholder='Ej: María López' autocomplete='name' value='"+amE(AMV.n)+"'>"):"")
+ +f("Número de WhatsApp","<i>+505</i><input id='"+k+"_p' type='tel' inputmode='numeric' maxlength='14' placeholder='8888 8888' autocomplete='tel-national' value='"+amE(AMV.p)+"'>")
+ +(up?f("Ciudad o dirección de entrega","<input id='"+k+"_d' placeholder='Ej: Managua, Altamira' autocomplete='street-address' value='"+amE(AMV.d)+"'>"):"")
+ +f("Contraseña","<input id='"+k+"_w' type='password' placeholder='"+(up?"Mínimo 8 caracteres":"Tu contraseña")+"' autocomplete='"+(up?"new-password":"current-password")+"'><button type='button' onclick='amEye(this)'>Ver</button>")
+ +"<div id='"+k+"_e' class='ame' role='alert'></div>"
+ +"<button id='"+k+"_b' class='amg' onclick='authGo("+g+")'>"+amBtn(mo,up)+"</button>"
+ +"<div class='amsw'>"+(up?"¿Ya tienes cuenta? <button onclick='amMode(0)'>Entrar</button>":"¿Primera vez aquí? <button onclick='amMode(1)'>Crear cuenta</button>")+"</div>"
+ +"<div class='ams'><span>"+ic("zap")+" Compra rápida</span><span>"+ic("cart")+" Carrito guardado</span><span>"+ic("box")+" Sigue tu pedido</span></div>"
+ +"</div>"}
+function amMode(up,msg){
+ var k=amK(),v=function(i){var e=$(k+i);return e?e.value:""};
+ AMV.p=v("_p")||AMV.p;AMV.n=v("_n")||AMV.n;AMV.d=v("_d")||AMV.d;
+ AM=up?"up":"in";
+ if(k==="m")$("am_c").innerHTML=amInner(true);else acct();
+ var e=$(k+"_e");if(e)e.innerHTML=msg||"";
+ var fo=$(k+(AMV.p&&!up?"_w":(up&&!AMV.n?"_n":"_p")));if(fo&&k==="m")try{fo.focus()}catch(x){}}
 function authBox(){
  if(!FB.ready)return'<div class="box mu">'+(FB.fail?"No hay conexión con el servidor.":"Cargando…")+'</div>';
  if(FB.user)return profBox();
- var up=AM==="up";
- return'<div class="box"><b>'+(up?"Crear cuenta":"Entrar")+'</b><div class="mu" style="margin-top:4px">Usa tu número de WhatsApp de Nicaragua.</div>'
- +(up?'<input id="a_n" placeholder="Tu nombre completo (obligatorio)" autocomplete="name">':'')
- +'<input id="a_p" type="tel" inputmode="numeric" placeholder="Número de WhatsApp, 8 dígitos (obligatorio)" autocomplete="tel-national">'+(up?'<input id="a_d" placeholder="Ciudad o dirección de entrega (obligatorio)" autocomplete="street-address">':'')+'<input id="a_w" type="password" placeholder="Contraseña (mínimo 8)" autocomplete="'+(up?"new-password":"current-password")+'">'
- +'<label class="mu" style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" style="width:auto;margin:0;padding:0" onchange="$(\'a_w\').type=this.checked?\'text\':\'password\'">Mostrar contraseña</label><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="authGo()">'+(up?"Crear cuenta":"Entrar")+'</button>'
- +'<button class="btn o" onclick="AM=\''+(up?"in":"up")+'\';acct()">'+(up?"Ya tengo cuenta":"Crear una cuenta")+'</button></div>'}
+ return"<div class='amcard'>"+amInner(false)+"</div>"}
 function pwBad(w){if(w.length<8)return"La contraseña debe tener al menos 8 caracteres.";if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||(FB.phone&&w.indexOf(FB.phone)>-1))return"Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return""}
 function pwBox(forced){
  var old=document.getElementById("pw");if(old&&forced&&window.PWF===1)return;if(old)old.remove();window.PWF=forced?1:0;
@@ -581,13 +647,27 @@ function pwGo(){var m=document.getElementById("pw_m"),n=document.getElementById(
  if(!f&&n===c){m.textContent="La nueva contraseña debe ser distinta a la actual.";return}
  m.textContent="Guardando…";
  FB.changePw(f?"":c,n).then(function(){var o=document.getElementById("pw");if(o)o.remove();window.PWF=0;alert("Contraseña actualizada.")},function(e){var k=(e&&e.code)||"";m.textContent=/invalid-credential|wrong-password/.test(k)?"La contraseña actual no es correcta.":k==="auth/requires-recent-login"?"Por seguridad, cierra sesión, entra de nuevo e inténtalo otra vez.":k==="auth/weak-password"?"Esa contraseña es muy débil.":"No se pudo guardar. Inténtalo de nuevo."})}
-function authGo(){var m=$("am"),p=nicaPhone($("a_p").value),w=$("a_w").value,up=AM==="up",n=up?$("a_n").value.trim():"",ad=up?$("a_d").value.trim():"";
- if(!p){m.textContent="Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
- if(!up){}else if(w.length<8){m.textContent="La contraseña debe tener al menos 8 caracteres.";return}else if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||w.indexOf(p)>-1){m.textContent="Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.";return}
- if(up&&n.length<3){m.textContent="Escribe tu nombre completo.";return}
- if(up&&ad.length<4){m.textContent="Escribe tu ciudad o dirección de entrega.";return}
- m.textContent="Un momento…";
- (up?FB.register(p,w,n,ad):FB.login(p,w)).then(function(){},function(e){var c=(e&&e.code)||"";m.textContent=c==="auth/email-already-in-use"?"Este número ya tiene cuenta. Toca «Ya tengo cuenta» y entra.":/invalid-credential|wrong-password|user-not-found/.test(c)?"Número o contraseña incorrectos.":c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
+function authGo(mo){
+ var k=mo?"m":"a",e=$(k+"_e"),bt=$(k+"_b"),up=AM==="up",
+ p=nicaPhone($(k+"_p").value),w=$(k+"_w").value,n=up?$(k+"_n").value.trim():"",ad=up?$(k+"_d").value.trim():"",
+ bad=function(t){e.textContent=t};
+ AMV.p=$(k+"_p").value;if(up){AMV.n=n;AMV.d=ad}
+ if(!FB.ready){bad("Conectando con el servidor… inténtalo de nuevo en unos segundos.");return}
+ if(!p){bad("Escribe tu número de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.");return}
+ if(!up&&!w){bad("Escribe tu contraseña.");return}
+ if(up){
+  if(n.length<3){bad("Escribe tu nombre completo.");return}
+  if(ad.length<4){bad("Escribe tu ciudad o dirección de entrega.");return}
+  if(w.length<8){bad("La contraseña debe tener al menos 8 caracteres.");return}
+  if(/^(.)\1+$/.test(w)||/^(12345678|123456789|1234567890|87654321|password|contrase|qwerty|abcd1234|00000000)/i.test(w)||w.indexOf(p)>-1){bad("Esa contraseña es muy fácil de adivinar. Evita números seguidos, repetidos o tu teléfono.");return}}
+ e.textContent="";if(bt){bt.disabled=true;bt.textContent="Un momento…"}
+ (up?FB.register(p,w,n,ad):FB.login(p,w)).then(function(){amDone(mo)},function(x){
+  if(bt){bt.disabled=false;bt.textContent=amBtn(mo,up)}
+  var c=(x&&x.code)||"";
+  if(c==="auth/email-already-in-use"){amMode(0,"Este número ya tiene cuenta. Escribe tu contraseña para entrar.");return}
+  if(/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)){
+   e.innerHTML="Número o contraseña incorrectos."+(up?"":"<div class='amn'><b>¿Aún no estás registrado?</b><span>Si es tu primera vez, crea tu cuenta con este número en menos de un minuto.</span><button onclick='amMode(1)'>Crear mi cuenta</button></div>");return}
+  e.textContent=c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
 function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route();cartApply()}
 
 

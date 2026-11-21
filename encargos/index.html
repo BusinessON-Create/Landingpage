@@ -508,6 +508,7 @@ function apCalc(p){var e=apE(p),imp=parseFloat(e.imp),pct=parseFloat(e.pct),ex=p
  fin=Math.round((base*(1+pct/100)+ex)*100)/100,err="";
  if(!(pa>0))err=p.edit?"Escribe el precio de Amazon.":"El robot no pudo leer el precio de Amazon. Descarta este producto y vuelve a intentarlo.";
  else if(ev<0)err="El envío no puede ser negativo.";
+ else if(!p.edit&&!e.envOk)err="Confirma el envío: revísalo y marca la casilla «Ya revisé el envío».";
  else if(imp<0||imp>30)err="El impuesto debe estar entre 0 y 30 %.";
  else if(pct<COM_MIN)err="La comisión mínima es "+COM_MIN+" %.";
  else if(ex<0)err="El otro cargo no puede ser negativo.";
@@ -518,13 +519,14 @@ function apUpd(id){var p=apFind(id);if(!p)return;var r=apCalc(p);
  $("api_"+id).textContent=apMoney(r.taxv);$("apc_"+id).textContent=apMoney(r.base);
  $("apf_"+id).textContent=apMoney(r.fin);$("apg_"+id).textContent=apMoney(r.gan);$("ape_"+id).textContent=r.err;$("apb_"+id).disabled=!!r.err}
 function apIn(id,k,v){var p=apFind(id);if(!p)return;apE(p)[k]=v;apUpd(id)}
+function envNota(p){var m=p.envioEstado==="pago"?"El robot vio un envío de "+apMoney(p.envio)+" y ya lo sumó.":p.envioEstado==="gratis"?"La tienda indica envío gratis.":"El robot no vio el costo de envío; quedó en $0.";return m+" Revísalo y ajústalo si hace falta."}
 function apForm(p,ed){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",id=p.id,
  num=function(k,l,v){return'<div style="flex:1"><div class="mu">'+l+'</div><input type="number" min="0" step="0.01" value="'+esc(String(v==null?"":v))+'" oninput="apIn(\''+id+'\',\''+k+'\',this.value)"></div>'};
  return'<div class="box">'+(ed?'<span class="st" style="background:#dbeafe;color:#1e40af;margin-bottom:10px">Editando producto publicado</span>':'')
   +'<div style="display:flex;gap:12px;align-items:center">'+(img?'<img src="'+esc(img)+'" alt="" style="width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;flex:none">':'')
   +(ed?'<div style="flex:1;min-width:0"><div class="mu">Nombre</div><input id="edn_'+id+'" value="'+esc(p.n||"")+'" maxlength="200"></div>':'<div style="font-size:14px;font-weight:600">'+esc(String(p.n||"").slice(0,90))+'</div>')+'</div>'
-  +(ed?(p.est?'<div class="demo" style="margin-top:10px">Este producto se aprobó antes de guardar el desglose. El precio de Amazon está estimado desde el precio final: confírmalo.</div>':'')+'<div style="display:flex;gap:10px;margin-top:10px">'+num("pAmazon","Precio en Amazon $",e.pAmazon)+num("envio","Envío en EE. UU. $",e.envio)+'</div>':'')
-  +'<div class="mu" style="margin-top:10px;line-height:1.7">'+(ed?'':'Amazon: '+apMoney(p.pAmazon)+'<br>Envío en EE. UU.: '+apMoney(p.envio)+'<br>')+'Impuesto: <span id="api_'+id+'">'+apMoney(r.taxv)+'</span><br><b style="color:var(--tx)">Costo real: <span id="apc_'+id+'">'+apMoney(r.base)+'</span></b></div>'
+  +(ed?(p.est?'<div class="demo" style="margin-top:10px">Este producto se aprobó antes de guardar el desglose. El precio de Amazon está estimado desde el precio final: confírmalo.</div>':'')+'<div style="display:flex;gap:10px;margin-top:10px">'+num("pAmazon","Precio en Amazon $",e.pAmazon)+num("envio","Envío en EE. UU. $",e.envio)+'</div>':'<div style="margin-top:10px">'+num("envio","Envío en EE. UU. $ (ajústalo si hace falta)",e.envio!=null?e.envio:p.envio)+'<div class="demo" style="margin-top:8px">'+envNota(p)+'</div><label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:14px"><input type="checkbox" '+(e.envOk?'checked ':'')+'onchange="apIn(\''+id+'\',\'envOk\',this.checked)"> Ya revisé el envío</label></div>')
+  +'<div class="mu" style="margin-top:10px;line-height:1.7">'+(ed?'':'Amazon: '+apMoney(p.pAmazon)+'<br>')+'Impuesto: <span id="api_'+id+'">'+apMoney(r.taxv)+'</span><br><b style="color:var(--tx)">Costo real: <span id="apc_'+id+'">'+apMoney(r.base)+'</span></b></div>'
   +'<div style="margin-top:10px"><div class="mu">Categoría</div><select onchange="apIn(\''+id+'\',\'cat\',this.value)" style="width:100%;margin-top:4px">'+(CATL.indexOf(e.cat)<0?[e.cat].concat(CATL):CATL).map(function(c){return'<option'+(c===e.cat?' selected':'')+'>'+esc(c)+'</option>'}).join("")+'</select></div>'
   +'<div style="display:flex;gap:10px;margin-top:10px"><div style="flex:1"><div class="mu">Impuesto % (Florida ≈ 7)</div><input type="number" min="0" max="30" step="0.01" value="'+esc(String(e.imp))+'" oninput="apIn(\''+id+'\',\'imp\',this.value)"></div><div style="flex:1"><div class="mu">Comisión % (mín. '+COM_MIN+')</div><input type="number" min="'+COM_MIN+'" step="1" value="'+esc(String(e.pct))+'" oninput="apIn(\''+id+'\',\'pct\',this.value)"></div></div>'
   +'<div style="margin-top:10px"><div class="mu">Otro cargo $ (opcional)</div><input type="number" min="0" step="0.01" value="'+esc(String(e.extra))+'" oninput="apIn(\''+id+'\',\'extra\',this.value)"></div>'
@@ -558,7 +560,7 @@ function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el p
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
- var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:p.envio||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:parseFloat(e.envio!=null?e.envio:p.envio)||0,envioEstado:p.envioEstado||"",envioOk:1,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
  FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
 function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
 

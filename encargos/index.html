@@ -44,7 +44,7 @@ h2{font-size:19px;margin:22px 14px 10px;letter-spacing:-.3px}
 .pc{flex:none;width:158px;border:1px solid var(--bd);border-radius:16px;background:var(--bg);overflow:hidden;cursor:pointer;position:relative}
 .pc .im{height:130px;display:grid;place-items:center;font-size:54px;position:relative}
 .tag{position:absolute;top:8px;left:8px;font-size:11px;font-weight:700;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:999px;padding:2px 8px}
-.pc .nm{font-size:13px;line-height:1.3;height:34px;overflow:hidden;padding:0 10px;margin-top:8px}
+.pc .nm{font-size:13px;line-height:1.3;height:34px;overflow:hidden;padding:0 10px;margin-top:8px}.pc .rtg{padding:3px 10px 0;font-size:12px;line-height:1.2;color:var(--gd);white-space:nowrap;overflow:hidden}.pc .rtg span{color:var(--mu);font-size:11px;margin-left:5px}
 .pc .pr{font-size:18px;font-weight:800;padding:4px 10px 0}.pc .sb{font-size:12px;color:var(--mu);padding:0 10px 12px}
 .add{position:absolute;right:8px;bottom:8px;width:34px;height:34px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:15px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px}.g2 .pc{width:auto}
@@ -167,6 +167,7 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .pc .im .pw img{padding:14px}
 .pc .tag{top:8px;left:8px;border:0;box-shadow:0 2px 8px rgba(15,23,42,.14)}
 .pc .nm{margin-top:10px;padding:0 12px;font-weight:500}
+.pc .rtg{padding:3px 12px 0}
 .pc .pr{padding:4px 12px 0;font-size:19px}
 .pc .sb{padding:0 12px 14px}
 .add{right:10px;bottom:10px;width:38px;height:38px;box-shadow:0 5px 14px rgba(37,99,235,.38)}
@@ -281,14 +282,14 @@ var CFG={wa:"50557294271",t:{air:"3 a 5 días hábiles",sea:"15 a 20 días hábi
 function cSel(){return S.cart.filter(function(c){return !c.off})}
 function quote(){var sub=0,sh=0;cSel().forEach(function(c){var p=find(c.id);sub+=sale(p)*c.q;if(!p.ni)sh+=Math.max(p.w,CFG.minW)*c.q*CFG[c.m||"sea"]});var d=CFG.dom.filter(function(x){return x[0]===S.dom})[0],fee=cSel().length?CFG.fee:0;return{sub:sub,sh:sh,fee:fee,dom:d[2],tot:sub+sh+fee+d[2]}}
 /* Tiendas activas (Shein y Temu son solo cotización: sin precio ni carrito). */
-var STORES=["Amazon","Victoria's Secret","Shein","Temu","EncarGo"];
+var STORES=["Amazon","Victoria's Secret","EncarGo"];
 function setStore(i){S.store=["Todos"].concat(STORES)[i]||"Todos";home()}
-var CATBG={Audio:"#ede9fe",Moda:"#fce7f3",Hogar:"#ecfccb","Tecnología":"#e0f2fe",Belleza:"#ffe4e6",Juguetes:"#fef3c7",Deportes:"#dcfce7",Mascotas:"#ffedd5",Cocina:"#fee2e2",Herramientas:"#e2e8f0"};
+var CATBG={"Audio y Video":"#ede9fe",Novedades:"#fce7f3","Electrónica":"#dbeafe","Perfumería":"#fae8ff",Suplementos:"#d1fae5",Hogar:"#ecfccb","Tecnología":"#e0f2fe",Belleza:"#ffe4e6",Juguetes:"#fef3c7",Deportes:"#dcfce7",Mascotas:"#ffedd5",Cocina:"#fee2e2",Herramientas:"#e2e8f0"};
 var P=[];
 var S={cat:"",dom:"mgua",cur:"USD",store:"Todos",q:"",cart:[],tut:true,qty:1};
 function $(i){return document.getElementById(i)}
 var ICO={search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>',home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"/>',msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',box:'<path d="m7.5 4.3 9 5.2"/><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/>',headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',shirt:'<path d="M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.1a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.3-2.2z"/>',bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>',phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.4 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.9 5.3 2.8 7.8"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',zap:'<path d="M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5L12.1 8.7A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z"/>',play:'<path d="M6 3l14 9-14 9z"/>',arrowl:'<path d="m12 19-7-7 7-7M19 12H5"/>'};
-var CI={Audio:"headphones",Moda:"shirt",Hogar:"bulb","Tecnología":"phone"};
+var CI={"Audio y Video":"headphones",Novedades:"shirt",Hogar:"bulb","Tecnología":"phone"};
 function ic(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(ICO[n]||"")+'</svg>'}
 var SH='<ellipse cx="50" cy="90" rx="28" ry="4" fill="#0f172a" opacity=".12"/>';
 var ART={
@@ -309,7 +310,8 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function stars(r){var f=Math.round(r);return "★".repeat(f)+"☆".repeat(5-f)}
 function find(id){return P.filter(function(p){return p.id===id})[0]}
 function eta(d){var t=new Date();t.setDate(t.getDate()+d);return t.toLocaleDateString("es",{day:"numeric",month:"long"})}
-function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag"'+(p.ni?' style="background:#dc2626;color:#fff;border-color:#dc2626"':'')+'>'+(p.so?'Agotado':p.ni?'Puesto en Nicaragua':p.s)+'</span>'+admBtns(p)+'</div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x||p.so?'':'<button class="add" aria-label="'+(hasV(p)?"Elegir opciones":"Agregar")+'" onclick="event.stopPropagation();'+(hasV(p)?"go(\'p"+p.id+"\')":"addC("+p.id+",1)")+'">'+ic("cart")+'</button>')+'</div>'}
+function rtg(p){var r=+p.r;if(!(r>0))return"";var k=+p.k,ks=k>=1000?(k/1000).toFixed(k>=10000?0:1).replace(/\.0$/,"")+"k":(k>0?String(k):"");return'<div class="rtg" aria-label="'+r+' de 5 estrellas">'+stars(r)+'<span>'+r.toFixed(1)+(ks?" ("+ks+")":"")+'</span></div>'}
+function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag"'+(p.ni?' style="background:#dc2626;color:#fff;border-color:#dc2626"':'')+'>'+(p.so?'Agotado':p.ni?'Puesto en Nicaragua':p.s)+'</span>'+admBtns(p)+'</div><div class="nm">'+esc(p.n)+'</div>'+rtg(p)+'<div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x||p.so?'':'<button class="add" aria-label="'+(hasV(p)?"Elegir opciones":"Agregar")+'" onclick="event.stopPropagation();'+(hasV(p)?"go(\'p"+p.id+"\')":"addC("+p.id+",1)")+'">'+ic("cart")+'</button>')+'</div>'}
 function hdr(search){return '<header>'+(search?'<input id="q" placeholder="Buscar productos" value="'+esc(S.q)+'" oninput="S.q=this.value;home(true)">':'<span style="flex:1;display:flex"><img class="lgw" alt="EncarGo" src="'+LOGO_URI+'"></span>')+'<button class="cur" onclick="S.cur=S.cur===\'USD\'?\'NIO\':\'USD\';route()"><i>$</i>'+(S.cur==="USD"?"US$":"C$")+'</button><button class="ib" aria-label="Notificaciones" onclick="avOpen()">'+ic("bell")+avBdg()+'</button></header>'}
 function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Todos"].concat(STORES).map(function(s,i){return '<button class="chip'+(S.store===s?' on':'')+'" onclick="setStore('+i+')">'+esc(s)+'</button>'}).join("")+(S.cot.length?'<button class="chip on" onclick="go(\'cotizar\')">Mi solicitud ('+S.cot.length+')</button>':'')+'</div>'}
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
@@ -386,7 +388,8 @@ function rcDraw(x,o){
  x.fillStyle="#0f172a";x.fillRect(0,0,W,112);
  if(LOGO_IMG.complete&&LOGO_IMG.naturalWidth){x.fillStyle="#fff";x.beginPath();if(x.roundRect)x.roundRect(P,15,226,82,12);else x.rect(P,15,226,82);x.fill();x.drawImage(LOGO_IMG,P+11,26,204,62)}else T("Encargos Managua",P,68,"700 32px "+F,"#fff");
  T(o.ord?"PEDIDO":o.cot?"COTIZACIÓN":"PEDIDO · PRIMERA FACTURA",W-P,52,"600 13px "+F,"#94a3b8","right");
- T(o.no,W-P,80,"600 20px "+F,"#fff","right");
+ T(o.cod?o.no+" · "+o.cod:o.no,W-P,80,"600 20px "+F,"#fff","right");
+ if(o.cod){x.fillStyle="#fff";x.beginPath();if(x.roundRect)x.roundRect(284,16,236,80,12);else x.rect(284,16,236,80);x.fill();T("CÓDIGO DE CLIENTE",402,40,"600 11px "+F,"#64748b","center");T(o.cod,402,82,"800 38px "+F,"#0f172a","center")}
  T("CLIENTE",P,152,"600 12px "+F,"#64748b");T(o.name,P,178,"600 20px "+F,"#0f172a");
  if(o.phone)T(o.phone,P,202,"400 16px "+F,"#475569");
  T("FECHA",430,152,"600 12px "+F,"#64748b");T(o.date,430,178,"500 16px "+F,"#0f172a");
@@ -436,13 +439,14 @@ function sendOrder(){
  if(!ph){m.textContent="Escribe tu WhatsApp de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
  m.textContent="";if(window.__sending)return;window.__sending=1;setTimeout(function(){window.__sending=0},4000);
  var ver=!!FB.verified;
+ var fin=function(cod){
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
  var items=cSel().map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va&&p.s==="Amazon"?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:p.ni?0:CFG[mm],ni:p.ni?1:0,vr:c.vk?vLabel(p,c.vk):""}});
  var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cno||"").trim().slice(0,300),addr:(S.cm||"").trim().slice(0,200),
-  items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee};
- var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\nProductos: "+items.length+"\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.addr?"\nDirección: "+o.addr:"")+(o.notes?"\nNotas: "+o.notes:"")+"\n\nAdjunto el comprobante de mi pedido.";
- var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",addr:o.addr||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||"",vr:it.vr||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
+  items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee,cod:cod};
+ var msg="Hola, quiero hacer un pedido.\nPedido: "+no+(cod?"\nCódigo de cliente: "+cod:"")+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\nProductos: "+items.length+"\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.addr?"\nDirección: "+o.addr:"")+(o.notes?"\nNotas: "+o.notes:"")+"\n\nAdjunto el comprobante de mi pedido.";
+ var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",addr:o.addr||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||"",vr:it.vr||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};if(cod)rec.cod=cod;
  var b;try{b=dataBlob(rcCanvas(o).toDataURL("image/png"))}catch(e){window.__sending=0;m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
  var wa="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),url=URL.createObjectURL(b);
  var fl=null;try{fl=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
@@ -451,7 +455,8 @@ function sendOrder(){
  rcDl();
  if(o.addr&&o.addr!==FB.addr&&FB.saveAddr)FB.saveAddr(o.addr).catch(function(){});S.cno="";
  cartClear(RC.snap);rcShow();
- if(ver)FB.saveOrder(rec).then(function(){RC.saved=true;rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
+ if(ver)FB.saveOrder(rec).then(function(){RC.saved=true;rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})};
+ if(ver&&FB.custCode){m.textContent="Preparando tu pedido…";(FB.cod?Promise.resolve(FB.cod):FB.custCode(FB.user.uid)).then(function(c){m.textContent="";fin(c)},function(){window.__sending=0;m.textContent="No se pudo generar tu código de cliente. Revisa tu conexión e inténtalo otra vez."})}else fin("")}
 function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
@@ -514,13 +519,13 @@ function setM(m){m=m==="air"?"air":"sea";S.cart.forEach(function(c){c.m=m});cart
 function qtyC(i,d){S.cart[i].q+=d;if(S.cart[i].q<1)S.cart.splice(i,1);cartPersist();nav();cartV()}
 function supV(){
  $("app").innerHTML=hdr(false)+'<h2>Soporte</h2><div class="box"><b>¿Necesitas ayuda o no encuentras lo que buscas?</b>'
- +'<div class="mu" style="margin-top:6px">Escribe tu mensaje y lo enviamos directo a nuestro WhatsApp. Si quieres cotizar un producto, cuéntanos cuál es y después puedes mandarnos la captura o el enlace por el chat.</div>'
+ +'<div class="mu" style="margin-top:6px">Escribe tu mensaje y lo enviamos directo a nuestro WhatsApp. Si quieres cotizar un producto, cuéntanos cuál es y después puedes mandarnos la captura por el chat.</div>'
  +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="chip" onclick="supQuote()">Cotizar un producto</button></div>'
  +'<textarea id="sp_m" rows="5" placeholder="Escribe aquí tu mensaje" oninput="S.sm=this.value" style="width:100%;margin-top:10px;border:1px solid var(--bd);border-radius:12px;padding:12px;background:var(--sf);color:var(--tx);font:inherit">'+esc(S.sm||"")+'</textarea>'
  +'<div id="sp_e" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="supSend()">'+ic("msg")+' Enviar por WhatsApp</button></div>'}
-function supQuote(){S.sm="Hola, quiero cotizar un producto que no encontré en la tienda. Te envío la captura o el enlace: ";supV();var t=$("sp_m");if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}}
+function supQuote(){S.sm="Hola, quiero cotizar un producto que no encontré en la tienda. Te envío la captura del producto: ";supV();var t=$("sp_m");if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}}
 function supSend(){var t=(S.sm||"").trim();if(!t){$("sp_e").textContent="Escribe tu mensaje antes de enviar.";return}
- var who=FB.user&&FB.phone?"soy "+((FB.name||S.cn||"").trim()||"cliente")+" ("+fmtPh(FB.phone)+".\n":"";
+ var who=FB.user&&FB.phone?"soy "+((FB.name||S.cn||"").trim()||"cliente")+" ("+fmtPh(FB.phone)+").\n":"";
  var u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent("Hola, "+who+t);S.sm="";var w=window.open(u,"_blank");if(!w)location.href=u;supV()}
 /* ===== Cotizaciones de Shein y Temu (cliente) ===== */
 var COTINF=0,CTL=["Por cotizar","Cotizado","Aceptado","Cancelado","Expirado"],CTC=[["#fef3c7","#92400e"],["#dbeafe","#1e40af"],["#d1fae5","#065f46"],["#fee2e2","#991b1b"],["#e2e8f0","#475569"]],CTI="width:100%;border:1px solid var(--bd);border-radius:12px;padding:11px 12px;background:var(--sf);color:var(--tx);margin:4px 0 8px";
@@ -554,8 +559,8 @@ function cotDomV(){var d=S.ce?S.ce.dom:S.cd;return d==="cargo"?"cargo":"mgua"}
 function cotDom(v){var d=v==="cargo"?"cargo":"mgua";if(S.ce)S.ce.dom=d;else S.cd=d}
 function cotDomN(d){return(CFG.dom.filter(function(x){return x[0]===d})[0]||["","Entrega a domicilio en Managua"])[1]}
 function cotDomBox(){var cur=cotDomV();return'<div class="box"><b>Entrega en Nicaragua</b><select onchange="cotDom(this.value)">'+CFG.dom.map(function(d){return'<option value="'+d[0]+'"'+(cur===d[0]?" selected":"")+'>'+d[1]+(d[2]?" (+"+fmt(d[2])+")":"")+'</option>'}).join("")+'</select><div class="mu" style="margin-top:8px">El precio de la entrega se confirma cuando tu paquete llega a Nicaragua, porque varía según el paquete. Se cobra al retirar.</div></div>'}
-function cotMsg(no,nm,ph,items,nota,upd,domN){var t=(upd?"Hola, actualicé mi solicitud de cotización.":"Hola, quiero cotizar estos productos.")+"\nSolicitud: "+no+"\nNombre: "+nm+"\nWhatsApp: "+fmtPh(ph);
- items.forEach(function(c,i){t+="\n\n"+(i+1)+". "+c.n+" ("+c.s+")"+(c.t?"\nTalla: "+c.t:"")+(c.c?"\nColor: "+c.c:"")+(c.nt?"\nNota: "+c.nt:"")+(c.m?"\nEnvío: "+(c.m==="air"?"Express":"Regular"):"")+(c.l?"\n"+c.l:"")});
+function cotMsg(no,nm,ph,items,nota,upd,domN){var t=(upd?"Hola, actualicé mi solicitud de cotización.":"Hola, quiero cotizar estos productos.")+"\nSolicitud: "+no+(FB.cod?"\nCódigo de cliente: "+FB.cod:"")+"\nNombre: "+nm+"\nWhatsApp: "+fmtPh(ph);
+ items.forEach(function(c,i){t+="\n\n"+(i+1)+". "+c.n+" ("+c.s+")"+(c.t?"\nTalla: "+c.t:"")+(c.c?"\nColor: "+c.c:"")+(c.nt?"\nNota: "+c.nt:"")+(c.m?"\nEnvío: "+(c.m==="air"?"Express":"Regular"):"")});
  if(domN)t+="\n\nEntrega: "+domN;if(nota)t+="\n\nNota: "+nota;return t}
 function cotWa(no,nm,ph,items,nota,upd,domN){var u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(cotMsg(no,nm,ph,items,nota,upd,domN)),w=window.open(u,"_blank");if(!w)location.href=u}
 function cotSend(){var m=$("ct_e"),L=cotList(),ed=!!S.ce;m.textContent="";
@@ -579,7 +584,7 @@ function cotAct(no,st){var c=cotFind(no);if(!c)return;
  var rec=cotPedido(c,new Date().toISOString());
  if(!rec){alert("Esta cotización no tiene un total válido. Escríbenos por WhatsApp.");return}
  window.__cacc=1;
- FB.cotAccept(no,rec).then(function(){window.__cacc=0},fail)}
+ (FB.cod?Promise.resolve(FB.cod):FB.verified?FB.custCode(FB.user.uid):Promise.resolve("")).then(function(c){if(c)rec.cod=c},function(){}).then(function(){return FB.cotAccept(no,rec)}).then(function(){window.__cacc=0},fail)}
 /* Arma el pedido (st:0) con la forma del checkout normal, a partir de una cotización aceptada. Mismo número que la cotización. */
 function cotPedido(c,iso){var its=c.items||[];if(!c.no||!c.uid||!(c.tot>0)||!its.length)return null;
  return{no:c.no,uid:c.uid,date:iso,name:c.name||"",phone:c.phone||"",notes:c.nota||"",tot:c.tot,items:its.length,
@@ -673,11 +678,13 @@ function avHide(i){var a=AVL[i];if(!a||!a.k||!FB.user||!FB.avSave)return;var cur
 function stPos(o){if(o.st===6)return-1;return stIdx(o).filter(function(i){return i<=(o.st||0)}).length-1}
 function getOrders(){return window.ORD||[]}
 function ordDate(iso){return new Date(iso).toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"})}
+function custBox(){return FB.cod?'<div class="box"><div class="mu">Tu código de cliente</div><div style="font-size:30px;font-weight:800;letter-spacing:3px;margin-top:2px">'+esc(FB.cod)+'</div><div class="mu" style="margin-top:4px">Va en todos tus paquetes para identificarlos.</div></div>':""}
+function codTag(o){return o&&o.cod?'<div style="margin-top:8px;display:inline-block;padding:6px 12px;border-radius:10px;background:#0f172a;color:#fff;font-weight:800;font-size:18px;letter-spacing:2px">'+esc(o.cod)+'<span style="font-weight:600;font-size:11px;letter-spacing:0;margin-left:8px;opacity:.7">CÓDIGO DE CLIENTE</span></div>':""}
 function stBadge(o){var c=STC[o.st||0];return'<span class="st" style="background:'+c[0]+';color:'+c[1]+'">'+STP[o.st||0][0]+'</span>'}
 function ordersV(){if(!FB.ready){soon("Cargando…","box","");return}if(!FB.user){soon("Entra a tu cuenta","user",'Para ver tus pedidos, entra con tu número de WhatsApp.<br><br><button class="btn" onclick="go(\'cuenta\')">Entrar o crear cuenta</button>');return}var L=getOrders().slice().reverse();
  if(!L.length&&!(window.COT||[]).length){soon("Aún no tienes pedidos","box","Cuando envíes un pedido por WhatsApp, podrás seguirlo desde aquí.");return}
- $("app").innerHTML=hdr(false)+cotSec()+(L.length?'<h2>Mis pedidos</h2>':'')+L.map(function(o){var n=typeof o.items==="number"?o.items:(o.lines||[]).length,pos=stPos(o);
-  return'<button class="box oc" onclick="go(\'o-'+esc(o.no)+'\')"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div class="mu" style="margin-top:6px">'+ordDate(o.date)+'</div><div class="mu">'+n+(n===1?" producto, ":" productos, ")+usd(o.tot)+'</div><div class="seg">'+stIdx(o).map(function(_,k){return'<i'+(k<=pos?' class="on"':'')+'></i>'}).join("")+'</div></button>'}).join("")}
+ $("app").innerHTML=hdr(false)+custBox()+cotSec()+(L.length?'<h2>Mis pedidos</h2>':'')+L.map(function(o){var n=typeof o.items==="number"?o.items:(o.lines||[]).length,pos=stPos(o);
+  return'<button class="box oc" onclick="go(\'o-'+esc(o.no)+'\')"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div>'+codTag(o)+'<div class="mu" style="margin-top:6px">'+ordDate(o.date)+'</div><div class="mu">'+n+(n===1?" producto, ":" productos, ")+usd(o.tot)+'</div><div class="seg">'+stIdx(o).map(function(_,k){return'<i'+(k<=pos?' class="on"':'')+'></i>'}).join("")+'</div></button>'}).join("")}
 function demoFill(o){var ix=stIdx(o),pos=stPos(o);o.h=[];ix.forEach(function(i,k){if(k<=pos)o.h[i]=new Date(Date.now()-(pos-k)*2*864e5).toISOString()})}
 function demoSet(i){var d=S.demo;d.st=i;demoFill(d);orderV("demo")}
 function demoDom(v){var d=S.demo;d.dom=v;if(v!=="cargo"&&d.st===4)d.st=3;demoFill(d);orderV("demo")}
@@ -691,14 +698,14 @@ function orderV(id){var demo=id==="demo",o;
  var msg="Hola, quiero consultar mi pedido "+o.no+".";
  $("app").innerHTML=hdr(false)+'<button class="back" onclick="go(\'pedidos\')">Mis pedidos</button>'
   +(demo?'<div class="box" style="background:var(--acs)"><b>Vista de ejemplo</b><div class="mu">Así se verá un pedido en cada estado. Elige uno para probarlo.</div><div class="dm">'+STP.map(function(s,i){return(i===4&&o.dom!=="cargo")?"":'<button class="chip'+(o.st===i?' on':'')+'" onclick="demoSet('+i+')">'+s[0]+'</button>'}).join("")+'</div><div class="dm"><button class="chip'+(o.dom!=="cargo"?' on':'')+'" onclick="demoDom(\'mgua\')">Entrega en Managua</button><button class="chip'+(o.dom==="cargo"?' on':'')+'" onclick="demoDom(\'cargo\')">Cargotrans</button></div></div>':'')
-  +'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:18px">'+esc(o.no)+'</b>'+stBadge(o)+'</div><div class="mu" style="margin-top:6px">Pedido del '+ordDate(o.date)+'</div><div style="margin-top:10px;font-size:20px;font-weight:800">'+usd(o.tot)+'</div><div class="mu">'+nio(o.tot)+'</div></div>'
+  +'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:18px">'+esc(o.no)+'</b>'+stBadge(o)+'</div>'+codTag(o)+'<div class="mu" style="margin-top:6px">Pedido del '+ordDate(o.date)+'</div><div style="margin-top:10px;font-size:20px;font-weight:800">'+usd(o.tot)+'</div><div class="mu">'+nio(o.tot)+'</div></div>'
   +(o.st===6?'<div class="box" style="border-color:#fecaca"><b style="color:#991b1b">Pedido cancelado</b><div class="mu" style="margin-top:6px">'+STP[6][1]+(o.h&&o.h[6]?' Fecha: '+ordDate(o.h[6])+'.':'')+'</div></div>':'<div class="box"><b>Seguimiento</b><ul class="tl">'+tl+'</ul></div>')
   +'<div class="box"><b>Productos</b>'+((o.lines&&o.lines.length)?o.lines.map(function(l){return'<div style="display:flex;gap:10px;justify-content:space-between;margin-top:10px;font-size:14px"><span>'+esc(l.n.slice(0,80))+(l.vr?'<br><small class="mu">'+esc(l.vr)+'</small>':'')+'</span><b>x'+l.q+'</b></div>'}).join(""):'<div class="mu" style="margin-top:8px">Sin detalle guardado.</div>')+(dn?'<div class="mu" style="margin-top:12px">Entrega: '+esc(dn)+'</div>':'')+'</div>'
   +'<div style="padding:0 14px"><button class="btn" onclick="window.open(\'https://wa.me/\'+CFG.wa+\'?text=\'+encodeURIComponent(\''+msg+'\'),\'_blank\')">Preguntar por WhatsApp</button></div>'}
 
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
-var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
+var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})},claimCode:function(){return Promise.reject({})},custCode:function(){return Promise.reject({})},cod:""};
 window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
@@ -830,7 +837,7 @@ function authGo(mo){
   if(/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)){
    e.innerHTML="Número o contraseña incorrectos."+(up?"":"<div class='amn'><b>¿Aún no estás registrado?</b><span>Si es tu primera vez, crea tu cuenta con este número en menos de un minuto.</span><button onclick='amMode(1)'>Crear mi cuenta</button></div>");return}
   e.textContent=c==="auth/too-many-requests"?"Demasiados intentos. Espera unos minutos.":"No pudimos conectar. Revisa tu internet e inténtalo de nuevo."})}
-function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));var h=location.hash.slice(1);if(!h||h==="inicio")route();cartApply()}
+function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){return x&&x.id!=null&&x.disp!==false}),ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(PB.filter(function(x){return!ids[x.id]}));P.forEach(function(p){if(p.c==="Moda")p.c="Novedades";else if(p.c==="Audio")p.c="Audio y Video"});var h=location.hash.slice(1);if(!h||h==="inicio")route();cartApply()}
 
 
 
@@ -908,7 +915,7 @@ function admTask(t){if(!confirm(t==="revisar"?"¿Enviar «Revisar ahora» al rob
 var OQ="",OF=-1;
 function ordNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
 function ordMatch(o,q){if(!q)return true;var t=ordNorm(q),d=t.replace(/\D/g,"");
- if(ordNorm(o.no).indexOf(t)>-1||ordNorm(o.name).indexOf(t)>-1||ordNorm(o.cot).indexOf(t)>-1)return true;
+ if(ordNorm(o.no).indexOf(t)>-1||ordNorm(o.name).indexOf(t)>-1||ordNorm(o.cot).indexOf(t)>-1||ordNorm(o.cod).indexOf(t)>-1)return true;
  return d.length>=2&&String(o.phone||"").indexOf(d)>-1}
 function admOrdList(){var U={};ADM.users.forEach(function(u){U[u._id]=u});
  var all=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1}),q=OQ.trim();
@@ -916,7 +923,7 @@ function admOrdList(){var U={};ADM.users.forEach(function(u){U[u._id]=u});
  var rec=OF<0&&!q,L=F.slice(0,rec?20:50);
  var note=F.length?'<div class="mu" style="margin:4px 0 8px">'+(F.length>L.length?"Mostrando "+L.length+" de "+F.length+(rec?" (los más recientes). Busca o elige un estado para ver el resto.":". Escribe más para afinar la búsqueda."):F.length+(F.length===1?" pedido":" pedidos"))+'</div>':'';
  return note+(L.length?L.map(function(o){var u=U[o.uid]||{};
-  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div>'+codTag(o)+'<div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
   +(o.addr?'<div style="margin-top:4px;font-size:14px"><b>Dirección:</b> '+esc(o.addr)+'</div>':'')+(o.notes?'<div style="margin-top:2px;font-size:14px"><b>Notas:</b> '+esc(o.notes)+'</div>':'')
   +'<select onchange="admSt(\''+o.no+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
   +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button>'+(admInvOk(o)?'<button class="btn o" onclick="admInv(\''+o.no+'\')">Descargar factura</button>':'')+'</div>'}).join(""):'<div class="empty">'+(all.length?"No hay pedidos con esa búsqueda o estado.":"Aún no hay pedidos.")+'</div>')}
@@ -928,7 +935,7 @@ function admOQ(v){OQ=v;var e=$("ordL");if(e)e.innerHTML=admOrdList()}
 function admOF(i){OF=i;admV()}
 function admInvOk(o){return!!(o&&o.man&&Array.isArray(o.lines)&&o.lines.length&&o.lines.every(function(l){return l&&+l.p>0}))}
 function admInv(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!admInvOk(o)){alert("Esta orden no tiene los precios guardados.");return}try{cqDl(moInv({rec:o,prices:o.lines.map(function(l){return+l.p})}),"Pedido-"+o.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
-function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+(o.cod?" (código de cliente "+o.cod+")":"")+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
 /* ===== Orden manual (admin) ===== */
 var MO=null;
 function moNew(){return{n:"",l:"",q:"1",t:"",c:"",p:""}}
@@ -981,15 +988,16 @@ function moBuild(M,no,iso){if(!M.u)return{err:"Elige un cliente."};var lines=[],
  return{rec:{no:no,uid:M.u.id,date:iso,name:M.u.name||"",phone:M.u.phone||"",notes:String(M.notes||"").trim().slice(0,300),tot:tot,items:lines.length,
   lines:lines.map(function(z){return{n:z.n,q:z.q,m:z.m,l:z.l,vr:z.vr,p:z._p}}),man:1,dom:dom,domN:cotDomN(dom),st:0,h:{0:iso}},prices:lines.map(function(z){return z._p})}}
 function moInv(d){var r=d.rec,its=r.lines.map(function(x,i){return{n:x.n,vr:x.vr,q:x.q,p:d.prices[i],sub:lnNi(x)?"Envío incluido · puesto en Nicaragua":x.m==="air"?"Envío Express":"Envío Regular"}});
- return rcCanvas({cot:1,ord:1,no:r.no,name:r.name,phone:fmtPh(r.phone||"00000000"),date:ordDate(r.date),items:its,sub:r.tot,fee:0,tot:r.tot,notes:r.notes,domN:r.domN,
+ return rcCanvas({cot:1,ord:1,no:r.no,cod:r.cod,name:r.name,phone:fmtPh(r.phone||"00000000"),date:ordDate(r.date),items:its,sub:r.tot,fee:0,tot:r.tot,notes:r.notes,domN:r.domN,
   bx:[r.lines.length&&r.lines.every(lnNi)?"Envío incluido: estos productos tienen precio puesto en Nicaragua, no hay cobro de flete por peso.":"La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+r.domN+". El precio se confirma al retirar, porque varía según el paquete.","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."]})}
 function moSave(){if(!MO||window.__mosv)return;var no=moNo();if(!no){alert("No se pudo crear un número de orden. Inténtalo de nuevo.");return}
  var iso=new Date().toISOString(),r=moBuild(MO,no,iso);if(r.err){alert(r.err);return}
  if(!confirm("¿Crear la orden "+no+" para "+(r.rec.name||"el cliente")+" por "+usd(r.rec.tot)+"?"))return;
  window.__mosv=1;
- FB.saveOrder(r.rec).then(function(){window.__mosv=0;MO.done=r;try{moDl()}catch(e){alert("La orden se guardó, pero no se pudo generar la imagen. Usa «Descargar factura».")}admV()},function(){window.__mosv=0;alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})}
+ var sv=function(){FB.saveOrder(r.rec).then(function(){window.__mosv=0;MO.done=r;try{moDl()}catch(e){alert("La orden se guardó, pero no se pudo generar la imagen. Usa «Descargar factura».")}admV()},function(){window.__mosv=0;alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})};
+ (function(){var uu=ADM.users.filter(function(x){return x._id===MO.u.id})[0]||{};return uu.cod?Promise.resolve(uu.cod):uu.verified?FB.custCode(MO.u.id):Promise.resolve("")})().then(function(c){if(c)r.rec.cod=c;sv()},function(){if(confirm("No se pudo generar el código de cliente (revisa la conexión o las reglas de Firebase). ¿Guardar la orden sin código?"))sv();else window.__mosv=0})}
 function moDl(){if(!MO||!MO.done)return;try{cqDl(moInv(MO.done),"Pedido-"+MO.done.rec.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
-function moWa(){if(!MO||!MO.done)return;var r=MO.done.rec;if(!r.phone)return;var u="https://wa.me/505"+r.phone+"?text="+encodeURIComponent("Hola "+(r.name||"")+", registramos tu pedido "+r.no+" por "+usd(r.tot)+". Te envío la factura.");var w=window.open(u,"_blank");if(!w)location.href=u}
+function moWa(){if(!MO||!MO.done)return;var r=MO.done.rec;if(!r.phone)return;var u="https://wa.me/505"+r.phone+"?text="+encodeURIComponent("Hola "+(r.name||"")+", registramos tu pedido "+r.no+(r.cod?" (código de cliente "+r.cod+")":"")+" por "+usd(r.tot)+". Te envío la factura.");var w=window.open(u,"_blank");if(!w)location.href=u}
 /* ===== Cotizaciones (admin) ===== */
 var CQ={};
 function cqPend(){return(ADM.cots||[]).filter(function(c){return c.st===0}).length}
@@ -1002,8 +1010,10 @@ function cqDraft(c){if(!CQ[c._id])CQ[c._id]={pr:(c.pr||[]).slice(),an:null};retu
 function admCotIn(id,i,v){var c=cqFind(id);if(!c)return;cqDraft(c).pr[i]=v;var e=$("cq_t_"+id);if(e)e.textContent=usd(cqSum(c))}
 function admCotAn(id,v){var c=cqFind(id);if(!c)return;cqDraft(c).an=v.slice(0,300)}
 function cqFmt(d){return d.toLocaleString("es",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
+function cqCod(c){var u=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];return u&&u.cod?u.cod:""}
+function cqEns(c){if(cqCod(c))return Promise.resolve();return FB.custCode(c.uid).then(function(cd){var u=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];if(u)u.cod=cd})}
 function cqInv(c,pr,tot,vence,an,iso){var its=(c.items||[]).map(function(x,i){return{n:x.n||"",vr:"",q:1,p:pr[i],sub:[x.s,x.t?"Talla "+x.t:"",x.c?"Color "+x.c:"",x.m==="air"?"Envío Express":x.m==="sea"?"Envío Regular":""].filter(Boolean).join(" · ")}}),vig=cqFmt(vence);
- return rcCanvas({cot:1,no:c._id,name:c.name||"",phone:c.phone?fmtPh(c.phone):"",date:ordDate(iso),vig:vig,items:its,sub:tot,fee:0,tot:tot,notes:an||"",domN:c.domN||"",
+ return rcCanvas({cot:1,no:c._id,cod:cqCod(c),name:c.name||"",phone:c.phone?fmtPh(c.phone):"",date:ordDate(iso),vig:vig,items:its,sub:tot,fee:0,tot:tot,notes:an||"",domN:c.domN||"",
   bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Esta cotización es válida hasta "+vig.replace(/\.$/,"")+". Después de esa fecha debes pedir una nueva.","Para aceptarla, entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización»."].concat(c.domN?["Entrega en Nicaragua: "+c.domN+". El precio se confirma al retirar, porque varía según el paquete."]:[])})}
 function cqDl(cv,name){var b=dataBlob(cv.toDataURL("image/png")),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}
 function admCots(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=(ADM.cots||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});
@@ -1029,18 +1039,18 @@ function admCotSave(id){var c=cqFind(id);if(!c||c.st===2)return;var its=c.items|
  var tot=Math.round(pr.reduce(function(a,b){return a+b},0)*100)/100,now=new Date(),vence=new Date(now.getTime()+48*3600*1000),an=cqAn(c).trim().slice(0,300);
  if(!confirm("¿Cotizar a "+(c.name||"el cliente")+" por "+usd(tot)+"? Quedará vigente 48 horas, hasta el "+cqFmt(vence).replace(/\.$/,"")+"."))return;
  var d={st:1,pr:pr,tot:tot,vence:vence,anota:an};d["h.1"]=now.toISOString();
- FB.cotAdm(id,d).then(function(){delete CQ[id];try{cqDl(cqInv(c,pr,tot,vence,an,now.toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("Se guardó la cotización, pero no se pudo generar la imagen. Usa «Descargar factura».")}},function(){alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})}
-function admCotDl(id){var c=cqFind(id);if(!c||!(c.tot>0)||!cotMs(c))return;try{cqDl(cqInv(c,c.pr||[],c.tot,new Date(cotMs(c)),c.anota||"",(c.h&&c.h[1])||new Date().toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("No se pudo generar la imagen.")}}
+ cqEns(c).then(function(){return FB.cotAdm(id,d)}).then(function(){delete CQ[id];try{cqDl(cqInv(c,pr,tot,vence,an,now.toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("Se guardó la cotización, pero no se pudo generar la imagen. Usa «Descargar factura».")}},function(){alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})}
+function admCotDl(id){var c=cqFind(id);if(!c||!(c.tot>0)||!cotMs(c))return;cqEns(c).then(function(){try{cqDl(cqInv(c,c.pr||[],c.tot,new Date(cotMs(c)),c.anota||"",(c.h&&c.h[1])||new Date().toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("No se pudo generar la imagen.")}},function(){alert("No se pudo obtener el código del cliente. Inténtalo de nuevo.")})}
 function admCotWa(id){var c=cqFind(id);if(!c||!c.phone||!(c.tot>0))return;if(!confirm("¿Abrir WhatsApp para enviar la cotización a "+(c.name||"el cliente")+"? Recuerda adjuntar la imagen descargada."))return;
- window.open("https://wa.me/505"+c.phone+"?text="+encodeURIComponent("Hola "+(c.name||"")+", tu cotización "+id+" está lista: total de productos "+usd(c.tot)+" (la importación se cobra por peso al entregar). Vigente hasta "+cqFmt(new Date(cotMs(c))).replace(/\.$/,"")+". Entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización». Te adjunto la factura."),"_blank")}
+ window.open("https://wa.me/505"+c.phone+"?text="+encodeURIComponent("Hola "+(c.name||"")+", tu cotización "+id+(cqCod(c)?" (código de cliente "+cqCod(c)+")":"")+" está lista: total de productos "+usd(c.tot)+" (la importación se cobra por peso al entregar). Vigente hasta "+cqFmt(new Date(cotMs(c))).replace(/\.$/,"")+". Entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización». Te adjunto la factura."),"_blank")}
 function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.name)<String(b.name)?-1:1});
- return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="admVer(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
+ return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div>'+codTag(u)+'<div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="admVer(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button>'+(u.verified&&!u.cod?'<button class="btn o" onclick="admCod(\''+u._id+'\')">Asignar código de cliente</button>':'')+'</div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
 function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?\n\nAntes confirma que es el dueño: pídele el número de su último pedido o su dirección de entrega."))return;
  var a="abcdefghjkmnpqrstuvwxyz23456789",r=new Uint32Array(10),t="";crypto.getRandomValues(r);for(var i=0;i<10;i++)t+=a[r[i]%a.length];
  FB.task({type:"reset",phone:u.phone,uid:u._id,temp:t,exp:Date.now()+432e5}).then(function(){return FB.resetMark(u._id,12)}).then(function(){prompt("Clave temporal (vence en 12 horas). Cópiala y envíala por WhatsApp:",t);window.open("https://wa.me/505"+u.phone+"?text="+encodeURIComponent("Hola, tu clave temporal de Encargos es: "+t+" . Entra con tu número y esa clave. Vence en 12 horas y al entrar te pedirá crear una contraseña nueva."),"_blank")},function(){alert("No se pudo crear la solicitud.")})}
 
 /* ===== Aprobar productos (admin) ===== */
-var AP_E={},EDP={},ED=null,CATL=["EncarGo","Audio","Moda","Tecnología","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=5,COM_DEF=10;
+var AP_E={},EDP={},ED=null,CATL=["EncarGo","Novedades","Audio y Video","Tecnología","Electrónica","Perfumería","Suplementos","Hogar","Belleza","Juguetes","Deportes","Mascotas","Cocina","Herramientas"],COM_MIN=5,COM_DEF=10;
 function apFind(id){return(ADM.pend||[]).filter(function(x){return String(x.id)===String(id)})[0]||EDP[id]}
 function apE(p){return AP_E[p.id]||(AP_E[p.id]={imp:Math.round((p.imp==null?0.1025:p.imp)*10000)/100,pct:COM_DEF,extra:0,cat:p.c||"Hogar"})}
 function apCalc(p){var e=apE(p),imp=parseFloat(e.imp),pct=parseFloat(e.pct),ex=parseFloat(e.extra)||0;if(isNaN(imp))imp=0;if(isNaN(pct))pct=0;
@@ -1115,6 +1125,7 @@ function admEditSave(id){var p=EDP[id];if(!p)return;var r=apCalc(p),e=apE(p);if(
  FB.editProd(id,d,p.linkId,n!==p.n?n:null).then(function(){delete EDP[id];delete AP_E[id];ED=null;admDone()},function(){alert("No se pudo guardar.")})},{title:"Guardar cambios",ok:"Guardar"})}
 function admRetry(id){if(!confirm("¿Reintentar leer este link?"))return;FB.retry(id).catch(function(){alert("No se pudo reintentar.")})}
 function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el pedido ":"¿Cambiar el pedido ")+no+(i===6?"? El cliente verá que fue cancelado.":" a «"+STP[i][0]+"»?"))){sel.value=prev;return}FB.setStatus(no,i).catch(function(){alert("No se pudo cambiar el estado.")})}
+function admCod(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||u.cod)return;FB.custCode(id).then(function(c){alert("Código asignado: "+c)},function(){alert("No se pudo asignar el código. Revisa las reglas de Firebase.")})}
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  ask("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?",function(){
@@ -1128,7 +1139,7 @@ fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).c
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,updatePassword,reauthenticateWithCredential,EmailAuthProvider}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,getDocs,serverTimestamp,writeBatch}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,getDocs,serverTimestamp,writeBatch,runTransaction}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
 const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null,unU=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
@@ -1140,13 +1151,15 @@ Object.assign(window.FB,{
  resetMark:(uid,h)=>updateDoc(doc(db,"usuarios",uid),{mustChange:true,tempExp:Date.now()+h*36e5}),
  cleanTasks:async()=>{try{const s=await getDocs(query(collection(db,"tareas"),where("type","==","reset")));const now=Date.now();for(const d of s.docs){const x=d.data(),t=x.createdAt&&x.createdAt.toMillis?x.createdAt.toMillis():0;if(x.done===true||(t&&now-t>864e5))await deleteDoc(d.ref)}}catch(e){}},
  saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
+ custCode:async(uid)=>{const c=await FB.claimCode(uid);return await runTransaction(db,async tx=>{const ref=doc(db,"usuarios",uid),sn=await tx.get(ref);const x=sn.exists()?sn.data().cod:"";if(x)return x;tx.update(ref,{cod:c});return c})},
+ claimCode:async(own)=>{const A="23456789ABCDEFGHJKLMNPQRSTUVWXYZ";for(let L=2;L<=5;L++){for(let t=0;t<(L===5?12:6);t++){const r=crypto.getRandomValues(new Uint8Array(L));let c="";for(let i=0;i<L;i++)c+=A[r[i]%32];const ok=await runTransaction(db,async tx=>{const ref=doc(db,"codigos",c),sn=await tx.get(ref);if(sn.exists())return false;tx.set(ref,{uid:own||auth.currentUser.uid,at:serverTimestamp()});return true});if(ok)return c}}throw new Error("cod")},
  adminLogin:(e,pw)=>signInWithEmailAndPassword(auth,e,pw),
  addLinks:async us=>{for(const u of us)await addDoc(collection(db,"links"),{url:u,st:"pendiente",createdAt:serverTimestamp()})},
  delLink:async(id,pid)=>{if(pid!=null&&pid!=="")await deleteDoc(doc(db,"productos",String(pid)));await deleteDoc(doc(db,"links",id))},
  setStatus:(no,st)=>updateDoc(doc(db,"pedidos",no),{st:st,["h."+st]:new Date().toISOString()}),
  avSave:(l)=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{avOc:l}),
  saveAddr:(a)=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{addr:String(a).slice(0,200)}),
- verify:(uid,v)=>updateDoc(doc(db,"usuarios",uid),{verified:v}),
+ verify:async(uid,v)=>{await updateDoc(doc(db,"usuarios",uid),{verified:v});if(v)try{await FB.custCode(uid)}catch(e){}},
  task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()}),
  approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
  discard:async(id,linkId)=>{await deleteDoc(doc(db,"porAprobar",String(id)));if(linkId)await deleteDoc(doc(db,"links",linkId))},
@@ -1166,7 +1179,7 @@ onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encar
  if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
   const d=s.data(),v=d.verified===true;FB.mustChange=d.mustChange===true;FB.tempExp=d.tempExp||0;
   if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
-  FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
+  FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;FB.cod=d.cod||"";if(v&&!d.cod&&!FB._cb){FB._cb=1;FB.custCode(u.uid).catch(function(){FB._cb=0})}const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];window.COT=[];
  if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm="";S.cno=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;

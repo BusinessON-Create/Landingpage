@@ -115,10 +115,9 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
 <script>
-/* TARIFAS DE EJEMPLO: ajústalas aquí. tiers: [precio máximo, extra en US$]; si el extra es menor que 1 se toma como porcentaje. air/sea: US$ por libra. */
-var CFG={wa:"50557294271",t:{air:"3 a 5 días hábiles",sea:"15 a 20 días hábiles"},rate:37.2,tiers:[[15,2],[50,4],[150,7],[1e9,.06]],air:8,sea:3.5,minW:.5,fee:0,
+/* TARIFAS DE EJEMPLO: ajústalas aquí. air/sea: US$ por libra. */
+var CFG={wa:"50557294271",t:{air:"3 a 5 días hábiles",sea:"15 a 20 días hábiles"},rate:37.2,air:8,sea:3.5,minW:.5,fee:0,
  dom:[["mgua","Entrega a domicilio en Managua",0],["cargo","Envío con Cargotrans",0]]};
-function extra(v){for(var i=0;i<CFG.tiers.length;i++){var t=CFG.tiers[i];if(v<=t[0])return t[1]<1?v*t[1]:t[1]}return 0}
 function cSel(){return S.cart.filter(function(c){return !c.off})}
 function quote(){var sub=0,sh=0;cSel().forEach(function(c){var p=find(c.id);sub+=sale(p)*c.q;sh+=Math.max(p.w,CFG.minW)*c.q*CFG[c.m||"sea"]});var d=CFG.dom.filter(function(x){return x[0]===S.dom})[0],fee=cSel().length?CFG.fee:0;return{sub:sub,sh:sh,fee:fee,dom:d[2],tot:sub+sh+fee+d[2]}}
 /* Tiendas activas (Shein y Temu son solo cotización: sin precio ni carrito). */
@@ -198,8 +197,6 @@ function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.close
  if(p&&p.dims&&p.dims.length){vk=vKey(p);if(!vk){var m=$("vm");if(m)m.textContent="Elige "+p.dims.map(function(d){return d.n.toLowerCase()}).join(" y ")+" antes de continuar.";var vb=$("vrb");if(vb&&vb.scrollIntoView)vb.scrollIntoView({behavior:"smooth",block:"center"});return false}}
  var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c){c.q+=q;c.off=0}else S.cart.push({id:id,q:q,m:cartM(),vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
 function soon(t,i,m){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic(i)+'</div><b>'+t+'</b>'+m+'</div>'}
-function cartOld(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
- var sub=0;$("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c){var p=find(c.id);sub+=sale(p)*c.q;return '<div class="box" style="display:flex;gap:12px;align-items:center"><div style="position:relative;overflow:hidden;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<br><b>'+fmt(sale(p))+'</b> × '+c.q+'</div></div>'}).join("")+'<div class="box"><div class="mu">Subtotal de productos</div><div class="big">'+fmt(sub)+'</div><div class="demo">Envío, fechas Express/Regular y checkout llegan en el siguiente paso.</div></div>'}
 /* Galería: flechas y arrastre con mouse */
 function gnav(k){var s=document.querySelector(".slides");if(s)s.scrollBy({left:k*s.clientWidth,behavior:"smooth"})}
 (function(){var d=null;

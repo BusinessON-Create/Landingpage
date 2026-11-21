@@ -149,6 +149,28 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .rtp{text-align:right;flex:none}.rtp b{display:block;font-size:20px;font-weight:800;letter-spacing:-.5px}.rtp span{font-size:12px;color:var(--mu)}
 .rtn{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;line-height:1.45;color:var(--mu)}.rtn i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;color:var(--ac);background:var(--acs)}
 .rtg{width:100%;margin-top:18px;border:0;border-radius:14px;padding:14px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 8px 20px rgba(37,99,235,.3)}
+/* ===== Look de la portada y tarjetas ===== */
+.ban{position:relative;overflow:hidden;border:0;padding:22px 20px;color:#fff;background:radial-gradient(130% 140% at 0 0,#2159e0 0,#032565 72%);box-shadow:0 12px 28px rgba(3,37,101,.28)}
+.ban::after{content:"";position:absolute;right:-46px;top:-46px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.ban h1{position:relative;font-size:26px;line-height:1.12;letter-spacing:-.7px}
+.ban p{position:relative;color:rgba(255,255,255,.84);line-height:1.4}
+.ban .banks{position:relative}.ban .banks span{background:#fff;color:#032565;border:0;border-radius:999px;padding:5px 12px}
+.bcta{position:relative;margin-top:16px;border:0;border-radius:999px;padding:12px 22px;font-weight:800;font-size:15px;background:#fff;color:#032565;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.ban .tut{position:relative;margin:16px 0 0;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff}
+.ban .tut>div:first-child{color:#fff!important;font-size:24px!important}.ban .tut small{color:#bcd2ff}.ban .tut b{font-size:14px}.ban .tut span{color:rgba(255,255,255,.82);font-size:12px}.ban .tut .ib{color:#fff}
+.row{scroll-snap-type:x mandatory;scroll-padding:0 14px;padding:2px 14px 16px}
+.pc{border:0;border-radius:20px;background:var(--bg);box-shadow:0 2px 12px rgba(15,23,42,.09),0 0 0 1px var(--bd);transition:transform .15s,box-shadow .15s}
+.pc:active{transform:scale(.98)}
+@media(hover:hover){.pc:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,23,42,.15),0 0 0 1px var(--bd)}}
+.row .pc{width:176px;scroll-snap-align:start}
+.pc .im{height:auto;aspect-ratio:1/1;margin:8px 8px 0;border-radius:14px;overflow:hidden}
+.pc .im .pw img{padding:14px}
+.pc .tag{top:8px;left:8px;border:0;box-shadow:0 2px 8px rgba(15,23,42,.14)}
+.pc .nm{margin-top:10px;padding:0 12px;font-weight:500}
+.pc .pr{padding:4px 12px 0;font-size:19px}
+.pc .sb{padding:0 12px 14px}
+.add{right:10px;bottom:10px;width:38px;height:38px;box-shadow:0 5px 14px rgba(37,99,235,.38)}
+.g2{gap:14px}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -198,12 +220,12 @@ var TT=null;
 function tileCar(){clearInterval(TT);if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  TT=setInterval(function(){var ts=document.querySelectorAll(".tile");if(!ts.length){clearInterval(TT);return}
   [].forEach.call(ts,function(t,k){setTimeout(function(){var s=t.querySelectorAll(".tsl");if(s.length<2)return;var d=t.querySelectorAll(".tdots i"),i=0;[].forEach.call(s,function(e,j){if(e.classList.contains("on"))i=j});var n=(i+1)%s.length;s[i].classList.remove("on");s[n].classList.add("on");[].forEach.call(d,function(e,j){e.className=j===n?"on":""});var cp=t.querySelector(".tcap small");if(cp)cp.textContent=cp.textContent.split(" · ")[0]+" · "+s[n].getAttribute("data-n")},k*450)})},3800)}
+function toProds(){var e=document.querySelector(".row,.g2");if(e)window.scrollTo({top:e.getBoundingClientRect().top+window.pageYOffset-120,behavior:"smooth"})}
 function home(keep){
  var l=list(),filt=S.q||S.cat||S.store!=="Todos";
- var body=(filt?'':'<div class="ban"><h1>Compra en Estados Unidos y recibe en Managua</h1><p>Pide desde Amazon. Paga por transferencia bancaria, sin tarjeta internacional.</p><div class="banks"><span>BAC</span><span>Lafise</span><span>Ficohsa</span><span>Banpro</span></div></div>'
- +(S.tut?'<div class="tut"><div style="font-size:30px;color:var(--ac)">'+ic("play")+'</div><div style="flex:1"><small>TUTORIAL RÁPIDO</small><b>¿Primera vez comprando?</b><span>Mira cómo comprar en 1 minuto.</span></div><button class="ib" onclick="S.tut=false;home()" aria-label="Cerrar">✕</button></div>':'')
+ var body=(filt?'':'<div class="ban"><h1>Compra en Estados Unidos y recibe en Managua</h1><p>Pide desde Amazon. Paga por transferencia bancaria, sin tarjeta internacional.</p><div class="banks"><span>BAC</span><span>Lafise</span><span>Ficohsa</span><span>Banpro</span></div><button class="bcta" onclick="toProds()">Ver productos</button>'+(S.tut?'<div class="tut"><div style="font-size:30px;color:var(--ac)">'+ic("play")+'</div><div style="flex:1"><small>TUTORIAL RÁPIDO</small><b>¿Primera vez comprando?</b><span>Mira cómo comprar en 1 minuto.</span></div><button class="ib" onclick="S.tut=false;home()" aria-label="Cerrar">✕</button></div>':'')+'</div>'
  +(catList().length?'<h2>Categorías</h2><div class="tiles">'+tiles()+'</div>':''))
- +(l.length||filt?'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>':'')+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Todos los productos</h2><div class="g2">'+l.map(card).join("")+'</div>'):'<div class="empty">'+(filt?'No hay productos con ese filtro.':'<b>Pronto habrá productos</b>Estamos preparando el catálogo.')+'</div>');
+ +(l.length||filt?'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>':'')+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':(l.length>6?'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Más productos</h2><div class="g2">'+l.slice(6).map(card).join("")+'</div>':'<div class="g2">'+l.map(card).join("")+'</div>')):'<div class="empty">'+(filt?'No hay productos con ese filtro.':'<b>Pronto habrá productos</b>Estamos preparando el catálogo.')+'</div>');
  if(keep&&$("hm")){$("hm").innerHTML=body;tileCar();return}
  $("app").innerHTML=hdr(true)+chips()+'<div id="hm">'+body+'</div>';tileCar()}
 function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.forEach(function(d,di){if(d.o.length===1)vSel(p.id)[di]=d.o[0]});var N=p.img&&p.img.length?p.img.length:3;

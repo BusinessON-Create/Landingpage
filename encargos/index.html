@@ -171,6 +171,44 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .pc .sb{padding:0 12px 14px}
 .add{right:10px;bottom:10px;width:38px;height:38px;box-shadow:0 5px 14px rgba(37,99,235,.38)}
 .g2{gap:14px}
+/* ===== Cuenta: identidad ===== */
+.pfx{border:0!important;border-radius:24px!important;box-shadow:0 10px 30px rgba(15,23,42,.12),0 0 0 1px var(--bd)}
+.pfx .pf-h{flex-direction:column;text-align:center;gap:12px;padding:28px 18px 26px;color:#fff;background:radial-gradient(130% 120% at 50% 0,#2159e0 0,#032565 72%)}
+.pfx .pf-av{width:92px;height:92px;font-size:34px;border:4px solid #fff;box-shadow:0 12px 26px rgba(0,0,0,.32)}.pfx .pf-av.em{font-size:46px}
+.pfx .pf-id{min-width:0}.pfx .pf-n{justify-content:center;font-size:22px;letter-spacing:-.4px}
+.pfx .pf-h .pf-pill{margin-top:8px;background:rgba(255,255,255,.16);color:#fff}
+.pfx .pf-h .pf-lk{color:#cfe0ff;margin-top:10px}
+.pfx .pf-b{margin:16px 16px 0}
+.pf-st{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 0}
+.pf-st>div{padding:12px;border-radius:16px;text-align:center;background:var(--sf);border:1px solid var(--bd)}
+.pf-st b{display:block;font-size:20px;font-weight:800;letter-spacing:-.4px}.pf-st span{display:block;margin-top:2px;font-size:12px;color:var(--mu)}
+.pf-ls{margin:12px 16px 0;border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.pfx .pf-r{align-items:center;padding:13px 14px}.pfx .pf-ls .pf-r:first-child{border-top:0}
+.pf-i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:16px;color:var(--ac);background:var(--acs)}
+.pfx .pf-r span:nth-child(2){flex:1}
+.pfx .pf-a{padding:16px}
+.pf-out{border-color:#fecdd3!important;color:#e11d48!important}
+.th{gap:12px}.th button{display:flex;flex-direction:column;align-items:center;gap:8px;border-radius:16px;font-size:13px}
+.th button.on{border-color:var(--ac);background:var(--acs);color:var(--ac)}
+.sw{display:block;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);box-shadow:inset 0 0 0 4px rgba(255,255,255,.0)}
+.sw-light{background:linear-gradient(135deg,#fff 50%,#e8edf5 50%)}.sw-sand{background:linear-gradient(135deg,#fbf7f0 50%,#b4691f 50%)}.sw-dark{background:linear-gradient(135deg,#0a0a0a 50%,#5b8def 50%)}
+.bnr{margin:0 14px 16px;border-radius:20px;overflow:hidden;background:#eaf1fb;box-shadow:0 10px 26px rgba(3,37,101,.18),0 0 0 1px var(--bd)}
+.bnr img{display:block;width:100%;height:auto}
+/* ===== Tira de marcas ===== */
+.mq{margin:0 0 14px;pointer-events:none;user-select:none;-webkit-user-select:none}
+.mql{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);opacity:.7;margin-bottom:6px}
+.mqw{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+.mqt{display:flex;width:max-content;animation:mqs 32s linear infinite}
+.mqg{display:flex;align-items:center;flex:none}
+.mqi{display:flex;align-items:center;padding:6px 22px;color:var(--mu);opacity:.8;white-space:nowrap;line-height:1}
+.mqi img{display:block;height:22px;width:auto;filter:grayscale(1);opacity:.85;background:none}
+.m-amz{font-size:21px;font-weight:800;letter-spacing:-.6px}
+.m-vs{font-family:Georgia,"Times New Roman",serif;font-size:12.5px;font-weight:600;letter-spacing:.2em}
+.m-eb{font-size:22px;font-weight:800;letter-spacing:-1px}
+.m-sh{font-size:15px;font-weight:700;letter-spacing:.3em}
+.m-te{font-size:18px;font-weight:800;letter-spacing:.04em}
+@keyframes mqs{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.mqt{animation:none;width:auto;flex-wrap:wrap;justify-content:center}.mqt .mqg:nth-child(2){display:none}.mqg{flex-wrap:wrap;justify-content:center}.mqw{-webkit-mask-image:none;mask-image:none}}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -220,10 +258,13 @@ var TT=null;
 function tileCar(){clearInterval(TT);if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  TT=setInterval(function(){var ts=document.querySelectorAll(".tile");if(!ts.length){clearInterval(TT);return}
   [].forEach.call(ts,function(t,k){setTimeout(function(){var s=t.querySelectorAll(".tsl");if(s.length<2)return;var d=t.querySelectorAll(".tdots i"),i=0;[].forEach.call(s,function(e,j){if(e.classList.contains("on"))i=j});var n=(i+1)%s.length;s[i].classList.remove("on");s[n].classList.add("on");[].forEach.call(d,function(e,j){e.className=j===n?"on":""});var cp=t.querySelector(".tcap small");if(cp)cp.textContent=cp.textContent.split(" · ")[0]+" · "+s[n].getAttribute("data-n")},k*450)})},3800)}
-function toProds(){var e=document.querySelector(".row,.g2");if(e)window.scrollTo({top:e.getBoundingClientRect().top+window.pageYOffset-120,behavior:"smooth"})}
+function brandStrip(){
+ var it=[["amazon","m-amz"],["VICTORIA'S SECRET","m-vs"],["ebay","m-eb"],["SHEIN","m-sh"],["TEMU","m-te"],["","m-lg"]],
+ g=function(){return"<div class='mqg'>"+it.map(function(x){return"<span class='mqi "+x[1]+"'>"+(x[1]==="m-lg"?"<img alt='' src='"+LOGO_URI+"'>":x[0])+"</span>"}).join("")+"</div>"};
+ return"<div class='mq' aria-hidden='true'><div class='mql'>Compra en tus tiendas favoritas</div><div class='mqw'><div class='mqt'>"+g()+g()+"</div></div></div>"}
 function home(keep){
  var l=list(),filt=S.q||S.cat||S.store!=="Todos";
- var body=(filt?'':'<div class="ban"><h1>Compra en Estados Unidos y recibe en Managua</h1><p>Pide desde Amazon. Paga por transferencia bancaria, sin tarjeta internacional.</p><div class="banks"><span>BAC</span><span>Lafise</span><span>Ficohsa</span><span>Banpro</span></div><button class="bcta" onclick="toProds()">Ver productos</button>'+(S.tut?'<div class="tut"><div style="font-size:30px;color:var(--ac)">'+ic("play")+'</div><div style="flex:1"><small>TUTORIAL RÁPIDO</small><b>¿Primera vez comprando?</b><span>Mira cómo comprar en 1 minuto.</span></div><button class="ib" onclick="S.tut=false;home()" aria-label="Cerrar">✕</button></div>':'')+'</div>'
+ var body=(filt?'':'<div class="bnr"><img src="banner-1200.webp" srcset="banner-800.webp 800w,banner-1200.webp 1200w" sizes="(max-width:560px) 100vw,560px" fetchpriority="high" decoding="async" onerror="this.parentNode.style.display=\'none\'" width="1200" height="450" alt="EncarGo: compra en Estados Unidos y recibe en Managua. Pide desde Amazon y paga por transferencia bancaria, sin tarjeta internacional."></div>'+brandStrip()+''
  +(catList().length?'<h2>Categorías</h2><div class="tiles">'+tiles()+'</div>':''))
  +(l.length||filt?'<h2>'+(S.cat?S.cat+' <button class="chip on" onclick="S.cat=\'\';home()">Quitar filtro ✕</button>':(filt?'Resultados':'Destacados'))+'</h2>':'')+(l.length?(filt?'<div class="g2">'+l.map(card).join("")+'</div>':(l.length>6?'<div class="row">'+l.slice(0,6).map(card).join("")+'</div><h2>Más productos</h2><div class="g2">'+l.slice(6).map(card).join("")+'</div>':'<div class="g2">'+l.map(card).join("")+'</div>')):'<div class="empty">'+(filt?'No hay productos con ese filtro.':'<b>Pronto habrá productos</b>Estamos preparando el catálogo.')+'</div>');
  if(keep&&$("hm")){$("hm").innerHTML=body;tileCar();return}
@@ -365,7 +406,7 @@ function rcShare(){var r=window.RC;if(!r)return;
  rcFallback()}
 function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedido-"+RC.no+".png";document.body.appendChild(a);a.click();a.remove()}
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
-function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
+function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<div style="height:8px"></div>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+'<i class="sw sw-'+x[0]+'"></i>'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
 function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var gm=cartNorm(),sel=cSel().length,allOn=sel===S.cart.length,q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
  $("app").innerHTML=hdr(false)+'<h2>Carrito</h2><div class="csel"><label><input type="checkbox" class="cbx" '+(allOn?'checked ':'')+'onchange="togAll()"> Seleccionar todo</label><span class="mu">'+sel+' de '+S.cart.length+' para comprar ahora</span></div>'+S.cart.map(function(c,i){var p=find(c.id);return '<div class="box'+(c.off?' coff':'')+'"><div style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" class="cbx" '+(c.off?'':'checked ')+'onchange="togC('+i+')" aria-label="Comprar este producto ahora"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;min-width:0;font-size:14px"><div class="cl2">'+esc(p.n)+'</div>'+(c.vk?'<div class="mu cl1">'+esc(vLabel(p,c.vk))+'</div>':'')+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div><button class="del" onclick="delC('+i+')" aria-label="Quitar del carrito">'+ic("trash")+'</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><b>'+fmt(sale(p)*c.q)+'</b></div></div>'}).join("")
@@ -607,12 +648,14 @@ var SEAL_OK='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12"
 SEAL_WAIT='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#f59e0b"/><path d="M12 6.5V12l3.5 2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function profBox(){
  var adm=!FB.phone,v=FB.verified,nm=(FB.name||"").trim(),ws=nm.split(/\s+/).filter(Boolean),ini=ws.length?(ws[0][0]+(ws[1]?ws[1][0]:"")).toUpperCase():"",
- ao=AVS.filter(function(a){return a[0]===FB.avatar})[0],av=ao?ao[1]:(ini?esc(ini):ic("user")),row=function(a,b){return'<div class="pf-r"><span>'+a+'</span><span>'+b+'</span></div>'};
- var h='<div class="box pf"><div class="pf-h"><div class="pf-av'+(ao?' em':'')+'"'+(ao?' style="background:'+ao[2]+'"':'')+(adm?'':' onclick="avPick()"')+'>'+av+'</div><div style="min-width:0"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(adm?'':(v?SEAL_OK:SEAL_WAIT))+'</div>'
+ ao=AVS.filter(function(a){return a[0]===FB.avatar})[0],av=ao?ao[1]:(ini?esc(ini):ic("user")),
+ info=function(icn,a,b){return'<div class="pf-r"><i class="pf-i">'+ic(icn)+'</i><span>'+a+'</span><span>'+b+'</span></div>'};
+ var h='<div class="box pf pfx"><div class="pf-h"><div class="pf-av'+(ao?' em':'')+'"'+(ao?' style="background:'+ao[2]+'"':'')+(adm?'':' onclick="avPick()"')+'>'+av+'</div><div class="pf-id"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(adm?'':(v?SEAL_OK:SEAL_WAIT))+'</div>'
  +(adm?'<div class="pf-pill pf-ok">Administrador</div>':v?'<div class="pf-pill pf-ok">Cuenta verificada</div>':'<div class="pf-pill pf-wait">Pendiente de verificación</div>')+(adm?'':'<div><span class="pf-lk" onclick="avPick()">Cambiar avatar</span></div>')+'</div></div>';
  if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'"><div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Estamos verificando tu cuenta.</b> Mientras tanto, tus pedidos se envían directo por WhatsApp y te atendemos por ahí.')+'</div></div>'
-  +'<div style="height:10px"></div>'+row("WhatsApp",fmtPh(FB.phone))+(FB.addr?row("Entrega",esc(FB.addr)):'')+row("Pedidos",String(getOrders().length));
- h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div></div>';
+  +'<div class="pf-st"><div><b>'+getOrders().length+'</b><span>Pedidos</span></div><div><b>'+(v?"Verificada":"En revisión")+'</b><span>Estado</span></div></div>'
+  +'<div class="pf-ls">'+info("phone","WhatsApp",fmtPh(FB.phone))+(FB.addr?info("home","Entrega",esc(FB.addr)):'')+'</div>';
+ h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o pf-out" onclick="FB.logout()">Cerrar sesión</button></div></div>';
  return h}
 /* ===== Tarjeta de tarifas ===== */
 function ratesOpen(){

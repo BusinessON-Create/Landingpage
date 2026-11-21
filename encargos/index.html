@@ -127,7 +127,7 @@ var CATBG={Audio:"#ede9fe",Moda:"#fce7f3",Hogar:"#ecfccb","Tecnología":"#e0f2fe
 var P=[];
 var S={cat:"",dom:"mgua",cur:"USD",store:"Todos",q:"",cart:[],tut:true,qty:1};
 function $(i){return document.getElementById(i)}
-var ICO={trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>',home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"/>',msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',box:'<path d="m7.5 4.3 9 5.2"/><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/>',headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',shirt:'<path d="M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.1a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.3-2.2z"/>',bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>',phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.4 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.9 5.3 2.8 7.8"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',zap:'<path d="M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5L12.1 8.7A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z"/>',play:'<path d="M6 3l14 9-14 9z"/>',arrowl:'<path d="m12 19-7-7 7-7M19 12H5"/>'};
+var ICO={search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>',home:'<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 2h2l2.7 12.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"/>',msg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',box:'<path d="m7.5 4.3 9 5.2"/><path d="M21 8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/>',headphones:'<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',shirt:'<path d="M20.4 3.5 16 2a4 4 0 0 1-8 0L3.6 3.5a2 2 0 0 0-1.3 2.2l.6 3.5a1 1 0 0 0 1 .8H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.1a1 1 0 0 0 1-.8l.6-3.5a2 2 0 0 0-1.3-2.2z"/>',bulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6M10 22h4"/>',phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',ship:'<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.4 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.9 5.3 2.8 7.8"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6M12 10v4M12 2v3"/>',zap:'<path d="M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5L12.1 8.7A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z"/>',play:'<path d="M6 3l14 9-14 9z"/>',arrowl:'<path d="m12 19-7-7 7-7M19 12H5"/>'};
 var CI={Audio:"headphones",Moda:"shirt",Hogar:"bulb","Tecnología":"phone"};
 function ic(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(ICO[n]||"")+'</svg>'}
 var SH='<ellipse cx="50" cy="90" rx="28" ry="4" fill="#0f172a" opacity=".12"/>';
@@ -243,6 +243,7 @@ function rcDraw(x,o){
  var bh=bl.length*21+66;x.fillStyle="#f1f5f9";x.fillRect(P,y,W-2*P,bh);
  T(o.cot?"IMPORTACIÓN: SE COBRA POR PESO AL ENTREGAR":"SEGUNDA FACTURA, SE COBRA AL RECIBIR",P+16,y+30,"600 12px "+F,"#64748b");
  bl.forEach(function(t,i){T(t,P+16,y+58+i*21,"400 15px "+F,"#334155")});y+=bh;
+ if(o.addr){x.font="400 16px "+F;y+=40;wrapT(x,"Dirección: "+o.addr,W-2*P).slice(0,3).forEach(function(s){T(s,P,y,"400 16px "+F,"#475569");y+=22})}
  if(o.notes){x.font="400 16px "+F;y+=40;wrapT(x,"Notas: "+o.notes,W-2*P).slice(0,3).forEach(function(s){T(s,P,y,"400 16px "+F,"#475569");y+=22})}
  y+=30;L(y,"#e2e8f0",1);y+=30;
  T("Pago por transferencia bancaria. Los tiempos de entrega son estimados.",W/2,y,"400 13px "+F,"#64748b","center");y+=22;
@@ -254,7 +255,7 @@ function rcCanvas(o){
 function orderBox(){
  var i=function(ph,k,t){return'<input type="'+(t||"text")+'"'+(t==="tel"?' inputmode="numeric"':'')+' placeholder="'+ph+'" value="'+esc(S[k]||"")+'" oninput="S.'+k+'=this.value" style="margin-top:8px">'};
  var warn=(FB.user&&!FB.verified)?'<div class="mu" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:#fef3c7;color:#92400e">Tu cuenta aún no está verificada. Tu pedido se enviará directo por WhatsApp y te atendemos por ahí.</div>':'';
- return'<div class="box"><b>Datos del pedido</b>'+warn+i("Tu nombre (obligatorio)","cn")+i("Tu WhatsApp, 8 dígitos (obligatorio)","cp","tel")+i("Dirección de entrega o notas (opcional)","cm")
+ return'<div class="box"><b>Datos del pedido</b>'+warn+i("Tu nombre (obligatorio)","cn")+i("Tu WhatsApp, 8 dígitos (obligatorio)","cp","tel")+i("Dirección de entrega (opcional)","cm")+i("Notas para este pedido (opcional)","cno")+'<div class="mu" style="margin-top:6px">Tu dirección se guarda en tu cuenta para tus próximas compras.</div>'
  +'<div id="om" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="sendOrder()">Solicitar pedido</button>'
  +'<div class="mu" style="margin-top:8px">Se descarga tu comprobante y se abre WhatsApp con los datos del pedido. Adjunta la imagen en el chat y envía.</div></div>'}
 function dataBlob(u){var p=u.split(","),bin=atob(p[1]),a=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);return new Blob([a],{type:"image/png"})}
@@ -269,16 +270,17 @@ function sendOrder(){
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
  var items=cSel().map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va&&p.s==="Amazon"?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:CFG[mm],vr:c.vk?vLabel(p,c.vk):""}});
- var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cm||"").trim(),
+ var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cno||"").trim().slice(0,300),addr:(S.cm||"").trim().slice(0,200),
   items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee};
- var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\nProductos: "+items.length+"\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nAdjunto el comprobante de mi pedido.";
- var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||"",vr:it.vr||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
+ var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\nProductos: "+items.length+"\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.addr?"\nDirección: "+o.addr:"")+(o.notes?"\nNotas: "+o.notes:"")+"\n\nAdjunto el comprobante de mi pedido.";
+ var rec={no:no,uid:FB.user.uid,date:n.toISOString(),name:o.name,phone:ph,notes:o.notes||"",addr:o.addr||"",tot:o.tot,items:items.length,lines:items.map(function(it){return{n:it.n,q:it.q,m:it.m,l:it.l||"",vr:it.vr||""}}),dom:S.dom,domN:d[1],st:0,h:{0:n.toISOString()}};
  var b;try{b=dataBlob(rcCanvas(o).toDataURL("image/png"))}catch(e){window.__sending=0;m.textContent="No se pudo generar el comprobante. Inténtalo de nuevo.";return}
  var wa="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msg),url=URL.createObjectURL(b);
  var fl=null;try{fl=new File([b],"Pedido-"+no+".png",{type:"image/png"})}catch(e){}
  window.RC={no:no,url:url,msg:msg,wa:wa,rec:rec,ver:ver,saved:false,err:"",file:fl,snap:JSON.stringify(cartItems())};
  /* Primero se descarga la imagen; después el cliente toca «Compartir por WhatsApp» */
  rcDl();
+ if(o.addr&&o.addr!==FB.addr&&FB.saveAddr)FB.saveAddr(o.addr).catch(function(){});S.cno="";
  cartClear(RC.snap);rcShow();
  if(ver)FB.saveOrder(rec).then(function(){RC.saved=true;rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
@@ -614,11 +616,27 @@ function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){re
  FB.addLinks(u).then(function(){},function(){$("am").textContent="No se pudieron guardar los links."})}
 function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l)return;var dup=!!l.dup&&(!l.st||l.st==="pendiente");if(!confirm(dup?"¿Quitar este link repetido de la lista? El producto original NO se borra.":"¿Eliminar este link y su producto de la tienda?"))return;if(ED===id){ED=null;EDP={}}FB.delLink(id,dup?null:l.pid).catch(function(){alert("No se pudo eliminar.")})}
 function admTask(t){if(!confirm(t==="revisar"?"¿Enviar «Revisar ahora» al robot?":"¿Enviar esta solicitud al robot?"))return;FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
-function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1});
- return moBox()+'<h2>Pedidos ('+L.length+')</h2>'+(L.length?L.map(function(o){var u=U[o.uid]||{};
+var OQ="",OF=-1;
+function ordNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function ordMatch(o,q){if(!q)return true;var t=ordNorm(q),d=t.replace(/\D/g,"");
+ if(ordNorm(o.no).indexOf(t)>-1||ordNorm(o.name).indexOf(t)>-1||ordNorm(o.cot).indexOf(t)>-1)return true;
+ return d.length>=2&&String(o.phone||"").indexOf(d)>-1}
+function admOrdList(){var U={};ADM.users.forEach(function(u){U[u._id]=u});
+ var all=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1}),q=OQ.trim();
+ var F=all.filter(function(o){return(OF<0||(o.st||0)===OF)&&ordMatch(o,q)});
+ var rec=OF<0&&!q,L=F.slice(0,rec?20:50);
+ var note=F.length?'<div class="mu" style="margin:4px 0 8px">'+(F.length>L.length?"Mostrando "+L.length+" de "+F.length+(rec?" (los más recientes). Busca o elige un estado para ver el resto.":". Escribe más para afinar la búsqueda."):F.length+(F.length===1?" pedido":" pedidos"))+'</div>':'';
+ return note+(L.length?L.map(function(o){var u=U[o.uid]||{};
   return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
+  +(o.addr?'<div style="margin-top:4px;font-size:14px"><b>Dirección:</b> '+esc(o.addr)+'</div>':'')+(o.notes?'<div style="margin-top:2px;font-size:14px"><b>Notas:</b> '+esc(o.notes)+'</div>':'')
   +'<select onchange="admSt(\''+o.no+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
-  +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button>'+(admInvOk(o)?'<button class="btn o" onclick="admInv(\''+o.no+'\')">Descargar factura</button>':'')+'</div>'}).join(""):'<div class="empty">Aún no hay pedidos.</div>')}
+  +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button>'+(admInvOk(o)?'<button class="btn o" onclick="admInv(\''+o.no+'\')">Descargar factura</button>':'')+'</div>'}).join(""):'<div class="empty">'+(all.length?"No hay pedidos con esa búsqueda o estado.":"Aún no hay pedidos.")+'</div>')}
+function admOrders(){var C={};ADM.orders.forEach(function(o){var k=o.st||0;C[k]=(C[k]||0)+1});
+ var chips='<div class="chips"><button class="chip'+(OF<0?' on':'')+'" onclick="admOF(-1)">Todos ('+ADM.orders.length+')</button>'+STP.map(function(s,i){return'<button class="chip'+(OF===i?' on':'')+'" onclick="admOF('+i+')">'+esc(s[0])+' ('+(C[i]||0)+')</button>'}).join("")+'</div>';
+ var sb='<div style="position:relative;margin:8px 0"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5;display:flex">'+ic("search")+'</span><input id="oq" type="search" placeholder="Buscar por código, nombre o celular" value="'+esc(OQ)+'" oninput="admOQ(this.value)" style="width:100%;padding:12px 12px 12px 40px;border:1px solid var(--bd);border-radius:12px;background:var(--sf);color:var(--tx);font:inherit;box-sizing:border-box"></div>';
+ return moBox()+'<h2>Pedidos ('+ADM.orders.length+')</h2>'+sb+chips+'<div id="ordL">'+admOrdList()+'</div>'}
+function admOQ(v){OQ=v;var e=$("ordL");if(e)e.innerHTML=admOrdList()}
+function admOF(i){OF=i;admV()}
 function admInvOk(o){return!!(o&&o.man&&Array.isArray(o.lines)&&o.lines.length&&o.lines.every(function(l){return l&&+l.p>0}))}
 function admInv(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!admInvOk(o)){alert("Esta orden no tiene los precios guardados.");return}try{cqDl(moInv({rec:o,prices:o.lines.map(function(l){return+l.p})}),"Pedido-"+o.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
 function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
@@ -837,6 +855,7 @@ Object.assign(window.FB,{
  delLink:async(id,pid)=>{if(pid!=null&&pid!=="")await deleteDoc(doc(db,"productos",String(pid)));await deleteDoc(doc(db,"links",id))},
  setStatus:(no,st)=>updateDoc(doc(db,"pedidos",no),{st:st,["h."+st]:new Date().toISOString()}),
  avSave:(l)=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{avOc:l}),
+ saveAddr:(a)=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{addr:String(a).slice(0,200)}),
  verify:(uid,v)=>updateDoc(doc(db,"usuarios",uid),{verified:v}),
  task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()}),
  approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
@@ -859,7 +878,7 @@ onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encar
   if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
   FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];window.COT=[];
- if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm=""}
+ if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm="";S.cno=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
   unO=(()=>{const q=onSnapshot(query(collection(db,"cotizaciones"),where("uid","==",u.uid)),s=>{window.COT=s.docs.map(d=>({...d.data(),no:d.id}));if(/^(pedidos|cuenta|cotizar)/.test(location.hash.slice(1)))route()},()=>{});const o=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(window.avRef)avRef();if(/^(pedidos|cuenta|o-)/.test(location.hash.slice(1)))route()},()=>{});return()=>{q();o()}})()}
  var cu=u?u.uid:null;

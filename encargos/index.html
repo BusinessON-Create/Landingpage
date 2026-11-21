@@ -248,9 +248,11 @@ body{background:var(--sf)}
 #app:has(#hm) .tiles .tile{width:200px}
 #app:has(#hm) .sec>div:first-child{padding:0 24px!important}
 #app:has(#hm) .nis>div:first-child{padding:6px 24px!important}
-/* Pagas lo que ves: tira roja detrás de la foto */
-.nis .pc .im{background-image:linear-gradient(135deg,#dc2626,#9f1239)!important}
-.nis .pc .im .pw img{top:14%;bottom:14%;height:72%;padding:6px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+/* Pagas lo que ves: una sola tira roja continua detrás de las fotos */
+.nis .row{gap:0!important;padding-left:0!important;padding-right:0!important;scroll-padding:0!important}
+.nis .pc .im{background-image:none!important;background-color:#dc2626!important}
+.nis .pc .im .pw img{top:14%;bottom:14%;height:72%;left:5px;width:calc(100% - 10px);padding:6px;-webkit-user-drag:none;user-select:none}
+.nis .pc .tag{background:#dc2626!important;border-color:#dc2626!important;color:#fff!important;box-shadow:none!important}
 .bnr img{max-height:none}
 nav div,.sbar div{max-width:640px}
 }
@@ -813,7 +815,7 @@ function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){retu
 
 /* ===== Precio puesto en Nicaragua / Personal Shopper / EncarGo ===== */
 (function(){var d=null,mv=0;
-document.addEventListener("mousedown",function(e){var t=e.target.closest&&e.target.closest(".tiles");if(!t||e.button)return;d={t:t,x:e.pageX,l:t.scrollLeft};mv=0;t.style.scrollSnapType="none"});
+document.addEventListener("mousedown",function(e){var t=e.target.closest&&e.target.closest(".tiles,.nis .row");if(!t||e.button)return;d={t:t,x:e.pageX,l:t.scrollLeft};mv=0;t.style.scrollSnapType="none"});
 document.addEventListener("mousemove",function(e){if(!d)return;var dx=e.pageX-d.x;if(Math.abs(dx)>5)mv=1;if(mv){d.t.scrollLeft=d.l-dx;e.preventDefault()}});
 document.addEventListener("mouseup",function(){if(d){d.t.style.scrollSnapType="";d=null}});
 document.addEventListener("click",function(e){if(mv){e.stopPropagation();e.preventDefault();mv=0}},true)})();

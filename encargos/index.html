@@ -118,8 +118,9 @@ var CFG={wa:"50557294271",t:{air:"3 a 5 días hábiles",sea:"15 a 20 días hábi
 function extra(v){for(var i=0;i<CFG.tiers.length;i++){var t=CFG.tiers[i];if(v<=t[0])return t[1]<1?v*t[1]:t[1]}return 0}
 function cSel(){return S.cart.filter(function(c){return !c.off})}
 function quote(){var sub=0,sh=0;cSel().forEach(function(c){var p=find(c.id);sub+=sale(p)*c.q;sh+=Math.max(p.w,CFG.minW)*c.q*CFG[c.m||"sea"]});var d=CFG.dom.filter(function(x){return x[0]===S.dom})[0],fee=cSel().length?CFG.fee:0;return{sub:sub,sh:sh,fee:fee,dom:d[2],tot:sub+sh+fee+d[2]}}
-/* Tiendas activas. Para volver a activar Shein o Temu, agrégalas aquí. */
-var STORES=["Amazon"];
+/* Tiendas activas (Shein y Temu son solo cotización: sin precio ni carrito). */
+var STORES=["Amazon","Victoria's Secret","Shein","Temu"];
+function setStore(i){S.store=["Todos"].concat(STORES)[i]||"Todos";home()}
 var CATBG={Audio:"#ede9fe",Moda:"#fce7f3",Hogar:"#ecfccb","Tecnología":"#e0f2fe",Belleza:"#ffe4e6",Juguetes:"#fef3c7",Deportes:"#dcfce7",Mascotas:"#ffedd5",Cocina:"#fee2e2",Herramientas:"#e2e8f0"};
 var P=[];
 var S={cat:"",dom:"mgua",cur:"USD",store:"Todos",q:"",cart:[],tut:true,qty:1};
@@ -146,9 +147,9 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function stars(r){var f=Math.round(r);return "★".repeat(f)+"☆".repeat(5-f)}
 function find(id){return P.filter(function(p){return p.id===id})[0]}
 function eta(d){var t=new Date();t.setDate(t.getDate()+d);return t.toLocaleDateString("es",{day:"numeric",month:"long"})}
-function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag">'+p.s+'</span></div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+fmt(sale(p))+'</div><div class="sb">'+alt(sale(p))+'</div>'+(p.x?'':'<button class="add" aria-label="Agregar" onclick="event.stopPropagation();addC('+p.id+',1)">'+ic("cart")+'</button>')+'</div>'}
+function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag">'+p.s+'</span></div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x?'':'<button class="add" aria-label="Agregar" onclick="event.stopPropagation();addC('+p.id+',1)">'+ic("cart")+'</button>')+'</div>'}
 function hdr(search){return '<header>'+(search?'<input id="q" placeholder="Buscar productos" value="'+esc(S.q)+'" oninput="S.q=this.value;home(true)">':'<b style="flex:1;font-size:18px">Encargos<span style="color:var(--gd)">.</span></b>')+'<button class="cur" onclick="S.cur=S.cur===\'USD\'?\'NIO\':\'USD\';route()"><i>$</i>'+(S.cur==="USD"?"US$":"C$")+'</button><button class="ib" aria-label="Notificaciones">'+ic("bell")+'</button></header>'}
-function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Todos"].concat(STORES).map(function(s){return '<button class="chip'+(S.store===s?' on':'')+'" onclick="S.store=\''+s+'\';home()">'+s+'</button>'}).join("")+'</div>'}
+function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Todos"].concat(STORES).map(function(s,i){return '<button class="chip'+(S.store===s?' on':'')+'" onclick="setStore('+i+')">'+esc(s)+'</button>'}).join("")+'</div>'}
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
 function recent(c){return P.filter(function(p){return p.c===c}).map(function(p,i){return{p:p,i:i}}).sort(function(a,b){var x=Date.parse(a.p.upd)||0,y=Date.parse(b.p.upd)||0;return y-x||a.i-b.i}).map(function(o){return o.p})}
 function catList(){var seen={},l=[];CATL.concat(P.map(function(p){return p.c})).forEach(function(c){if(c&&!seen[c]&&P.some(function(p){return p.c===c})){seen[c]=1;l.push(c)}});return l}
@@ -172,26 +173,27 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.for
  +'<div class="gal"><div class="slides" onscroll="var i=Math.round(this.scrollLeft/this.clientWidth);$(\'cn\').textContent=(i+1)+\' de '+N+'\';[].forEach.call(document.querySelectorAll(\'.dots i\'),function(d,j){d.className=j===i?\'on\':\'\'})">'+(p.img&&p.img.length?p.img:[0,1,2]).map(function(u,i){return '<div style="background:'+p.bg+'">'+pic(p,i)+'</div>'}).join("")+'</div><span class="cnt" id="cn">1 de '+N+'</span>'+(N>1?'<button class="gnav l" onclick="gnav(-1)" aria-label="Anterior">‹</button><button class="gnav r" onclick="gnav(1)" aria-label="Siguiente">›</button>':'')+'</div><div class="dots"><i class="on"></i>'+'<i></i>'.repeat(N-1)+'</div>'
  +'<div class="px"><div class="badges"><b style="background:#0f172a;color:#fff">'+p.s+'</b><b style="background:#fef3c7;color:#92400e">'+esc(p.b)+'</b></div><h1 class="ttl">'+esc(p.n)+'</h1>'
  +'<div class="rt"><span>'+(p.r?'<b>'+p.r+'</b> <span style="color:var(--gd)">'+stars(p.r)+'</span> <a>'+p.k.toLocaleString("en-US")+' valoraciones</a>':'<span class="mu">Sin reseñas cargadas</span>')+'</span><a onclick="navigator.share&&navigator.share({title:\''+esc(p.n).replace(/'/g,"")+'\',url:location.href})">Compartir</a></div></div>'
- +'<div class="box"><div class="mu">Precio del producto</div><div style="display:flex;justify-content:space-between;align-items:center"><div class="big">'+fmt(sub)+'</div>'+(p.x?'':'<div class="qty"><button onclick="S.qty=Math.max(1,S.qty-1);prod('+p.id+')">−</button><b>'+S.qty+'</b><button onclick="S.qty++;prod('+p.id+')">+</button></div>')+'</div>'
- +(p.x?'<div class="mu">Falta confirmar el precio de este enlace.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
+ +'<div class="box"><div class="mu">Precio del producto</div><div style="display:flex;justify-content:space-between;align-items:center"><div class="big">'+(p.x?'Se cotiza':fmt(sub))+'</div>'+(p.x?'':'<div class="qty"><button onclick="S.qty=Math.max(1,S.qty-1);prod('+p.id+')">−</button><b>'+S.qty+'</b><button onclick="S.qty++;prod('+p.id+')">+</button></div>')+'</div>'
+ +(p.x?'<div class="mu">Este producto se cotiza: te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma, se cobra por peso al entregar.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
  +'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="alert(\'Envío de Miami a Nicaragua, por libra y según el peso real al recibir. Express US$'+CFG.air+' ('+CFG.t.air+') · Regular US$'+CFG.sea+' ('+CFG.t.sea+'). Los días hábiles se cuentan desde que tu paquete llega a Miami.\')">Ver tarifas ›</button></div>'
  +(p.dims&&p.dims.length?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar un poco según la opción elegida. Te lo confirmamos antes de cobrar.</div>':'')
- +'<button class="btn"'+(p.x?' disabled':'')+' onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button><button class="btn o"'+(p.x?' disabled':'')+' onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button></div>'
+ +(p.x?'':'<button class="btn" onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
  +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p><p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p></details></div>'
  +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
  +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="if(addC('+p.id+',S.qty,1))go(\'carrito\')">'+ic("zap")+' Comprar ahora</button></div></div>')}
+function vOut(p,o){return !!(p&&p.dims&&(p.dims.length===1||p.s==="Victoria's Secret")&&(p.agot||[]).indexOf(o)>=0)}
 function vSel(id){S.vs=S.vs||{};return S.vs[id]||(S.vs[id]={})}
 function vAvail(p,di,val){if(!(p.vl&&p.vl.length))return true;var sel=vSel(p.id);return p.vl.some(function(c){var k=c.k.split("|");if(k[di]!==val)return false;return p.dims.every(function(_,j){return j===di||!sel[j]||k[j]===sel[j]})})}
 function vKey(p){var sel=vSel(p.id),a=[];for(var i=0;i<p.dims.length;i++){if(!sel[i])return"";a.push(sel[i])}return a.join("|")}
 function vLabel(p,vk){if(!vk||!p||!p.dims)return"";var k=vk.split("|");return k.map(function(v,i){return(p.dims[i]?p.dims[i].n:"Opción")+": "+v}).join(" · ")}
 function vAsin(p,vk){var c=((p&&p.vl)||[]).filter(function(x){return x.k===vk})[0];return c?c.a:""}
-function vrHtml(p){var sel=vSel(p.id);return p.dims.map(function(d,di){return'<div class="lb">'+esc(d.n.toUpperCase())+(sel[di]?': <b style="color:var(--tx)">'+esc(sel[di])+'</b>':'')+'</div><div class="vo">'+d.o.map(function(o,oi){return'<button class="'+(sel[di]===o?'on':'')+'"'+(vAvail(p,di,o)?'':' disabled')+' onclick="vPick('+p.id+','+di+','+oi+')">'+esc(o)+'</button>'}).join("")+'</div>'}).join("")+'<div id="vm" class="mu" style="color:#dc2626;margin-bottom:8px"></div>'}
+function vrHtml(p){var sel=vSel(p.id);return p.dims.map(function(d,di){return'<div class="lb">'+esc(d.n.toUpperCase())+(sel[di]?': <b style="color:var(--tx)">'+esc(sel[di])+'</b>':'')+'</div><div class="vo">'+d.o.map(function(o,oi){return'<button class="'+(sel[di]===o?'on':'')+'"'+(vAvail(p,di,o)&&!vOut(p,o)?'':' disabled')+(vOut(p,o)?' title="Agotado"':'')+' onclick="vPick('+p.id+','+di+','+oi+')">'+esc(o)+'</button>'}).join("")+'</div>'}).join("")+'<div id="vm" class="mu" style="color:#dc2626;margin-bottom:8px"></div>'}
 function vPick(id,di,oi){var p=find(id),sel=vSel(id),v=p.dims[di].o[oi];if(sel[di]===v)delete sel[di];else sel[di]=v;
  p.dims.forEach(function(_,j){if(j!==di&&sel[j]&&!vAvail(p,j,sel[j]))delete sel[j]});var b=$("vrb");if(b)b.innerHTML=vrHtml(p)}
 function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null,p=find(id),vk="";
  if(p&&p.dims&&p.dims.length){vk=vKey(p);if(!vk){var m=$("vm");if(m)m.textContent="Elige "+p.dims.map(function(d){return d.n.toLowerCase()}).join(" y ")+" antes de continuar.";var vb=$("vrb");if(vb&&vb.scrollIntoView)vb.scrollIntoView({behavior:"smooth",block:"center"});return false}}
- var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c)c.q+=q;else S.cart.push({id:id,q:q,m:"sea",vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
+ var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c){c.q+=q;c.off=0}else S.cart.push({id:id,q:q,m:"sea",vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
 function soon(t,i,m){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic(i)+'</div><b>'+t+'</b>'+m+'</div>'}
 function cartOld(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var sub=0;$("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c){var p=find(c.id);sub+=sale(p)*c.q;return '<div class="box" style="display:flex;gap:12px;align-items:center"><div style="position:relative;overflow:hidden;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<br><b>'+fmt(sale(p))+'</b> × '+c.q+'</div></div>'}).join("")+'<div class="box"><div class="mu">Subtotal de productos</div><div class="big">'+fmt(sub)+'</div><div class="demo">Envío, fechas Express/Regular y checkout llegan en el siguiente paso.</div></div>'}
@@ -265,7 +267,7 @@ function sendOrder(){
  var ver=!!FB.verified;
  var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
  no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
- var items=cSel().map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:CFG[mm],vr:c.vk?vLabel(p,c.vk):""}});
+ var items=cSel().map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va&&p.s==="Amazon"?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:CFG[mm],vr:c.vk?vLabel(p,c.vk):""}});
  var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cm||"").trim(),
   items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee};
  var msg="Hola, quiero hacer un pedido.\nPedido: "+no+"\nNombre: "+o.name+"\nWhatsApp: "+fmtPh(ph)+(ver?"":"\n(Cuenta pendiente de verificación)")+"\nProductos: "+items.length+"\nTotal a pagar ahora: "+usd(o.tot)+" ("+nio(o.tot)+")\nEntrega en Nicaragua: "+o.domN+(o.notes?"\nNotas: "+o.notes:"")+"\n\nAdjunto el comprobante de mi pedido.";
@@ -531,7 +533,7 @@ function apUpd(id){var p=apFind(id);if(!p)return;var r=apCalc(p);
  $("apf_"+id).textContent=apMoney(r.fin);$("apg_"+id).textContent=apMoney(r.gan);$("ape_"+id).textContent=r.err;$("apb_"+id).disabled=!!r.err}
 function apIn(id,k,v){var p=apFind(id);if(!p)return;apE(p)[k]=v;apUpd(id)}
 function envNota(p){var m=p.envioEstado==="pago"?"El robot vio un envío de "+apMoney(p.envio)+" y ya lo sumó.":p.envioEstado==="gratis"?"La tienda indica envío gratis.":"El robot no vio el costo de envío; quedó en $0.";return m+" Revísalo y ajústalo si hace falta."}
-function apForm(p,ed){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",id=p.id,
+function apForm(p,ed){if(p.cotizar&&!ed)return cotForm(p);var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",id=p.id,
  num=function(k,l,v){return'<div style="flex:1"><div class="mu">'+l+'</div><input type="number" min="0" step="0.01" value="'+esc(String(v==null?"":v))+'" oninput="apIn(\''+id+'\',\''+k+'\',this.value)"></div>'};
  return'<div class="box">'+(ed?'<span class="st" style="background:#dbeafe;color:#1e40af;margin-bottom:10px">Editando producto publicado</span>':'')
   +'<div style="display:flex;gap:12px;align-items:center">'+(img?'<img src="'+esc(img)+'" alt="" style="width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;flex:none">':'')
@@ -545,6 +547,22 @@ function apForm(p,ed){var e=apE(p),r=apCalc(p),img=(p.img&&p.img[0])||"",id=p.id
   +'<div id="ape_'+id+'" style="color:#dc2626;font-size:13px;margin-top:6px">'+esc(r.err)+'</div>'
   +(ed?'<button id="apb_'+id+'" class="btn" onclick="admEditSave(\''+id+'\')"'+(r.err?' disabled':'')+'>Guardar cambios</button><button class="btn o" onclick="admEditCancel(\''+id+'\')">Cancelar</button>'
       :'<button id="apb_'+id+'" class="btn" onclick="admOk(\''+id+'\')"'+(r.err?' disabled':'')+'>Aprobar y publicar</button><button class="btn o" onclick="admNo(\''+id+'\')">Descartar</button>')+'</div>'}
+/* Productos de cotización (Shein, Temu): el robot trae nombre, fotos y reseñas; no hay precio. */
+function apCat(id,v){var p=apFind(id);if(p)apE(p).cat=v}
+function cotForm(p){var e=apE(p),id=p.id,im=(p.img||[]).slice(0,4),
+ th=im.length?'<div style="display:flex;gap:6px;overflow:auto">'+im.map(function(u,i){return'<img src="'+esc(u)+'" alt="" style="width:'+(i?64:96)+'px;height:'+(i?64:96)+'px;object-fit:contain;border-radius:10px;background:#fff;flex:none">'}).join("")+'</div>':'<div class="demo">El robot no encontró fotos de este producto. Puedes publicarlo igual, pero conviene descartarlo y reintentar el link.</div>';
+ return'<div class="box"><span class="st" style="background:#fef3c7;color:#92400e;margin-bottom:10px">Se cotiza · '+esc(p.s||"")+'</span>'+th
+  +'<div style="font-size:14px;font-weight:600;margin-top:10px">'+esc(String(p.n||"").slice(0,120))+'</div>'
+  +'<div class="mu" style="margin-top:4px">'+(p.r?'<b>'+p.r+'</b> ★ · '+(p.k||0).toLocaleString("en-US")+' reseñas':'Sin reseñas')+' · '+(p.img||[]).length+' fotos</div>'
+  +(p.d?'<div class="mu" style="margin-top:6px">'+esc(String(p.d).slice(0,160))+'</div>':'')
+  +'<div class="mu" style="margin-top:6px;word-break:break-all"><a href="'+esc(p.l)+'" target="_blank" rel="noopener">Ver en '+esc(p.s||"la tienda")+'</a></div>'
+  +'<div style="margin-top:10px"><div class="mu">Categoría</div><select onchange="apCat(\''+id+'\',this.value)" style="width:100%;margin-top:4px">'+(CATL.indexOf(e.cat)<0?[e.cat].concat(CATL):CATL).map(function(c){return'<option'+(c===e.cat?' selected':'')+'>'+esc(c)+'</option>'}).join("")+'</select></div>'
+  +'<div class="demo" style="margin-top:10px">Este producto no lleva precio: el cliente lo pide con «Cotizar» y tú pones el precio a mano.</div>'
+  +'<button class="btn" onclick="admOkCot(\''+id+'\')">Publicar para cotizar</button><button class="btn o" onclick="admNo(\''+id+'\')">Descartar</button></div>'}
+function admOkCot(id){var p=apFind(id);if(!p)return;var e=apE(p);
+ if(!confirm("¿Publicar en la tienda para cotizar (sin precio)?"))return;
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:0,x:1,cotizar:1,tienda:p.tienda||"",w:0,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v||["Único"],dims:[],vl:[],agot:[],img:p.img,auto:1,upd:new Date().toISOString()}));
+ FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo publicar.")})}
 function admApprove(){var L=ADM.pend||[];
  if(!L.length)return'<h2>Por aprobar</h2><div class="empty">No hay productos por aprobar. Enciende el robot (node scrape.js) para leer los links pendientes.</div>';
  return'<h2>Por aprobar ('+L.length+')</h2>'+L.map(function(p){return apForm(p,false)}).join("")}
@@ -553,6 +571,7 @@ function hasProd(pid){return pid!=null&&pid!==""&&(window.FBP||[]).some(function
 function admEdit(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l)return;
  var q=(window.FBP||[]).filter(function(x){return String(x.id)===String(l.pid)})[0];
  if(!q){alert("Este link todavía no tiene un producto publicado, así que no hay nada que editar.");return}
+ if(q.cotizar){alert("Este producto se cotiza y no tiene precio que editar. Si algo cambió, elimina el link y vuelve a agregarlo.");return}
  if(ED&&ED!==id&&!confirm("Ya estás editando otro producto. ¿Descartar esos cambios y editar este?"))return;
  EDP={};ED=id;
  var est=q.pAmazon==null,imp=q.imp==null?0.1025:q.imp,pct=q.pct==null?COM_DEF:q.pct,ex=q.extra||0,ev=q.envio||0,pa=q.pAmazon;
@@ -571,7 +590,7 @@ function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el p
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
- var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:parseFloat(e.envio!=null?e.envio:p.envio)||0,envioEstado:p.envioEstado||"",envioOk:1,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
+ var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:parseFloat(e.envio!=null?e.envio:p.envio)||0,envioEstado:p.envioEstado||"",envioOk:1,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],agot:p.agot||[],tienda:p.tienda||"",img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
  FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
 function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
 

@@ -219,37 +219,37 @@ function rcDraw(x,o){
  x.fillStyle="#fff";x.fillRect(0,0,W,4000);
  x.fillStyle="#0f172a";x.fillRect(0,0,W,112);
  if(LOGO_IMG.complete&&LOGO_IMG.naturalWidth){x.fillStyle="#fff";x.beginPath();if(x.roundRect)x.roundRect(P,15,226,82,12);else x.rect(P,15,226,82);x.fill();x.drawImage(LOGO_IMG,P+11,26,204,62)}else T("Encargos Managua",P,68,"700 32px "+F,"#fff");
- T("PEDIDO · PRIMERA FACTURA",W-P,52,"600 13px "+F,"#94a3b8","right");
+ T(o.cot?"COTIZACIÓN":"PEDIDO · PRIMERA FACTURA",W-P,52,"600 13px "+F,"#94a3b8","right");
  T(o.no,W-P,80,"600 20px "+F,"#fff","right");
  T("CLIENTE",P,152,"600 12px "+F,"#64748b");T(o.name,P,178,"600 20px "+F,"#0f172a");
  if(o.phone)T(o.phone,P,202,"400 16px "+F,"#475569");
  T("FECHA",430,152,"600 12px "+F,"#64748b");T(o.date,430,178,"500 16px "+F,"#0f172a");
- T("ENTREGA",430,214,"600 12px "+F,"#64748b");T(o.domN,430,240,"500 16px "+F,"#0f172a");
+ T(o.cot?"VIGENTE HASTA":"ENTREGA",430,214,"600 12px "+F,"#64748b");T(o.cot?o.vig:o.domN,430,240,"500 16px "+F,"#0f172a");if(o.cot&&o.domN){T("ENTREGA",P,232,"600 12px "+F,"#64748b");T(o.domN,P,258,"500 16px "+F,"#0f172a")}
  T("PRODUCTO",P,304,"600 12px "+F,"#64748b");T("CANT.",470,304,"600 12px "+F,"#64748b","center");
- T("PRECIO",620,304,"600 12px "+F,"#64748b","right");T("ENVÍO POR LIBRA",W-P,304,"600 12px "+F,"#64748b","right");
+ T("PRECIO",o.cot?W-P:620,304,"600 12px "+F,"#64748b","right");if(!o.cot)T("ENVÍO POR LIBRA",W-P,304,"600 12px "+F,"#64748b","right");
  L(314,"#0f172a",1.5);y=314;
  o.items.forEach(function(it){
   x.font="500 20px "+F;var ls=wrapT(x,it.vr?it.n.slice(0,60)+" · "+it.vr:it.n,350).slice(0,3);
   ls.forEach(function(s,i){T(s,P,y+32+i*26,"500 20px "+F,"#0f172a")});
-  T(it.m==="air"?"Envío Express · "+CFG.t.air:"Envío Regular · "+CFG.t.sea,P,y+32+ls.length*26-2,"400 14px "+F,"#64748b");
+  T(o.cot?(it.sub||""):(it.m==="air"?"Envío Express · "+CFG.t.air:"Envío Regular · "+CFG.t.sea),P,y+32+ls.length*26-2,"400 14px "+F,"#64748b");
   T("x "+it.q,470,y+32,"500 18px "+F,"#0f172a","center");
-  T(it.p?usd(it.p):"Por confirmar",620,y+32,"500 18px "+F,"#0f172a","right");
-  T(usd(it.s)+"/lb",W-P,y+32,"500 18px "+F,"#0f172a","right");
+  T(it.p?usd(it.p):"Por confirmar",o.cot?W-P:620,y+32,"500 18px "+F,"#0f172a","right");
+  if(!o.cot)T(usd(it.s)+"/lb",W-P,y+32,"500 18px "+F,"#0f172a","right");
   y+=ls.length*26+44;L(y,"#e2e8f0",1)});
  y+=40;
  [["Productos",o.sub]].concat(o.fee?[["Preparación del pedido",o.fee]]:[]).forEach(function(r){
   T(r[0],430,y,"400 16px "+F,"#475569");T(r[1]?usd(r[1]):"Gratis",W-P,y,"600 16px "+F,"#0f172a","right");y+=32});
- y+=4;x.strokeStyle="#0f172a";x.lineWidth=1.5;x.beginPath();x.moveTo(430,y);x.lineTo(W-P,y);x.stroke();y+=34;T("TOTAL A PAGAR AHORA",430,y,"600 13px "+F,"#64748b");y+=40;T(usd(o.tot),W-P,y,"700 34px "+F,"#0f172a","right");y+=30;
+ y+=4;x.strokeStyle="#0f172a";x.lineWidth=1.5;x.beginPath();x.moveTo(430,y);x.lineTo(W-P,y);x.stroke();y+=34;T(o.cot?"TOTAL DE PRODUCTOS":"TOTAL A PAGAR AHORA",430,y,"600 13px "+F,"#64748b");y+=40;T(usd(o.tot),W-P,y,"700 34px "+F,"#0f172a","right");y+=30;
  T(nio(o.tot),W-P,y,"500 20px "+F,"#475569","right");y+=34;
  var bx=["Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+o.domN+(o.dom?" ("+usd(o.dom)+")":". El precio se confirma al retirar, porque varía según el paquete")+".","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."],bl=[];
- x.font="400 15px "+F;bx.forEach(function(t){bl=bl.concat(wrapT(x,t,W-2*P-32),[""])});bl.pop();
+ if(o.cot)bx=o.bx;x.font="400 15px "+F;bx.forEach(function(t){bl=bl.concat(wrapT(x,t,W-2*P-32),[""])});bl.pop();
  var bh=bl.length*21+66;x.fillStyle="#f1f5f9";x.fillRect(P,y,W-2*P,bh);
- T("SEGUNDA FACTURA, SE COBRA AL RECIBIR",P+16,y+30,"600 12px "+F,"#64748b");
+ T(o.cot?"IMPORTACIÓN: SE COBRA POR PESO AL ENTREGAR":"SEGUNDA FACTURA, SE COBRA AL RECIBIR",P+16,y+30,"600 12px "+F,"#64748b");
  bl.forEach(function(t,i){T(t,P+16,y+58+i*21,"400 15px "+F,"#334155")});y+=bh;
  if(o.notes){x.font="400 16px "+F;y+=40;wrapT(x,"Notas: "+o.notes,W-2*P).slice(0,3).forEach(function(s){T(s,P,y,"400 16px "+F,"#475569");y+=22})}
  y+=30;L(y,"#e2e8f0",1);y+=30;
  T("Pago por transferencia bancaria. Los tiempos de entrega son estimados.",W/2,y,"400 13px "+F,"#64748b","center");y+=22;
- T("Primera de dos facturas del pedido. Consultas por WhatsApp: +505 5729 4271",W/2,y,"400 13px "+F,"#64748b","center");
+ T(o.cot?"Cotización sujeta a disponibilidad. Consultas por WhatsApp: +505 5729 4271":"Primera de dos facturas del pedido. Consultas por WhatsApp: +505 5729 4271",W/2,y,"400 13px "+F,"#64748b","center");
  return y+40}
 function rcCanvas(o){
  var H=rcDraw(document.createElement("canvas").getContext("2d"),o),c=document.createElement("canvas");
@@ -360,7 +360,7 @@ function cotPersistDraft(){if(S.ce||!FB.user||!FB.cotSave)return;if(!(window.CR&
 function cotBox(p){return'<div style="margin-top:12px"><div class="lb">TALLA</div><input id="ct_t" maxlength="30" placeholder="Ej: M, 38, única" style="'+CTI+'"><div class="lb">COLOR</div><input id="ct_c" maxlength="30" placeholder="Ej: negro" style="'+CTI+'"><div class="lb">NOTA (OPCIONAL)</div><input id="ct_n" maxlength="120" placeholder="Algo que debamos saber" style="'+CTI+'"><div id="ct_m" class="mu" style="color:#dc2626"></div><button class="btn" onclick="cotAdd('+p.id+')">Cotizar</button></div>'}
 function cotAdd(id){var p=find(id),L=cotList(),m=$("ct_m"),g=function(k){return(($(k)&&$(k).value)||"").trim().slice(0,k==="ct_n"?120:30)};if(!p)return;
  if(L.length>=20){m.textContent="Máximo 20 productos por solicitud.";return}
- L.push({id:p.id,n:String(p.n).slice(0,120),s:p.s||"",l:String(p.l||"").slice(0,300),img:(p.img&&p.img[0])||"",t:g("ct_t"),c:g("ct_c"),nt:g("ct_n")});
+ L.push({id:p.id,n:String(p.n).slice(0,120),s:p.s||"",l:String(p.l||"").slice(0,300),img:(p.img&&p.img[0])||"",t:g("ct_t"),c:g("ct_c"),nt:g("ct_n"),m:"sea"});
  cotPersistDraft();go("cotizar")}
 function cotEd(i,k,v){var c=cotList()[i];if(!c)return;c[k]=String(v).slice(0,k==="nt"?120:30);clearTimeout(window.CTT);window.CTT=setTimeout(cotPersistDraft,700)}
 function cotNt(v){if(S.ce)S.ce.nota=v.slice(0,300);else S.cg=v.slice(0,300)}
@@ -371,29 +371,46 @@ function cotV(){if(!FB.ready){soon("Cargando…","box","");return}
  if(!L.length){soon("Tu solicitud está vacía","msg",'Elige productos de Shein o Temu en la tienda y toca «Cotizar».<br><br><button class="btn" onclick="go(\'inicio\')">Ver la tienda</button>');return}
  $("app").innerHTML=hdr(false)+'<h2>'+(ed?'Editar solicitud '+esc(S.ce.no):'Solicitud de cotización')+'</h2><div class="mu" style="margin-bottom:10px">Te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma: se cobra por peso al entregar.</div>'
  +L.map(function(c,i){return'<div class="box"><div style="display:flex;gap:12px;align-items:center"><div style="width:56px;height:56px;border-radius:12px;overflow:hidden;background:#f1f5f9;flex:none">'+(c.img?'<img src="'+esc(c.img)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'')+'</div><div style="flex:1;min-width:0"><b>'+esc(c.n)+'</b><div class="mu">'+esc(c.s||"")+'</div></div><button class="ib" aria-label="Quitar" onclick="cotDel('+i+')">✕</button></div>'
-  +'<div style="margin-top:10px"><div class="lb">TALLA</div><input maxlength="30" value="'+esc(c.t||"")+'" oninput="cotEd('+i+',\'t\',this.value)" style="'+CTI+'"><div class="lb">COLOR</div><input maxlength="30" value="'+esc(c.c||"")+'" oninput="cotEd('+i+',\'c\',this.value)" style="'+CTI+'"><div class="lb">NOTA</div><input maxlength="120" value="'+esc(c.nt||"")+'" oninput="cotEd('+i+',\'nt\',this.value)" style="'+CTI+'"></div></div>'}).join("")
- +'<div class="box"><div class="lb">NOTA GENERAL (OPCIONAL)</div><textarea rows="2" maxlength="300" oninput="cotNt(this.value)" style="'+CTI+'">'+esc(ed?S.ce.nota||"":S.cg||"")+'</textarea></div>'
+  +'<div style="margin-top:10px"><div class="lb">TALLA</div><input maxlength="30" value="'+esc(c.t||"")+'" oninput="cotEd('+i+',\'t\',this.value)" style="'+CTI+'"><div class="lb">COLOR</div><input maxlength="30" value="'+esc(c.c||"")+'" oninput="cotEd('+i+',\'c\',this.value)" style="'+CTI+'"><div class="lb">NOTA</div><input maxlength="120" value="'+esc(c.nt||"")+'" oninput="cotEd('+i+',\'nt\',this.value)" style="'+CTI+'"></div>'+cotModes(c,i)+'</div>'}).join("")
+ +cotDomBox()+'<div class="box"><div class="lb">NOTA GENERAL (OPCIONAL)</div><textarea rows="2" maxlength="300" oninput="cotNt(this.value)" style="'+CTI+'">'+esc(ed?S.ce.nota||"":S.cg||"")+'</textarea></div>'
  +'<div id="ct_e" class="mu" style="color:#dc2626;margin:0 0 8px"></div><button class="btn" onclick="cotSend()">'+(ed?'Guardar cambios y avisar por WhatsApp':'Enviar solicitud por WhatsApp')+'</button>'+(ed?'<button class="btn o" onclick="cotEditEnd()">Cancelar edición</button>':'')}
-function cotMsg(no,nm,ph,items,nota,upd){var t=(upd?"Hola, actualicé mi solicitud de cotización.":"Hola, quiero cotizar estos productos.")+"\nSolicitud: "+no+"\nNombre: "+nm+"\nWhatsApp: "+fmtPh(ph);
- items.forEach(function(c,i){t+="\n\n"+(i+1)+". "+c.n+" ("+c.s+")"+(c.t?"\nTalla: "+c.t:"")+(c.c?"\nColor: "+c.c:"")+(c.nt?"\nNota: "+c.nt:"")+(c.l?"\n"+c.l:"")});
- if(nota)t+="\n\nNota: "+nota;return t}
-function cotWa(no,nm,ph,items,nota,upd){var u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(cotMsg(no,nm,ph,items,nota,upd)),w=window.open(u,"_blank");if(!w)location.href=u}
+function cotModes(c,i){var m=c.m==="air"?"air":"sea";return'<div class="th" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="'+(m==="air"?"on":"")+'" onclick="cotM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="cotM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div>'}
+function cotM(i,m){var c=cotList()[i];if(!c)return;c.m=m==="air"?"air":"sea";cotPersistDraft();cotV()}
+function cotDomV(){var d=S.ce?S.ce.dom:S.cd;return d==="cargo"?"cargo":"mgua"}
+function cotDom(v){var d=v==="cargo"?"cargo":"mgua";if(S.ce)S.ce.dom=d;else S.cd=d}
+function cotDomN(d){return(CFG.dom.filter(function(x){return x[0]===d})[0]||["","Entrega a domicilio en Managua"])[1]}
+function cotDomBox(){var cur=cotDomV();return'<div class="box"><b>Entrega en Nicaragua</b><select onchange="cotDom(this.value)">'+CFG.dom.map(function(d){return'<option value="'+d[0]+'"'+(cur===d[0]?" selected":"")+'>'+d[1]+(d[2]?" (+"+fmt(d[2])+")":"")+'</option>'}).join("")+'</select><div class="mu" style="margin-top:8px">El precio de la entrega se confirma cuando tu paquete llega a Nicaragua, porque varía según el paquete. Se cobra al retirar.</div></div>'}
+function cotMsg(no,nm,ph,items,nota,upd,domN){var t=(upd?"Hola, actualicé mi solicitud de cotización.":"Hola, quiero cotizar estos productos.")+"\nSolicitud: "+no+"\nNombre: "+nm+"\nWhatsApp: "+fmtPh(ph);
+ items.forEach(function(c,i){t+="\n\n"+(i+1)+". "+c.n+" ("+c.s+")"+(c.t?"\nTalla: "+c.t:"")+(c.c?"\nColor: "+c.c:"")+(c.nt?"\nNota: "+c.nt:"")+(c.m?"\nEnvío: "+(c.m==="air"?"Express":"Regular"):"")+(c.l?"\n"+c.l:"")});
+ if(domN)t+="\n\nEntrega: "+domN;if(nota)t+="\n\nNota: "+nota;return t}
+function cotWa(no,nm,ph,items,nota,upd,domN){var u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(cotMsg(no,nm,ph,items,nota,upd,domN)),w=window.open(u,"_blank");if(!w)location.href=u}
 function cotSend(){var m=$("ct_e"),L=cotList(),ed=!!S.ce;m.textContent="";
  if(!FB.user){m.textContent="Entra a tu cuenta para enviar tu solicitud.";return}
  if(!FB.verified){m.textContent="Tu cuenta aún no está verificada. Escríbenos por WhatsApp para verificarla y poder cotizar.";return}
  if(!L.length||window.__csending)return;window.__csending=1;setTimeout(function(){window.__csending=0},4000);
  var nota=(ed?S.ce.nota||"":S.cg||"").trim().slice(0,300),nm=(S.cn||FB.name||"Cliente").trim().slice(0,60)||"Cliente",ph=FB.phone,
- items=L.map(function(c){return{id:c.id,n:c.n,s:c.s||"",l:c.l||"",img:c.img||"",t:c.t||"",c:c.c||"",nt:c.nt||""}}),fail=function(){window.__csending=0;m.textContent="No se pudo enviar la solicitud. Revisa tu conexión e inténtalo de nuevo."};
- if(ed){var no=S.ce.no;FB.cotEdit(no,items,nota).then(function(){S.ce=null;go("pedidos");cotWa(no,nm,ph,items,nota,true)},fail);return}
+ dom=cotDomV(),domN=cotDomN(dom),items=L.map(function(c){return{id:c.id,n:c.n,s:c.s||"",l:c.l||"",img:c.img||"",t:c.t||"",c:c.c||"",nt:c.nt||"",m:c.m==="air"?"air":"sea"}}),fail=function(){window.__csending=0;m.textContent="No se pudo enviar la solicitud. Revisa tu conexión e inténtalo de nuevo."};
+ if(ed){var no=S.ce.no;FB.cotEdit(no,items,nota,dom,domN).then(function(){S.ce=null;go("pedidos");cotWa(no,nm,ph,items,nota,true,domN)},fail);return}
  var n=new Date(),pad=function(v){return String(v).padStart(2,"0")},no2="CT-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000)),iso=n.toISOString();
- FB.cotCreate(no2,{uid:FB.user.uid,name:nm,phone:ph,items:items,nota:nota,st:0,h:{0:iso},date:iso}).then(function(){S.cot=[];S.cg="";cotPersistDraft();go("pedidos");cotWa(no2,nm,ph,items,nota,false)},fail)}
+ FB.cotCreate(no2,{uid:FB.user.uid,name:nm,phone:ph,items:items,nota:nota,dom:dom,domN:domN,st:0,h:{0:iso},date:iso}).then(function(){S.cot=[];S.cg="";cotPersistDraft();go("pedidos");cotWa(no2,nm,ph,items,nota,false,domN)},fail)}
 function cotFind(no){return(window.COT||[]).filter(function(c){return c.no===no})[0]}
-function cotEditStart(no){var c=cotFind(no);if(!c||c.st!==0)return;S.ce={no:no,items:JSON.parse(JSON.stringify(c.items||[])),nota:c.nota||""};go("cotizar")}
-function cotAgain(no){var c=cotFind(no);if(!c||S.ce)return;(c.items||[]).forEach(function(it){if(S.cot.length<20)S.cot.push(JSON.parse(JSON.stringify(it)))});cotPersistDraft();go("cotizar")}
+function cotEditStart(no){var c=cotFind(no);if(!c||c.st!==0)return;S.ce={no:no,items:JSON.parse(JSON.stringify(c.items||[])),nota:c.nota||"",dom:c.dom||"mgua"};go("cotizar")}
+function cotAgain(no){var c=cotFind(no);if(!c||S.ce)return;if(c.dom)S.cd=c.dom;(c.items||[]).forEach(function(it){if(S.cot.length<20)S.cot.push(JSON.parse(JSON.stringify(it)))});cotPersistDraft();go("cotizar")}
 function cotAct(no,st){var c=cotFind(no);if(!c)return;
  if(st===2&&cotSt(c)!==1){alert("Esta cotización ya venció. Puedes pedir una nueva con «Volver a cotizar».");route();return}
  if(!confirm(st===2?"¿Aceptar esta cotización?":"¿Cancelar esta solicitud?"))return;
- FB.cotSet(no,st).catch(function(){alert("No se pudo actualizar. Inténtalo de nuevo.")})}
+ var fail=function(){window.__cacc=0;alert("No se pudo actualizar. Inténtalo de nuevo.")};
+ if(st!==2){FB.cotSet(no,st).catch(fail);return}
+ if(window.__cacc)return;
+ var rec=cotPedido(c,new Date().toISOString());
+ if(!rec){alert("Esta cotización no tiene un total válido. Escríbenos por WhatsApp.");return}
+ window.__cacc=1;
+ FB.cotAccept(no,rec).then(function(){window.__cacc=0},fail)}
+/* Arma el pedido (st:0) con la forma del checkout normal, a partir de una cotización aceptada. Mismo número que la cotización. */
+function cotPedido(c,iso){var its=c.items||[];if(!c.no||!c.uid||!(c.tot>0)||!its.length)return null;
+ return{no:c.no,uid:c.uid,date:iso,name:c.name||"",phone:c.phone||"",notes:c.nota||"",tot:c.tot,items:its.length,
+  lines:its.map(function(it){return{n:it.n||"",q:1,m:it.m==="air"?"air":"sea",l:it.l||"",vr:[it.t?"Talla: "+it.t:"",it.c?"Color: "+it.c:""].filter(Boolean).join(" · ")}}),
+  dom:c.dom==="cargo"?"cargo":"mgua",domN:c.domN||"",st:0,h:{0:iso},cot:c.no}}
 function cotCard(c){var st=cotSt(c),col=CTC[st],its=c.items||[],pr=c.pr||[],q=c.st>=1,b="";
  var rows=its.map(function(it,i){return'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:6px"><span class="mu" style="flex:1;min-width:0">'+esc(it.n)+(it.t||it.c?" · "+esc([it.t,it.c].filter(Boolean).join(" / ")):"")+'</span>'+(q&&pr[i]!=null?'<b>'+usd(+pr[i])+'</b>':'')+'</div>'}).join("");
  if(st===0)b='<button class="btn o" style="margin-top:10px" onclick="cotEditStart(\''+esc(c.no)+'\')">Editar productos</button><button class="btn o" onclick="cotAct(\''+esc(c.no)+'\',3)">Cancelar solicitud</button>';
@@ -478,7 +495,7 @@ function orderV(id){var demo=id==="demo",o;
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
 var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})}};
-window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
+window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
 function fmtPh(p){return"+505 "+p.slice(0,4)+" "+p.slice(4)}
@@ -544,8 +561,8 @@ var AT="links",LC={pendiente:["#fef3c7","#92400e"],disponible:["#d1fae5","#065f4
 function admV(){
  if(!FB.ready){soon("Cargando…","user","");return}
  if(!FB.isAdmin){$("app").innerHTML=hdr(false)+'<h2>Administrador</h2><div class="box"><b>Entrar</b><input id="ad_e" type="email" placeholder="Correo" autocomplete="username"><input id="ad_w" type="password" placeholder="Contraseña" autocomplete="current-password"><div id="am" class="mu" style="margin:8px 0;color:#dc2626"></div><button class="btn" onclick="admGo()">Entrar</button></div>';return}
- var T=[["links","Links"],["aprobar","Aprobar"+((ADM.pend||[]).length?" ("+ADM.pend.length+")":"")],["pedidos","Pedidos"],["clientes","Clientes"]];
- $("app").innerHTML=hdr(false)+'<h2>Panel</h2><div class="chips">'+T.map(function(t){return'<button class="chip'+(AT===t[0]?' on':'')+'" onclick="AT=\''+t[0]+'\';admV()">'+t[1]+'</button>'}).join("")+'</div>'+(AT==="links"?admLinks():AT==="aprobar"?admApprove():AT==="pedidos"?admOrders():admUsers())}
+ var T=[["links","Links"],["aprobar","Aprobar"+((ADM.pend||[]).length?" ("+ADM.pend.length+")":"")],["cotizaciones","Cotizaciones"+(cqPend()?" ("+cqPend()+")":"")],["pedidos","Pedidos"],["clientes","Clientes"]];
+ $("app").innerHTML=hdr(false)+'<h2>Panel</h2><div class="chips">'+T.map(function(t){return'<button class="chip'+(AT===t[0]?' on':'')+'" onclick="AT=\''+t[0]+'\';admV()">'+t[1]+'</button>'}).join("")+'</div>'+(AT==="links"?admLinks():AT==="aprobar"?admApprove():AT==="cotizaciones"?admCots():AT==="pedidos"?admOrders():admUsers())}
 function admGo(){FB.adminLogin($("ad_e").value.trim(),$("ad_w").value).then(function(){},function(){$("am").textContent="Correo o contraseña incorrectos."})}
 function admLinks(){var L=ADM.links.slice().sort(function(a,b){return String(a.url)<String(b.url)?-1:1});
  return'<div class="box"><b>Agregar links</b><textarea id="ad_l" rows="4" placeholder="Pega uno o varios links, uno por línea" style="width:100%;margin-top:8px;border:1px solid var(--bd);border-radius:12px;padding:12px;background:var(--sf);color:var(--tx);font:inherit"></textarea><div id="am" class="mu" style="margin-top:6px;color:#dc2626"></div><button class="btn" onclick="admAdd()">Agregar links</button><button class="btn o" onclick="admTask(\'revisar\')">Revisar ahora</button><div class="demo">El robot de tu PC procesa los links pendientes y responde a «Revisar ahora» mientras esté abierto.</div></div>'
@@ -564,6 +581,49 @@ function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=A
   +'<select onchange="admSt(\''+o.no+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
   +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button></div>'}).join(""):'<div class="empty">Aún no hay pedidos.</div>')}
 function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+/* ===== Cotizaciones (admin) ===== */
+var CQ={};
+function cqPend(){return(ADM.cots||[]).filter(function(c){return c.st===0}).length}
+function cqFind(id){return(ADM.cots||[]).filter(function(c){return c._id===id})[0]}
+function cqN(v){var n=parseFloat(String(v).replace(",","."));return isFinite(n)&&n>0?Math.round(n*100)/100:0}
+function cqV(c,i){var d=CQ[c._id];return d&&d.pr[i]!=null?d.pr[i]:(c.pr&&c.pr[i]!=null?c.pr[i]:"")}
+function cqSum(c){var s=0;(c.items||[]).forEach(function(it,i){s+=cqN(cqV(c,i))});return Math.round(s*100)/100}
+function cqAn(c){var d=CQ[c._id];return d&&d.an!=null?d.an:(c.anota||"")}
+function cqDraft(c){if(!CQ[c._id])CQ[c._id]={pr:(c.pr||[]).slice(),an:null};return CQ[c._id]}
+function admCotIn(id,i,v){var c=cqFind(id);if(!c)return;cqDraft(c).pr[i]=v;var e=$("cq_t_"+id);if(e)e.textContent=usd(cqSum(c))}
+function admCotAn(id,v){var c=cqFind(id);if(!c)return;cqDraft(c).an=v.slice(0,300)}
+function cqFmt(d){return d.toLocaleString("es",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
+function cqInv(c,pr,tot,vence,an,iso){var its=(c.items||[]).map(function(x,i){return{n:x.n||"",vr:"",q:1,p:pr[i],sub:[x.s,x.t?"Talla "+x.t:"",x.c?"Color "+x.c:"",x.m==="air"?"Envío Express":x.m==="sea"?"Envío Regular":""].filter(Boolean).join(" · ")}}),vig=cqFmt(vence);
+ return rcCanvas({cot:1,no:c._id,name:c.name||"",phone:c.phone?fmtPh(c.phone):"",date:ordDate(iso),vig:vig,items:its,sub:tot,fee:0,tot:tot,notes:an||"",domN:c.domN||"",
+  bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Esta cotización es válida hasta "+vig.replace(/\.$/,"")+". Después de esa fecha debes pedir una nueva.","Para aceptarla, entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización»."].concat(c.domN?["Entrega en Nicaragua: "+c.domN+". El precio se confirma al retirar, porque varía según el paquete."]:[])})}
+function cqDl(cv,name){var b=dataBlob(cv.toDataURL("image/png")),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}
+function admCots(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=(ADM.cots||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});
+ return'<h2>Cotizaciones ('+L.length+')</h2>'+(L.length?L.map(function(c){
+  var st=cotSt(c),col=CTC[st],id=esc(c._id),ed=st!==2,its=c.items||[],q=c.st>=1,ms=cotMs(c),b="";
+  var rows=its.map(function(it,i){var lk=/^https?:\/\//.test(it.l||"")?' · <a href="'+esc(it.l)+'" target="_blank" rel="noopener">enlace</a>':"";
+   return'<div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0"><div style="font-size:14px">'+esc(it.n||"")+'</div><div class="mu">'+esc([it.s,it.t?"Talla "+it.t:"",it.c?"Color "+it.c:"",it.m==="air"?"Envío Express":it.m==="sea"?"Envío Regular":"Envío sin definir"].filter(Boolean).join(" · "))+lk+'</div>'+(it.nt?'<div class="mu">Nota del cliente: '+esc(it.nt)+'</div>':'')
+    +'<div style="margin-top:6px;display:flex;align-items:center;gap:8px"><span class="mu">Precio US$</span>'+(ed?'<input inputmode="decimal" style="width:96px;padding:8px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;text-align:right" value="'+esc(cqV(c,i))+'" oninput="admCotIn(\''+id+'\','+i+',this.value)">':'<b>'+usd(cqN(cqV(c,i)))+'</b>')+'</div></div>'}).join("");
+  if(st===0)b='<button class="btn" onclick="admCotSave(\''+id+'\')">Cotizar y descargar factura</button>';
+  else if(st===1)b='<button class="btn" onclick="admCotSave(\''+id+'\')">Actualizar (nuevas 48 h) y descargar factura</button>';
+  else if(st>=3)b='<button class="btn" onclick="admCotSave(\''+id+'\')">Volver a cotizar (48 h) y descargar factura</button>';
+  if(st===1&&c.tot>0)b+='<button class="btn o" onclick="admCotDl(\''+id+'\')">Descargar factura</button><button class="btn o" onclick="admCotWa(\''+id+'\')">Enviar por WhatsApp</button>';
+  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+id+'</b><span class="st" style="background:'+col[0]+';color:'+col[1]+'">'+CTL[st]+'</span></div>'
+   +'<div style="margin-top:6px;font-size:14px">'+esc(c.name||"")+'</div><div class="mu">'+(c.phone?fmtPh(c.phone)+", ":"")+ordDate(c.date)+'</div><div class="mu" style="font-size:11px;word-break:break-all">uid: '+esc(c.uid||"")+'</div><div class="mu">Entrega: '+esc(c.domN||"sin definir")+'</div>'
+   +(c.nota?'<div class="mu" style="margin-top:6px">Nota de la solicitud: '+esc(c.nota)+'</div>':'')+rows
+   +'<div style="display:flex;justify-content:space-between;margin-top:12px"><b>Total de productos</b><b id="cq_t_'+id+'">'+usd(cqSum(c))+'</b></div><div class="mu">Sin importación: se cobra por peso al entregar.</div>'
+   +(q&&ms?'<div class="mu" style="margin-top:6px">'+(st===4?"Venció el ":"Vigente hasta ")+esc(new Date(ms).toLocaleString("es",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}))+'</div>':'')
+   +(ed?'<input maxlength="300" placeholder="Nota para el cliente (opcional)" style="margin-top:10px" value="'+esc(cqAn(c))+'" oninput="admCotAn(\''+id+'\',this.value)">':(c.anota?'<div class="mu" style="margin-top:6px">'+esc(c.anota)+'</div>':''))
+   +b+'</div>'}).join(""):'<div class="empty">Aún no hay cotizaciones.</div>')}
+function admCotSave(id){var c=cqFind(id);if(!c||c.st===2)return;var its=c.items||[],pr=[],bad=0;
+ its.forEach(function(it,i){var v=cqN(cqV(c,i));if(!v)bad=1;pr.push(v)});
+ if(!its.length||bad){alert("Escribe el precio de cada producto (mayor que 0).");return}
+ var tot=Math.round(pr.reduce(function(a,b){return a+b},0)*100)/100,now=new Date(),vence=new Date(now.getTime()+48*3600*1000),an=cqAn(c).trim().slice(0,300);
+ if(!confirm("¿Cotizar a "+(c.name||"el cliente")+" por "+usd(tot)+"? Quedará vigente 48 horas, hasta el "+cqFmt(vence).replace(/\.$/,"")+"."))return;
+ var d={st:1,pr:pr,tot:tot,vence:vence,anota:an};d["h.1"]=now.toISOString();
+ FB.cotAdm(id,d).then(function(){delete CQ[id];try{cqDl(cqInv(c,pr,tot,vence,an,now.toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("Se guardó la cotización, pero no se pudo generar la imagen. Usa «Descargar factura».")}},function(){alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})}
+function admCotDl(id){var c=cqFind(id);if(!c||!(c.tot>0)||!cotMs(c))return;try{cqDl(cqInv(c,c.pr||[],c.tot,new Date(cotMs(c)),c.anota||"",(c.h&&c.h[1])||new Date().toISOString()),"Cotizacion-"+id+".png")}catch(e){alert("No se pudo generar la imagen.")}}
+function admCotWa(id){var c=cqFind(id);if(!c||!c.phone||!(c.tot>0))return;if(!confirm("¿Abrir WhatsApp para enviar la cotización a "+(c.name||"el cliente")+"? Recuerda adjuntar la imagen descargada."))return;
+ window.open("https://wa.me/505"+c.phone+"?text="+encodeURIComponent("Hola "+(c.name||"")+", tu cotización "+id+" está lista: total de productos "+usd(c.tot)+" (la importación se cobra por peso al entregar). Vigente hasta "+cqFmt(new Date(cotMs(c))).replace(/\.$/,"")+". Entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización». Te adjunto la factura."),"_blank")}
 function admUsers(){var L=ADM.users.slice().sort(function(a,b){return String(a.name)<String(b.name)?-1:1});
  return'<h2>Clientes ('+L.length+')</h2>'+(L.length?L.map(function(u){return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(u.name||"Sin nombre")+'</b>'+(u.verified?'<span class="st" style="background:#d1fae5;color:#065f46">Verificado</span>':'<span class="st" style="background:#fef3c7;color:#92400e">Sin verificar</span>')+'</div><div class="mu" style="margin-top:6px">'+fmtPh(u.phone||"00000000")+'</div><button class="btn o" onclick="admVer(\''+u._id+'\','+(u.verified?'false':'true')+')">'+(u.verified?"Quitar verificación":"Marcar como verificado")+'</button><button class="btn o" onclick="admReset(\''+u._id+'\')">Restablecer contraseña</button></div>'}).join(""):'<div class="empty">Aún no hay clientes.</div>')}
 function admReset(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!confirm("¿Restablecer la contraseña de "+(u.name||fmtPh(u.phone))+"?\n\nAntes confirma que es el dueño: pídele el número de su último pedido o su dirección de entrega."))return;
@@ -658,7 +718,7 @@ fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).c
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,updatePassword,reauthenticateWithCredential,EmailAuthProvider}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,getDocs,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import{getFirestore,doc,setDoc,addDoc,deleteDoc,updateDoc,collection,query,where,onSnapshot,getDocs,serverTimestamp,writeBatch}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyBSxtylRVal92S78q5L5JOktrxYuk5uFyE",authDomain:"encargos-a973f.firebaseapp.com",projectId:"encargos-a973f",storageBucket:"encargos-a973f.firebasestorage.app",messagingSenderId:"1037727617046",appId:"1:1037727617046:web:863457d1b28e0095b5a537"});
 const auth=getAuth(app),db=getFirestore(app),mail=p=>"505"+p+"@encargos.app";let unO=null,unA=[],unC=null,unU=null;const ADMIN="s93sGjAkOFh8DmocePL9kzzL7Jf1";
 Object.assign(window.FB,{
@@ -682,11 +742,13 @@ Object.assign(window.FB,{
  cartSave:items=>setDoc(doc(db,"carritos",auth.currentUser.uid),{items:items,upd:serverTimestamp()},{merge:true}),
  cotSave:(items,cot)=>setDoc(doc(db,"carritos",auth.currentUser.uid),{items:items,cot:cot,upd:serverTimestamp()},{merge:true}),
  cotCreate:(no,d)=>setDoc(doc(db,"cotizaciones",no),d),
- cotEdit:(no,items,nota)=>updateDoc(doc(db,"cotizaciones",no),{items:items,nota:nota}),
+ cotEdit:(no,items,nota,dom,domN)=>updateDoc(doc(db,"cotizaciones",no),{items:items,nota:nota,dom:dom,domN:domN}),
+ cotAdm:(no,d)=>updateDoc(doc(db,"cotizaciones",no),d),
  cotSet:(no,st)=>updateDoc(doc(db,"cotizaciones",no),{st:st,["h."+st]:new Date().toISOString()}),
+ cotAccept:(no,rec)=>{const b=writeBatch(db);b.update(doc(db,"cotizaciones",no),{st:2,["h.2"]:rec.date});b.set(doc(db,"pedidos",no),rec);return b.commit()},
  editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
-onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[]};
- if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
+onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};
+ if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"],["cotizaciones","cots"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(FB.isAdmin)FB.cleanTasks();if(!u&&window.PWF){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
  if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";
  if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}

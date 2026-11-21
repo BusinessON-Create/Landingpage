@@ -223,6 +223,13 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .tile{border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
 .tile .tv{border-radius:0!important;box-shadow:none!important}
 .add{box-shadow:none!important}
+/* Categorías en carrusel deslizable, sin cantidad de productos */
+.tiles{display:flex!important;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 14px 6px;cursor:grab;user-select:none;-webkit-user-select:none}
+.tiles::-webkit-scrollbar{display:none}
+.tiles:active{cursor:grabbing}
+.tiles .tile{flex:none!important;width:150px;grid-column:auto!important;scroll-snap-align:start}
+.tiles .tile .tcn{display:none}
+.tiles img{-webkit-user-drag:none;user-drag:none}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -781,6 +788,12 @@ function applyFBP(){if(!PB)return;var a=(window.FBP||[]).filter(function(x){retu
 
 
 /* ===== Precio puesto en Nicaragua / Personal Shopper / EncarGo ===== */
+(function(){var d=null,mv=0;
+document.addEventListener("mousedown",function(e){var t=e.target.closest&&e.target.closest(".tiles");if(!t||e.button)return;d={t:t,x:e.pageX,l:t.scrollLeft};mv=0;t.style.scrollSnapType="none"});
+document.addEventListener("mousemove",function(e){if(!d)return;var dx=e.pageX-d.x;if(Math.abs(dx)>5)mv=1;if(mv){d.t.scrollLeft=d.l-dx;e.preventDefault()}});
+document.addEventListener("mouseup",function(){if(d){d.t.style.scrollSnapType="";d=null}});
+document.addEventListener("click",function(e){if(mv){e.stopPropagation();e.preventDefault();mv=0}},true)})();
+function lnNi(x){var p=P.filter(function(q){return q.n===x.n})[0];return!!(p&&p.ni)}
 function allNi(){var l=cSel();return l.length>0&&l.every(function(c){var p=find(c.id);return p&&p.ni})}
 function niAny(){return cSel().some(function(c){var p=find(c.id);return p&&p.ni})}
 function niSec(){var l=P.filter(function(p){return p.ni&&!p.x});if(!l.length)return'';return'<div style="margin:0 0 14px;border-radius:0;padding:14px 0 10px;background:linear-gradient(135deg,#dc2626,#9f1239);color:#fff"><div style="padding:0 14px"><b style="font-size:20px">🔥 Pagas lo que ves</b><div style="font-size:13px;opacity:.92;margin:2px 0 10px">Precio final puesto en Nicaragua. Sin tarifas de envío.</div></div><div class="row">'+l.map(card).join("")+'</div></div>'}
@@ -904,9 +917,9 @@ function moBuild(M,no,iso){if(!M.u)return{err:"Elige un cliente."};var lines=[],
  tot=Math.round(tot*100)/100;var dom=M.dom==="cargo"?"cargo":"mgua";
  return{rec:{no:no,uid:M.u.id,date:iso,name:M.u.name||"",phone:M.u.phone||"",notes:String(M.notes||"").trim().slice(0,300),tot:tot,items:lines.length,
   lines:lines.map(function(z){return{n:z.n,q:z.q,m:z.m,l:z.l,vr:z.vr,p:z._p}}),man:1,dom:dom,domN:cotDomN(dom),st:0,h:{0:iso}},prices:lines.map(function(z){return z._p})}}
-function moInv(d){var r=d.rec,its=r.lines.map(function(x,i){return{n:x.n,vr:x.vr,q:x.q,p:d.prices[i],sub:x.m==="air"?"Envío Express":"Envío Regular"}});
+function moInv(d){var r=d.rec,its=r.lines.map(function(x,i){return{n:x.n,vr:x.vr,q:x.q,p:d.prices[i],sub:lnNi(x)?"Envío incluido · puesto en Nicaragua":x.m==="air"?"Envío Express":"Envío Regular"}});
  return rcCanvas({cot:1,ord:1,no:r.no,name:r.name,phone:fmtPh(r.phone||"00000000"),date:ordDate(r.date),items:its,sub:r.tot,fee:0,tot:r.tot,notes:r.notes,domN:r.domN,
-  bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+r.domN+". El precio se confirma al retirar, porque varía según el paquete.","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."]})}
+  bx:[r.lines.length&&r.lines.every(lnNi)?"Envío incluido: estos productos tienen precio puesto en Nicaragua, no hay cobro de flete por peso.":"La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+r.domN+". El precio se confirma al retirar, porque varía según el paquete.","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."]})}
 function moSave(){if(!MO||window.__mosv)return;var no=moNo();if(!no){alert("No se pudo crear un número de orden. Inténtalo de nuevo.");return}
  var iso=new Date().toISOString(),r=moBuild(MO,no,iso);if(r.err){alert(r.err);return}
  if(!confirm("¿Crear la orden "+no+" para "+(r.rec.name||"el cliente")+" por "+usd(r.rec.tot)+"?"))return;

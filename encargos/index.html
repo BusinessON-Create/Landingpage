@@ -18,7 +18,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var
 header input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--sf);border-radius:12px;padding:11px 14px}
 .cur{border:1px solid var(--bd);background:var(--sf);border-radius:999px;padding:6px 12px 6px 6px;display:flex;gap:6px;align-items:center;font-weight:700;font-size:13px}
 .cur i{font-style:normal;background:#0f172a;color:#fff;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px}
-.ib{border:0;background:none;font-size:20px;padding:4px}
+.ib{border:0;background:none;font-size:20px;padding:4px}.ib{position:relative}.bdg{position:absolute;top:-2px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#dc2626;color:#fff;font:700 10px/16px system-ui,sans-serif;text-align:center;font-style:normal}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;scrollbar-width:none}
 .lgw{background:#fff;border-radius:10px;padding:3px 9px;height:34px;display:block}
 .chip{flex:none;border:1px solid var(--bd);background:var(--sf);border-radius:999px;padding:9px 14px;font-size:14px;font-weight:500}
@@ -150,7 +150,7 @@ function stars(r){var f=Math.round(r);return "★".repeat(f)+"☆".repeat(5-f)}
 function find(id){return P.filter(function(p){return p.id===id})[0]}
 function eta(d){var t=new Date();t.setDate(t.getDate()+d);return t.toLocaleDateString("es",{day:"numeric",month:"long"})}
 function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag">'+p.s+'</span></div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x?'':'<button class="add" aria-label="'+(p.dims&&p.dims.length?"Elegir opciones":"Agregar")+'" onclick="event.stopPropagation();'+(p.dims&&p.dims.length?"go(\'p"+p.id+"\')":"addC("+p.id+",1)")+'">'+ic("cart")+'</button>')+'</div>'}
-function hdr(search){return '<header>'+(search?'<input id="q" placeholder="Buscar productos" value="'+esc(S.q)+'" oninput="S.q=this.value;home(true)">':'<span style="flex:1;display:flex"><img class="lgw" alt="EncarGo" src="'+LOGO_URI+'"></span>')+'<button class="cur" onclick="S.cur=S.cur===\'USD\'?\'NIO\':\'USD\';route()"><i>$</i>'+(S.cur==="USD"?"US$":"C$")+'</button><button class="ib" aria-label="Notificaciones">'+ic("bell")+'</button></header>'}
+function hdr(search){return '<header>'+(search?'<input id="q" placeholder="Buscar productos" value="'+esc(S.q)+'" oninput="S.q=this.value;home(true)">':'<span style="flex:1;display:flex"><img class="lgw" alt="EncarGo" src="'+LOGO_URI+'"></span>')+'<button class="cur" onclick="S.cur=S.cur===\'USD\'?\'NIO\':\'USD\';route()"><i>$</i>'+(S.cur==="USD"?"US$":"C$")+'</button><button class="ib" aria-label="Notificaciones" onclick="avOpen()">'+ic("bell")+avBdg()+'</button></header>'}
 function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Todos"].concat(STORES).map(function(s,i){return '<button class="chip'+(S.store===s?' on':'')+'" onclick="setStore('+i+')">'+esc(s)+'</button>'}).join("")+(S.cot.length?'<button class="chip on" onclick="go(\'cotizar\')">Mi solicitud ('+S.cot.length+')</button>':'')+'</div>'}
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
 function recent(c){return P.filter(function(p){return p.c===c}).map(function(p,i){return{p:p,i:i}}).sort(function(a,b){var x=Date.parse(a.p.upd)||0,y=Date.parse(b.p.upd)||0;return y-x||a.i-b.i}).map(function(o){return o.p})}
@@ -469,6 +469,36 @@ ICO.check='<path d="M20 6 9 17l-5-5"/>';
 var STP=[["Solicitud en proceso","Recibimos tu pedido y estamos confirmando tu pago."],["Pedido realizado","Ya compramos tus productos en la tienda."],["Entregado en Miami","Tus productos llegaron a nuestra bodega en Miami."],["Entregado en Nicaragua","Tu pedido ya está en Nicaragua."],["En camino","Cargotrans lleva tu pedido a la dirección que indicaste."],["Recibido","Ya tienes tu pedido. Gracias por tu compra."],["Cancelado","Este pedido fue cancelado. Si tienes dudas, escríbenos por WhatsApp."]];
 var STC=[["#fef3c7","#92400e"],["#e0e7ff","#3730a3"],["#e0f2fe","#075985"],["#ede9fe","#5b21b6"],["#ffedd5","#9a3412"],["#d1fae5","#065f46"],["#fee2e2","#991b1b"]];
 function stIdx(o){return[0,1,2,3,4,5].filter(function(i){return i!==4||o.dom==="cargo"})}
+var AVL=[];
+function avItems(){var L=[];
+ if(FB.isAdmin){
+  (ADM.cots||[]).filter(function(c){return c.st===0}).forEach(function(c){L.push({t:"Solicitud nueva",s:(c.name||"Cliente")+" · "+(c._id||c.no||""),x:c.date||"",tab:"cotizaciones"})});
+  (ADM.orders||[]).filter(function(o){return !o.st&&!o.man}).forEach(function(o){L.push({t:"Pedido nuevo",s:(o.name||"Cliente")+" · "+o.no,x:o.date||"",tab:"pedidos"})});
+ }else if(FB.user){
+  var oc=FB.avOc||[];
+  (window.ORD||[]).forEach(function(o){var st=o.st||0,k=o.no+":"+st,x=(o.h&&o.h[st])||o.date||"",tm=Date.parse(x);if(!STP[st]||oc.indexOf(k)>-1||(tm&&Date.now()-tm>2592e6))return;L.push({k:k,no:o.no,t:STP[st][0],s:STP[st][1],x:x})});
+ }
+ L.sort(function(a,b){return String(a.x)<String(b.x)?1:-1});return L}
+function avBdg(){try{var n=avItems().length;return n?'<i class="bdg">'+(n>9?"9+":n)+'</i>':''}catch(e){return''}}
+function avRef(){try{var b=document.querySelector('header .ib[aria-label="Notificaciones"]');if(b)b.innerHTML=ic("bell")+avBdg();if(document.getElementById("avp"))avDraw()}catch(e){}}
+function avOpen(){var o=document.getElementById("avp");if(o){o.remove();return}
+ var d=document.createElement("div");d.id="avp";d.style.cssText="position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.35)";
+ d.onclick=function(e){if(e.target===d)d.remove()};document.body.appendChild(d);avDraw()}
+function avDraw(){var d=document.getElementById("avp");if(!d)return;AVL=avItems();
+ var h='<div style="position:absolute;top:calc(env(safe-area-inset-top,0px) + 58px);left:12px;right:12px;max-width:480px;margin:0 auto;max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:16px;padding:6px 14px;box-shadow:0 12px 32px rgba(0,0,0,.25)">';
+ h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0"><b>Avisos</b><button class="ib" aria-label="Cerrar" onclick="avOpen()">×</button></div>';
+ if(!FB.user)h+='<div class="mu" style="padding:12px 0">Inicia sesión para ver tus avisos.</div>';
+ else if(!AVL.length)h+='<div class="mu" style="padding:12px 0">No tienes avisos nuevos.</div>';
+ else AVL.forEach(function(a,i){var dt=a.x&&!isNaN(new Date(a.x))?ordDate(a.x):"";
+  h+='<div style="display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd)"><div style="flex:1;cursor:pointer" onclick="avGo('+i+')"><b>'+esc(a.t)+'</b><div class="mu" style="margin-top:2px">'+esc(a.no?"Pedido "+a.no:a.s)+(dt?" · "+dt:"")+'</div>'+(a.no?'<div style="margin-top:4px;font-size:14px">'+esc(a.s)+'</div>':'')+'</div>'+(a.k?'<button class="ib" aria-label="Ocultar aviso" onclick="avHide('+i+')">×</button>':'')+'</div>'});
+ d.innerHTML=h+'</div>'}
+function avGo(i){var a=AVL[i];if(!a)return;var d=document.getElementById("avp");if(d)d.remove();
+ if(FB.isAdmin){AT=a.tab;if(location.hash==="#admin")admV();else go("admin")}else go("o-"+a.no)}
+function avHide(i){var a=AVL[i];if(!a||!a.k||!FB.user||!FB.avSave)return;var cur={};(window.ORD||[]).forEach(function(o){cur[o.no+":"+(o.st||0)]=1});
+ var prev=FB.avOc||[],l=prev.filter(function(k){return cur[k]});if(l.indexOf(a.k)<0)l.push(a.k);l=l.slice(-200);
+ FB.avOc=l;avRef();
+ FB.avSave(l).catch(function(){FB.avOc=prev;avRef();alert("No se pudo ocultar el aviso.")})}
+
 function stPos(o){if(o.st===6)return-1;return stIdx(o).filter(function(i){return i<=(o.st||0)}).length-1}
 function getOrders(){return window.ORD||[]}
 function ordDate(iso){return new Date(iso).toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"})}
@@ -806,6 +836,7 @@ Object.assign(window.FB,{
  addLinks:async us=>{for(const u of us)await addDoc(collection(db,"links"),{url:u,st:"pendiente",createdAt:serverTimestamp()})},
  delLink:async(id,pid)=>{if(pid!=null&&pid!=="")await deleteDoc(doc(db,"productos",String(pid)));await deleteDoc(doc(db,"links",id))},
  setStatus:(no,st)=>updateDoc(doc(db,"pedidos",no),{st:st,["h."+st]:new Date().toISOString()}),
+ avSave:(l)=>updateDoc(doc(db,"usuarios",auth.currentUser.uid),{avOc:l}),
  verify:(uid,v)=>updateDoc(doc(db,"usuarios",uid),{verified:v}),
  task:o=>addDoc(collection(db,"tareas"),{...o,done:false,createdAt:serverTimestamp()}),
  approve:async(p,linkId)=>{await setDoc(doc(db,"productos",String(p.id)),p);await deleteDoc(doc(db,"porAprobar",String(p.id)));if(linkId)await updateDoc(doc(db,"links",linkId),{st:"disponible"})},
@@ -820,17 +851,17 @@ Object.assign(window.FB,{
  cotAccept:(no,rec)=>{const b=writeBatch(db);b.update(doc(db,"cotizaciones",no),{st:2,["h.2"]:rec.date});b.set(doc(db,"pedidos",no),rec);return b.commit()},
  editProd:async(id,d,linkId,name)=>{await updateDoc(doc(db,"productos",String(id)),d);if(linkId&&name)await updateDoc(doc(db,"links",linkId),{name:name})}});
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};
- if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"],["cotizaciones","cots"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
+ if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"],["cotizaciones","cots"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(window.avRef)avRef();if(location.hash==="#admin")route()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(FB.isAdmin)FB.cleanTasks();if(!u&&window.PWF){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
- if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";
+ if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";FB.avOc=[];
  if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
   const d=s.data(),v=d.verified===true;FB.mustChange=d.mustChange===true;FB.tempExp=d.tempExp||0;
   if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
-  FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
+  FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];window.COT=[];
  if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;
-  unO=(()=>{const q=onSnapshot(query(collection(db,"cotizaciones"),where("uid","==",u.uid)),s=>{window.COT=s.docs.map(d=>({...d.data(),no:d.id}));if(/^(pedidos|cuenta|cotizar)/.test(location.hash.slice(1)))route()},()=>{});const o=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(/^(pedidos|cuenta|o-)/.test(location.hash.slice(1)))route()},()=>{});return()=>{q();o()}})()}
+  unO=(()=>{const q=onSnapshot(query(collection(db,"cotizaciones"),where("uid","==",u.uid)),s=>{window.COT=s.docs.map(d=>({...d.data(),no:d.id}));if(/^(pedidos|cuenta|cotizar)/.test(location.hash.slice(1)))route()},()=>{});const o=onSnapshot(query(collection(db,"pedidos"),where("uid","==",u.uid)),s=>{window.ORD=s.docs.map(d=>d.data()).sort((a,b)=>a.date<b.date?-1:1);if(window.avRef)avRef();if(/^(pedidos|cuenta|o-)/.test(location.hash.slice(1)))route()},()=>{});return()=>{q();o()}})()}
  var cu=u?u.uid:null;
  if(window.CUID!==cu){if(unC){unC();unC=null}if(window.CUID){S.cart=[];S.cot=[];S.ce=null}window.CUID=cu;window.CR=null;window.CFIRST=true;
   if(u)unC=onSnapshot(doc(db,"carritos",u.uid),s=>{if(s.metadata.hasPendingWrites)return;window.CR={items:s.exists()?(s.data().items||[]):[]};if(!COTINF&&!S.ce){S.cot=s.exists()?(s.data().cot||[]):[];if(location.hash==="#cotizar")route()}cartApply()},()=>{})}

@@ -248,6 +248,9 @@ body{background:var(--sf)}
 #app:has(#hm) .tiles .tile{width:200px}
 #app:has(#hm) .sec>div:first-child{padding:0 24px!important}
 #app:has(#hm) .nis>div:first-child{padding:6px 24px!important}
+/* Pagas lo que ves: tira roja detrás de la foto */
+.nis .pc .im{background-image:linear-gradient(to bottom,transparent 16%,#dc2626 16%,#9f1239 84%,transparent 84%)!important}
+.nis .pc .im .pw img{filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
 .bnr img{max-height:none}
 nav div,.sbar div{max-width:640px}
 }

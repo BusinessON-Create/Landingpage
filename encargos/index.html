@@ -66,7 +66,7 @@ nav button.mid span{background:var(--ac);color:#fff;border-radius:50%;width:46px
 .ttl{font-size:25px;line-height:1.15;letter-spacing:-.6px;margin:0 0 8px}.rt{display:flex;justify-content:space-between;font-size:14px;margin-bottom:14px}.rt a{color:var(--ac);font-weight:700}
 .box{border:1px solid var(--bd);border-radius:16px;padding:16px;margin:0 14px 14px;background:var(--bg)}
 .big{font-size:38px;font-weight:800;letter-spacing:-1px}.mu{color:var(--mu);font-size:14px}
-.qty{display:flex;align-items:center;border:1px solid var(--bd);border-radius:10px;background:var(--sf)}.qty button{border:0;background:none;width:36px;height:36px;font-size:18px}.qty b{width:26px;text-align:center}.cbx{width:22px;height:22px;flex:none;margin:2px 0 0;accent-color:var(--ac)}.del{flex:none;width:36px;height:36px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--mu);font-size:18px;display:flex;align-items:center;justify-content:center}.del:active{color:var(--rd);border-color:var(--rd)}.coff>div:first-child>div{opacity:.55}.csel{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}.csel label{display:flex;gap:8px;align-items:center;font-weight:600;font-size:14px}
+.qty{display:flex;align-items:center;border:1px solid var(--bd);border-radius:10px;background:var(--sf)}.qty button{border:0;background:none;width:36px;height:36px;font-size:18px}.qty b{width:26px;text-align:center}.cbx{width:22px;height:22px;flex:none;margin:2px 0 0;accent-color:var(--ac)}.box input.cbx{width:22px;height:22px;padding:0;margin:2px 0 0;border:0;background:none}.cl1,.cl2{overflow:hidden;word-break:break-word}.cl1{white-space:nowrap;text-overflow:ellipsis}.cl2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}.del{flex:none;width:36px;height:36px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--mu);font-size:18px;display:flex;align-items:center;justify-content:center}.del:active{color:var(--rd);border-color:var(--rd)}.coff>div:first-child>div{opacity:.55}.csel{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}.csel label{display:flex;gap:8px;align-items:center;font-weight:600;font-size:14px}
 .eta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px;font-size:14px}.eta div{display:grid;gap:4px}
 .btn{width:100%;border:0;border-radius:12px;padding:15px;font-weight:700;font-size:16px;background:var(--ac);color:#fff;margin-top:12px}.btn.o{background:var(--bg);color:var(--ac);border:2px solid var(--ac);margin-top:10px}
 .btn:disabled{opacity:.45}
@@ -150,7 +150,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function stars(r){var f=Math.round(r);return "★".repeat(f)+"☆".repeat(5-f)}
 function find(id){return P.filter(function(p){return p.id===id})[0]}
 function eta(d){var t=new Date();t.setDate(t.getDate()+d);return t.toLocaleDateString("es",{day:"numeric",month:"long"})}
-function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag">'+p.s+'</span></div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x?'':'<button class="add" aria-label="Agregar" onclick="event.stopPropagation();addC('+p.id+',1)">'+ic("cart")+'</button>')+'</div>'}
+function card(p){return '<div class="pc" onclick="go(\'p'+p.id+'\')"><div class="im" style="background:'+p.bg+'">'+pic(p)+'<span class="tag">'+p.s+'</span></div><div class="nm">'+esc(p.n)+'</div><div class="pr">'+(p.x?'Se cotiza':fmt(sale(p)))+'</div><div class="sb">'+(p.x?'Pide tu cotización':alt(sale(p)))+'</div>'+(p.x?'':'<button class="add" aria-label="'+(p.dims&&p.dims.length?"Elegir opciones":"Agregar")+'" onclick="event.stopPropagation();'+(p.dims&&p.dims.length?"go(\'p"+p.id+"\')":"addC("+p.id+",1)")+'">'+ic("cart")+'</button>')+'</div>'}
 function hdr(search){return '<header>'+(search?'<input id="q" placeholder="Buscar productos" value="'+esc(S.q)+'" oninput="S.q=this.value;home(true)">':'<span style="flex:1;display:flex"><img class="lgw" alt="EncarGo" src="'+LOGO_URI+'"></span>')+'<button class="cur" onclick="S.cur=S.cur===\'USD\'?\'NIO\':\'USD\';route()"><i>$</i>'+(S.cur==="USD"?"US$":"C$")+'</button><button class="ib" aria-label="Notificaciones">'+ic("bell")+'</button></header>'}
 function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Todos"].concat(STORES).map(function(s,i){return '<button class="chip'+(S.store===s?' on':'')+'" onclick="setStore('+i+')">'+esc(s)+'</button>'}).join("")+(S.cot.length?'<button class="chip on" onclick="go(\'cotizar\')">Mi solicitud ('+S.cot.length+')</button>':'')+'</div>'}
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
@@ -196,7 +196,7 @@ function vPick(id,di,oi){var p=find(id),sel=vSel(id),v=p.dims[di].o[oi];if(sel[d
  p.dims.forEach(function(_,j){if(j!==di&&sel[j]&&!vAvail(p,j,sel[j]))delete sel[j]});var b=$("vrb");if(b)b.innerHTML=vrHtml(p)}
 function addC(id,q,quiet){var ev=window.event,btn=ev&&ev.target&&ev.target.closest?ev.target.closest("button"):null,p=find(id),vk="";
  if(p&&p.dims&&p.dims.length){vk=vKey(p);if(!vk){var m=$("vm");if(m)m.textContent="Elige "+p.dims.map(function(d){return d.n.toLowerCase()}).join(" y ")+" antes de continuar.";var vb=$("vrb");if(vb&&vb.scrollIntoView)vb.scrollIntoView({behavior:"smooth",block:"center"});return false}}
- var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c){c.q+=q;c.off=0}else S.cart.push({id:id,q:q,m:"sea",vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
+ var c=S.cart.filter(function(x){return x.id===id&&(x.vk||"")===vk})[0];if(c){c.q+=q;c.off=0}else S.cart.push({id:id,q:q,m:cartM(),vk:vk});S.qty=1;cartPersist();nav();if(!quiet)addFx(id,btn);return true}
 function soon(t,i,m){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic(i)+'</div><b>'+t+'</b>'+m+'</div>'}
 function cartOld(){if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var sub=0;$("app").innerHTML=hdr(false)+'<h2>Carrito</h2>'+S.cart.map(function(c){var p=find(c.id);sub+=sale(p)*c.q;return '<div class="box" style="display:flex;gap:12px;align-items:center"><div style="position:relative;overflow:hidden;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:28px;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+'<br><b>'+fmt(sale(p))+'</b> × '+c.q+'</div></div>'}).join("")+'<div class="box"><div class="mu">Subtotal de productos</div><div class="big">'+fmt(sub)+'</div><div class="demo">Envío, fechas Express/Regular y checkout llegan en el siguiente paso.</div></div>'}
@@ -219,12 +219,12 @@ function rcDraw(x,o){
  x.fillStyle="#fff";x.fillRect(0,0,W,4000);
  x.fillStyle="#0f172a";x.fillRect(0,0,W,112);
  if(LOGO_IMG.complete&&LOGO_IMG.naturalWidth){x.fillStyle="#fff";x.beginPath();if(x.roundRect)x.roundRect(P,15,226,82,12);else x.rect(P,15,226,82);x.fill();x.drawImage(LOGO_IMG,P+11,26,204,62)}else T("Encargos Managua",P,68,"700 32px "+F,"#fff");
- T(o.cot?"COTIZACIÓN":"PEDIDO · PRIMERA FACTURA",W-P,52,"600 13px "+F,"#94a3b8","right");
+ T(o.ord?"PEDIDO":o.cot?"COTIZACIÓN":"PEDIDO · PRIMERA FACTURA",W-P,52,"600 13px "+F,"#94a3b8","right");
  T(o.no,W-P,80,"600 20px "+F,"#fff","right");
  T("CLIENTE",P,152,"600 12px "+F,"#64748b");T(o.name,P,178,"600 20px "+F,"#0f172a");
  if(o.phone)T(o.phone,P,202,"400 16px "+F,"#475569");
  T("FECHA",430,152,"600 12px "+F,"#64748b");T(o.date,430,178,"500 16px "+F,"#0f172a");
- T(o.cot?"VIGENTE HASTA":"ENTREGA",430,214,"600 12px "+F,"#64748b");T(o.cot?o.vig:o.domN,430,240,"500 16px "+F,"#0f172a");if(o.cot&&o.domN){T("ENTREGA",P,232,"600 12px "+F,"#64748b");T(o.domN,P,258,"500 16px "+F,"#0f172a")}
+ T(o.cot&&!o.ord?"VIGENTE HASTA":"ENTREGA",430,214,"600 12px "+F,"#64748b");T(o.cot&&!o.ord?o.vig:o.domN,430,240,"500 16px "+F,"#0f172a");if(o.cot&&!o.ord&&o.domN){T("ENTREGA",P,232,"600 12px "+F,"#64748b");T(o.domN,P,258,"500 16px "+F,"#0f172a")}
  T("PRODUCTO",P,304,"600 12px "+F,"#64748b");T("CANT.",470,304,"600 12px "+F,"#64748b","center");
  T("PRECIO",o.cot?W-P:620,304,"600 12px "+F,"#64748b","right");if(!o.cot)T("ENVÍO POR LIBRA",W-P,304,"600 12px "+F,"#64748b","right");
  L(314,"#0f172a",1.5);y=314;
@@ -249,7 +249,7 @@ function rcDraw(x,o){
  if(o.notes){x.font="400 16px "+F;y+=40;wrapT(x,"Notas: "+o.notes,W-2*P).slice(0,3).forEach(function(s){T(s,P,y,"400 16px "+F,"#475569");y+=22})}
  y+=30;L(y,"#e2e8f0",1);y+=30;
  T("Pago por transferencia bancaria. Los tiempos de entrega son estimados.",W/2,y,"400 13px "+F,"#64748b","center");y+=22;
- T(o.cot?"Cotización sujeta a disponibilidad. Consultas por WhatsApp: +505 5729 4271":"Primera de dos facturas del pedido. Consultas por WhatsApp: +505 5729 4271",W/2,y,"400 13px "+F,"#64748b","center");
+ T(o.ord?"Pedido registrado por Encargos Managua. Consultas por WhatsApp: +505 5729 4271":o.cot?"Cotización sujeta a disponibilidad. Consultas por WhatsApp: +505 5729 4271":"Primera de dos facturas del pedido. Consultas por WhatsApp: +505 5729 4271",W/2,y,"400 13px "+F,"#64748b","center");
  return y+40}
 function rcCanvas(o){
  var H=rcDraw(document.createElement("canvas").getContext("2d"),o),c=document.createElement("canvas");
@@ -308,8 +308,9 @@ function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedi
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
 function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<h2>Tu cuenta</h2>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
 function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
- var sel=cSel().length,allOn=sel===S.cart.length,q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
- $("app").innerHTML=hdr(false)+'<h2>Carrito</h2><div class="csel"><label><input type="checkbox" class="cbx" '+(allOn?'checked ':'')+'onchange="togAll()"> Seleccionar todo</label><span class="mu">'+sel+' de '+S.cart.length+' para comprar ahora</span></div>'+S.cart.map(function(c,i){var p=find(c.id),m=c.m||"sea";return '<div class="box'+(c.off?' coff':'')+'"><div style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" class="cbx" '+(c.off?'':'checked ')+'onchange="togC('+i+')" aria-label="Comprar este producto ahora"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;font-size:14px">'+esc(p.n)+(c.vk?'<div class="mu">'+esc(vLabel(p,c.vk))+'</div>':'')+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div><button class="del" onclick="delC('+i+')" aria-label="Quitar del carrito">'+ic("trash")+'</button></div><div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="setM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="setM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><span class="mu">Envío se cobra al recibir en Miami</span></div></div>'}).join("")
+ var gm=cartNorm(),sel=cSel().length,allOn=sel===S.cart.length,q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
+ $("app").innerHTML=hdr(false)+'<h2>Carrito</h2><div class="csel"><label><input type="checkbox" class="cbx" '+(allOn?'checked ':'')+'onchange="togAll()"> Seleccionar todo</label><span class="mu">'+sel+' de '+S.cart.length+' para comprar ahora</span></div>'+S.cart.map(function(c,i){var p=find(c.id);return '<div class="box'+(c.off?' coff':'')+'"><div style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" class="cbx" '+(c.off?'':'checked ')+'onchange="togC('+i+')" aria-label="Comprar este producto ahora"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;min-width:0;font-size:14px"><div class="cl2">'+esc(p.n)+'</div>'+(c.vk?'<div class="mu cl1">'+esc(vLabel(p,c.vk))+'</div>':'')+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div><button class="del" onclick="delC('+i+')" aria-label="Quitar del carrito">'+ic("trash")+'</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><b>'+fmt(sale(p)*c.q)+'</b></div></div>'}).join("")
+ +'<div class="box"><b>Envío de Miami a Nicaragua</b><div class="mu" style="margin:4px 0 8px">Un solo envío para todo tu pedido. Se cobra por peso al recibir en Miami.</div>'+shipBtns(gm,"setM")+'</div>'
  +(!sel?'<div class="box"><div class="mu">Marca al menos un producto para ver tu total y solicitar el pedido. Los que no marques se quedan guardados en tu carrito.</div></div>':'<div class="box"><b>Entrega en Nicaragua</b><select onchange="S.dom=this.value;cartV()">'+CFG.dom.map(function(d){return '<option value="'+d[0]+'"'+(S.dom===d[0]?" selected":"")+'>'+d[1]+(d[2]?" (+"+fmt(d[2])+")":"")+'</option>'}).join("")+'</select><div class="mu" style="margin-top:8px">El precio de la entrega se confirma cuando tu paquete llega a Nicaragua, porque varía según el paquete. Se cobra en la segunda factura, al retirar.</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">PRIMERA FACTURA, LA PAGAS AHORA</div>'+[["Productos",q.sub]].concat(q.fee?[["Preparación del pedido",q.fee]]:[]).map(row).join("")+'<div class="lb">TOTAL A PAGAR AHORA</div><div class="big">'+fmt(now)+'</div></div>'
  +'<div class="box"><div class="lb" style="margin:0 0 8px">SEGUNDA FACTURA, SE COBRA AL RECIBIR</div><div style="margin:8px 0"><b>Envío de Miami a Nicaragua</b><div class="mu">Por peso real al llegar a Miami: Express '+fmt(CFG.air)+' por libra, Regular '+fmt(CFG.sea)+' por libra.</div></div><div style="margin:8px 0"><b>Entrega en Nicaragua</b><div class="mu">'+dn[1]+(dn[2]?" ("+fmt(dn[2])+")":": el precio se confirma al retirar, porque varía según el paquete")+'</div></div><div class="mu" style="margin-top:8px">Los días hábiles (Express '+CFG.t.air+', Regular '+CFG.t.sea+') se cuentan desde que tu paquete llega a Miami, no desde la compra.</div></div>'+orderBox())}
@@ -338,7 +339,10 @@ function cartApply(){
 function togC(i){S.cart[i].off=S.cart[i].off?0:1;cartPersist();nav();cartV()}
 function togAll(){var all=!S.cart.some(function(c){return c.off});S.cart.forEach(function(c){c.off=all?1:0});cartPersist();nav();cartV()}
 function delC(i){if(!confirm("¿Quitar este producto del carrito?"))return;S.cart.splice(i,1);cartPersist();nav();cartV()}
-function setM(i,m){S.cart[i].m=m;cartPersist();cartV()}
+function cartM(){return S.cart.length&&S.cart.every(function(c){return c.m==="air"})?"air":"sea"}
+function cartNorm(){var g=cartM(),ch=0;S.cart.forEach(function(c){if(c.m!==g){c.m=g;ch=1}});if(ch)cartPersist();return g}
+function shipBtns(m,fn){return'<div class="th" style="grid-template-columns:1fr 1fr"><button class="'+(m==="air"?"on":"")+'" onclick="'+fn+'(\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="'+fn+'(\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div>'}
+function setM(m){m=m==="air"?"air":"sea";S.cart.forEach(function(c){c.m=m});cartPersist();cartV()}
 function qtyC(i,d){S.cart[i].q+=d;if(S.cart[i].q<1)S.cart.splice(i,1);cartPersist();nav();cartV()}
 function supV(){
  $("app").innerHTML=hdr(false)+'<h2>Soporte</h2><div class="box"><b>¿Necesitas ayuda o no encuentras lo que buscas?</b>'
@@ -360,7 +364,7 @@ function cotPersistDraft(){if(S.ce||!FB.user||!FB.cotSave)return;if(!(window.CR&
 function cotBox(p){return'<div style="margin-top:12px"><div class="lb">TALLA</div><input id="ct_t" maxlength="30" placeholder="Ej: M, 38, única" style="'+CTI+'"><div class="lb">COLOR</div><input id="ct_c" maxlength="30" placeholder="Ej: negro" style="'+CTI+'"><div class="lb">NOTA (OPCIONAL)</div><input id="ct_n" maxlength="120" placeholder="Algo que debamos saber" style="'+CTI+'"><div id="ct_m" class="mu" style="color:#dc2626"></div><button class="btn" onclick="cotAdd('+p.id+')">Cotizar</button></div>'}
 function cotAdd(id){var p=find(id),L=cotList(),m=$("ct_m"),g=function(k){return(($(k)&&$(k).value)||"").trim().slice(0,k==="ct_n"?120:30)};if(!p)return;
  if(L.length>=20){m.textContent="Máximo 20 productos por solicitud.";return}
- L.push({id:p.id,n:String(p.n).slice(0,120),s:p.s||"",l:String(p.l||"").slice(0,300),img:(p.img&&p.img[0])||"",t:g("ct_t"),c:g("ct_c"),nt:g("ct_n"),m:"sea"});
+ L.push({id:p.id,n:String(p.n).slice(0,120),s:p.s||"",l:String(p.l||"").slice(0,300),img:(p.img&&p.img[0])||"",t:g("ct_t"),c:g("ct_c"),nt:g("ct_n"),m:cotMode()});
  cotPersistDraft();go("cotizar")}
 function cotEd(i,k,v){var c=cotList()[i];if(!c)return;c[k]=String(v).slice(0,k==="nt"?120:30);clearTimeout(window.CTT);window.CTT=setTimeout(cotPersistDraft,700)}
 function cotNt(v){if(S.ce)S.ce.nota=v.slice(0,300);else S.cg=v.slice(0,300)}
@@ -370,12 +374,13 @@ function cotV(){if(!FB.ready){soon("Cargando…","box","");return}
  var L=cotList(),ed=!!S.ce;
  if(!L.length){soon("Tu solicitud está vacía","msg",'Elige productos de Shein o Temu en la tienda y toca «Cotizar».<br><br><button class="btn" onclick="go(\'inicio\')">Ver la tienda</button>');return}
  $("app").innerHTML=hdr(false)+'<h2>'+(ed?'Editar solicitud '+esc(S.ce.no):'Solicitud de cotización')+'</h2><div class="mu" style="margin-bottom:10px">Te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma: se cobra por peso al entregar.</div>'
- +L.map(function(c,i){return'<div class="box"><div style="display:flex;gap:12px;align-items:center"><div style="width:56px;height:56px;border-radius:12px;overflow:hidden;background:#f1f5f9;flex:none">'+(c.img?'<img src="'+esc(c.img)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'')+'</div><div style="flex:1;min-width:0"><b>'+esc(c.n)+'</b><div class="mu">'+esc(c.s||"")+'</div></div><button class="ib" aria-label="Quitar" onclick="cotDel('+i+')">✕</button></div>'
-  +'<div style="margin-top:10px"><div class="lb">TALLA</div><input maxlength="30" value="'+esc(c.t||"")+'" oninput="cotEd('+i+',\'t\',this.value)" style="'+CTI+'"><div class="lb">COLOR</div><input maxlength="30" value="'+esc(c.c||"")+'" oninput="cotEd('+i+',\'c\',this.value)" style="'+CTI+'"><div class="lb">NOTA</div><input maxlength="120" value="'+esc(c.nt||"")+'" oninput="cotEd('+i+',\'nt\',this.value)" style="'+CTI+'"></div>'+cotModes(c,i)+'</div>'}).join("")
+ +L.map(function(c,i){return'<div class="box"><div style="display:flex;gap:12px;align-items:center"><div style="width:56px;height:56px;border-radius:12px;overflow:hidden;background:#f1f5f9;flex:none">'+(c.img?'<img src="'+esc(c.img)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'')+'</div><div style="flex:1;min-width:0"><b class="cl2">'+esc(c.n)+'</b><div class="mu cl1">'+esc(c.s||"")+'</div></div><button class="ib" aria-label="Quitar" onclick="cotDel('+i+')">✕</button></div>'
+  +'<div style="margin-top:10px"><div class="lb">TALLA</div><input maxlength="30" value="'+esc(c.t||"")+'" oninput="cotEd('+i+',\'t\',this.value)" style="'+CTI+'"><div class="lb">COLOR</div><input maxlength="30" value="'+esc(c.c||"")+'" oninput="cotEd('+i+',\'c\',this.value)" style="'+CTI+'"><div class="lb">NOTA</div><input maxlength="120" value="'+esc(c.nt||"")+'" oninput="cotEd('+i+',\'nt\',this.value)" style="'+CTI+'"></div></div>'}).join("")
+ +'<div class="box"><b>Envío de Miami a Nicaragua</b><div class="mu" style="margin:4px 0 8px">Un solo envío para toda tu solicitud. Se cobra por peso al entregar.</div>'+shipBtns(cotMode(),"cotM")+'</div>'
  +cotDomBox()+'<div class="box"><div class="lb">NOTA GENERAL (OPCIONAL)</div><textarea rows="2" maxlength="300" oninput="cotNt(this.value)" style="'+CTI+'">'+esc(ed?S.ce.nota||"":S.cg||"")+'</textarea></div>'
  +'<div id="ct_e" class="mu" style="color:#dc2626;margin:0 0 8px"></div><button class="btn" onclick="cotSend()">'+(ed?'Guardar cambios y avisar por WhatsApp':'Enviar solicitud por WhatsApp')+'</button>'+(ed?'<button class="btn o" onclick="cotEditEnd()">Cancelar edición</button>':'')}
-function cotModes(c,i){var m=c.m==="air"?"air":"sea";return'<div class="th" style="grid-template-columns:1fr 1fr;margin-top:10px"><button class="'+(m==="air"?"on":"")+'" onclick="cotM('+i+',\'air\')">'+ic("plane")+' Express<br>'+fmt(CFG.air)+' por libra<br><span class="mu">'+CFG.t.air+'</span></button><button class="'+(m==="sea"?"on":"")+'" onclick="cotM('+i+',\'sea\')">'+ic("ship")+' Regular<br>'+fmt(CFG.sea)+' por libra<br><span class="mu">'+CFG.t.sea+'</span></button></div>'}
-function cotM(i,m){var c=cotList()[i];if(!c)return;c.m=m==="air"?"air":"sea";cotPersistDraft();cotV()}
+function cotMode(){var L=cotList();return L.length&&L.every(function(c){return c.m==="air"})?"air":"sea"}
+function cotM(m){m=m==="air"?"air":"sea";cotList().forEach(function(c){c.m=m});cotPersistDraft();cotV()}
 function cotDomV(){var d=S.ce?S.ce.dom:S.cd;return d==="cargo"?"cargo":"mgua"}
 function cotDom(v){var d=v==="cargo"?"cargo":"mgua";if(S.ce)S.ce.dom=d;else S.cd=d}
 function cotDomN(d){return(CFG.dom.filter(function(x){return x[0]===d})[0]||["","Entrega a domicilio en Managua"])[1]}
@@ -389,7 +394,7 @@ function cotSend(){var m=$("ct_e"),L=cotList(),ed=!!S.ce;m.textContent="";
  if(!FB.verified){m.textContent="Tu cuenta aún no está verificada. Escríbenos por WhatsApp para verificarla y poder cotizar.";return}
  if(!L.length||window.__csending)return;window.__csending=1;setTimeout(function(){window.__csending=0},4000);
  var nota=(ed?S.ce.nota||"":S.cg||"").trim().slice(0,300),nm=(S.cn||FB.name||"Cliente").trim().slice(0,60)||"Cliente",ph=FB.phone,
- dom=cotDomV(),domN=cotDomN(dom),items=L.map(function(c){return{id:c.id,n:c.n,s:c.s||"",l:c.l||"",img:c.img||"",t:c.t||"",c:c.c||"",nt:c.nt||"",m:c.m==="air"?"air":"sea"}}),fail=function(){window.__csending=0;m.textContent="No se pudo enviar la solicitud. Revisa tu conexión e inténtalo de nuevo."};
+ dom=cotDomV(),domN=cotDomN(dom),gm=cotMode(),items=L.map(function(c){return{id:c.id,n:c.n,s:c.s||"",l:c.l||"",img:c.img||"",t:c.t||"",c:c.c||"",nt:c.nt||"",m:gm}}),fail=function(){window.__csending=0;m.textContent="No se pudo enviar la solicitud. Revisa tu conexión e inténtalo de nuevo."};
  if(ed){var no=S.ce.no;FB.cotEdit(no,items,nota,dom,domN).then(function(){S.ce=null;go("pedidos");cotWa(no,nm,ph,items,nota,true,domN)},fail);return}
  var n=new Date(),pad=function(v){return String(v).padStart(2,"0")},no2="CT-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000)),iso=n.toISOString();
  FB.cotCreate(no2,{uid:FB.user.uid,name:nm,phone:ph,items:items,nota:nota,dom:dom,domN:domN,st:0,h:{0:iso},date:iso}).then(function(){S.cot=[];S.cg="";cotPersistDraft();go("pedidos");cotWa(no2,nm,ph,items,nota,false,domN)},fail)}
@@ -576,11 +581,72 @@ function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){re
 function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l||!confirm("¿Eliminar este link y su producto de la tienda?"))return;if(ED===id){ED=null;EDP={}}FB.delLink(id,l.pid).catch(function(){alert("No se pudo eliminar.")})}
 function admTask(t){if(!confirm(t==="revisar"?"¿Enviar «Revisar ahora» al robot?":"¿Enviar esta solicitud al robot?"))return;FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
 function admOrders(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1});
- return'<h2>Pedidos ('+L.length+')</h2>'+(L.length?L.map(function(o){var u=U[o.uid]||{};
+ return moBox()+'<h2>Pedidos ('+L.length+')</h2>'+(L.length?L.map(function(o){var u=U[o.uid]||{};
   return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div><div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+usd(o.tot)+", "+ordDate(o.date)+'</div>'
   +'<select onchange="admSt(\''+o.no+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
   +'<button class="btn o" onclick="admWa(\''+o.no+'\')">Avisar por WhatsApp</button></div>'}).join(""):'<div class="empty">Aún no hay pedidos.</div>')}
 function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+/* ===== Orden manual (admin) ===== */
+var MO=null;
+function moNew(){return{n:"",l:"",q:"1",t:"",c:"",p:""}}
+function moOpen(){MO={u:null,q:"",its:[moNew()],dom:"mgua",m:"sea",notes:"",done:null};admV()}
+function moClose(){if(MO&&!MO.done&&MO.its.some(function(it){return it.n||it.p||it.l})&&!confirm("¿Descartar esta orden sin guardar?"))return;MO=null;admV()}
+function moP(v){var n=parseFloat(String(v).replace(",","."));return isFinite(n)&&n>0?Math.round(n*100)/100:0}
+function moQty(v){var n=parseInt(v,10);return n>=1&&n<=99?n:0}
+function moLn(it){return Math.round(moP(it.p)*moQty(it.q)*100)/100}
+function moSum(){var s=0;MO.its.forEach(function(it){s+=moLn(it)});return Math.round(s*100)/100}
+function moTot(){var e=$("mo_t");if(e)e.textContent=usd(moSum());MO.its.forEach(function(it,i){var l=$("mo_l"+i);if(l)l.textContent=moLn(it)?"Subtotal "+usd(moLn(it)):""})}
+function moSet(i,k,v){if(!MO||!MO.its[i])return;MO.its[i][k]=v;if(k==="p"||k==="q")moTot()}
+function moRes(){var q=String(MO.q||"").trim().toLowerCase();if(q.length<2)return'<div class="mu" style="margin-top:6px">Escribe al menos 2 letras o números.</div>';
+ var d=q.replace(/\D/g,"").replace(/^505(?=\d{3,})/,"");
+ var L=ADM.users.filter(function(u){return String(u.name||"").toLowerCase().indexOf(q)>-1||(d.length>=3&&String(u.phone||"").indexOf(d)>-1)}).slice(0,6);
+ return L.length?L.map(function(u){return'<button class="btn o" style="margin-top:6px;text-align:left" onclick="moPick(\''+u._id+'\')">'+esc(u.name||"Sin nombre")+" · "+fmtPh(u.phone||"00000000")+(u.verified?"":" (sin verificar)")+'</button>'}).join(""):'<div class="mu" style="margin-top:6px">No encontré clientes.</div>'}
+function moQ(v){MO.q=v;var e=$("mo_r");if(e)e.innerHTML=moRes()}
+function moPick(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||!MO)return;MO.u={id:u._id,name:u.name||"",phone:u.phone||""};admV()}
+function moUnpick(){MO.u=null;admV()}
+function moAdd(){if(MO.its.length>=20){alert("Máximo 20 productos por orden.");return}MO.its.push(moNew());admV()}
+function moDel(i){MO.its.splice(i,1);if(!MO.its.length)MO.its.push(moNew());admV()}
+function moItem(it,i){var f=function(ph,k,ex){return'<input '+(ex||"")+'placeholder="'+ph+'" value="'+esc(it[k])+'" oninput="moSet('+i+',\''+k+'\',this.value)">'};
+ return'<div style="border:1px solid var(--bd);border-radius:12px;padding:10px;margin-top:10px"><div style="display:flex;justify-content:space-between;align-items:center"><b>Producto '+(i+1)+'</b><button class="ib" onclick="moDel('+i+')" aria-label="Quitar producto">✕</button></div>'
+ +f("Nombre del producto (obligatorio)","n",'maxlength="120" ')+f("Enlace (opcional)","l",'inputmode="url" maxlength="500" ')
+ +'<div style="display:flex;gap:8px"><div style="flex:1">'+f("Cantidad","q",'inputmode="numeric" ')+'</div><div style="flex:2">'+f("Precio por unidad, US$","p",'inputmode="decimal" ')+'</div></div>'
+ +'<div style="display:flex;gap:8px"><div style="flex:1">'+f("Talla","t",'maxlength="30" ')+'</div><div style="flex:1">'+f("Color","c",'maxlength="30" ')+'</div></div>'
+ +'<div id="mo_l'+i+'" class="mu" style="margin-top:6px">'+(moLn(it)?"Subtotal "+usd(moLn(it)):"")+'</div></div>'}
+function moForm(){var d=MO.done;
+ if(d)return'<div class="box"><b>Orden '+esc(d.no)+' creada</b><div class="mu" style="margin-top:6px">'+esc(d.rec.name)+" · "+usd(d.rec.tot)+'</div><div class="mu" style="margin-top:6px">Quedó en «Solicitud en proceso». Descarga la factura y envíala al cliente por WhatsApp.</div><button class="btn" onclick="moDl()">Descargar factura</button><button class="btn" style="background:#25d366;color:#fff;border:0" onclick="moWa()">Abrir WhatsApp</button><button class="btn o" onclick="MO=null;admV()">Cerrar</button></div>';
+ var cl=MO.u?'<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:8px"><div><b>'+esc(MO.u.name||"Sin nombre")+'</b><div class="mu">'+fmtPh(MO.u.phone||"00000000")+'</div></div><button class="btn o" style="width:auto;margin:0;padding:8px 12px" onclick="moUnpick()">Cambiar</button></div>'
+  :'<input placeholder="Buscar cliente por nombre o celular" value="'+esc(MO.q)+'" oninput="moQ(this.value)"><div id="mo_r">'+moRes()+'</div>';
+ return'<div class="box"><b>Nueva orden</b><div class="mu" style="margin-top:8px">Cliente</div>'+cl
+ +'<div class="mu" style="margin-top:14px">Productos</div>'+MO.its.map(function(it,i){return moItem(it,i)}).join("")+'<button class="btn o" onclick="moAdd()">+ Agregar producto</button>'
+ +'<div class="mu" style="margin-top:14px">Envío de Miami (todo el pedido)</div><select onchange="MO.m=this.value"><option value="sea"'+(MO.m==="sea"?" selected":"")+'>Regular</option><option value="air"'+(MO.m==="air"?" selected":"")+'>Express</option></select>'
+ +'<div class="mu" style="margin-top:14px">Entrega</div><select onchange="MO.dom=this.value">'+CFG.dom.map(function(z){return'<option value="'+z[0]+'"'+(MO.dom===z[0]?" selected":"")+'>'+esc(z[1])+'</option>'}).join("")+'</select>'
+ +'<input placeholder="Notas (opcional)" maxlength="300" value="'+esc(MO.notes)+'" oninput="MO.notes=this.value">'
+ +'<div style="margin-top:14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span class="mu">Total de productos</span><b id="mo_t" style="font-size:22px">'+usd(moSum())+'</b></div>'
+ +'<div class="mu" style="margin-top:6px">La importación no se suma: se cobra por peso al entregar.</div>'
+ +'<button class="btn" onclick="moSave()">Guardar orden y crear factura</button><button class="btn o" onclick="moClose()">Cancelar</button></div>'}
+function moBox(){return MO?moForm():'<div class="box"><button class="btn" style="margin-top:0" onclick="moOpen()">Nueva orden</button></div>'}
+function moNo(){var n=new Date(),pad=function(v){return String(v).padStart(2,"0")},ex={};ADM.orders.forEach(function(o){ex[o.no]=1});
+ for(var k=0;k<20;k++){var no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));if(!ex[no])return no}return""}
+/* Arma el pedido (st:0) con la forma del checkout normal. Devuelve {rec}, o {err} si algo falta. */
+function moBuild(M,no,iso){if(!M.u)return{err:"Elige un cliente."};var lines=[],tot=0;
+ for(var i=0;i<M.its.length;i++){var it=M.its[i],n=String(it.n||"").trim(),l=String(it.l||"").trim(),q=moQty(it.q),p=moP(it.p),k=" (producto "+(i+1)+")";
+  if(!n)return{err:"Falta el nombre"+k+"."};if(!q)return{err:"La cantidad debe ser de 1 a 99"+k+"."};if(!p)return{err:"Escribe el precio, mayor que 0"+k+"."};
+  if(l&&!/^https?:\/\//i.test(l))return{err:"El enlace debe empezar con http:// o https://"+k+"."};
+  tot+=Math.round(p*q*100)/100;
+  lines.push({n:n.slice(0,120),q:q,m:M.m==="air"?"air":"sea",l:l,vr:[String(it.t||"").trim()?"Talla: "+String(it.t).trim():"",String(it.c||"").trim()?"Color: "+String(it.c).trim():""].filter(Boolean).join(" · "),_p:Math.round(p*q*100)/100})}
+ tot=Math.round(tot*100)/100;var dom=M.dom==="cargo"?"cargo":"mgua";
+ return{rec:{no:no,uid:M.u.id,date:iso,name:M.u.name||"",phone:M.u.phone||"",notes:String(M.notes||"").trim().slice(0,300),tot:tot,items:lines.length,
+  lines:lines.map(function(z){return{n:z.n,q:z.q,m:z.m,l:z.l,vr:z.vr}}),dom:dom,domN:cotDomN(dom),st:0,h:{0:iso}},prices:lines.map(function(z){return z._p})}}
+function moInv(d){var r=d.rec,its=r.lines.map(function(x,i){return{n:x.n,vr:x.vr,q:x.q,p:d.prices[i],sub:x.m==="air"?"Envío Express":"Envío Regular"}});
+ return rcCanvas({cot:1,ord:1,no:r.no,name:r.name,phone:fmtPh(r.phone||"00000000"),date:ordDate(r.date),items:its,sub:r.tot,fee:0,tot:r.tot,notes:r.notes,domN:r.domN,
+  bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+r.domN+". El precio se confirma al retirar, porque varía según el paquete.","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."]})}
+function moSave(){if(!MO||window.__mosv)return;var no=moNo();if(!no){alert("No se pudo crear un número de orden. Inténtalo de nuevo.");return}
+ var iso=new Date().toISOString(),r=moBuild(MO,no,iso);if(r.err){alert(r.err);return}
+ if(!confirm("¿Crear la orden "+no+" para "+(r.rec.name||"el cliente")+" por "+usd(r.rec.tot)+"?"))return;
+ window.__mosv=1;
+ FB.saveOrder(r.rec).then(function(){window.__mosv=0;MO.done=r;try{moDl()}catch(e){alert("La orden se guardó, pero no se pudo generar la imagen. Usa «Descargar factura».")}admV()},function(){window.__mosv=0;alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})}
+function moDl(){if(!MO||!MO.done)return;try{cqDl(moInv(MO.done),"Pedido-"+MO.done.rec.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
+function moWa(){if(!MO||!MO.done)return;var r=MO.done.rec;if(!r.phone)return;var u="https://wa.me/505"+r.phone+"?text="+encodeURIComponent("Hola "+(r.name||"")+", registramos tu pedido "+r.no+" por "+usd(r.tot)+". Te envío la factura.");var w=window.open(u,"_blank");if(!w)location.href=u}
 /* ===== Cotizaciones (admin) ===== */
 var CQ={};
 function cqPend(){return(ADM.cots||[]).filter(function(c){return c.st===0}).length}

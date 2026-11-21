@@ -209,6 +209,12 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .m-te{font-size:18px;font-weight:800;letter-spacing:.04em}
 @keyframes mqs{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.mqt{animation:none;width:auto;flex-wrap:wrap;justify-content:center}.mqt .mqg:nth-child(2){display:none}.mqg{flex-wrap:wrap;justify-content:center}.mqw{-webkit-mask-image:none;mask-image:none}}
+/* ===== Categorías: tarjetas blancas ===== */
+.tile{background:var(--bg);color:var(--tx);box-shadow:0 2px 12px rgba(15,23,42,.08),0 0 0 1px var(--bd);transition:transform .15s,box-shadow .15s;cursor:pointer}
+@media(hover:hover){.tile:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,.13),0 0 0 1px var(--bd)}}
+.tile .thd b{color:var(--tx)}
+.tile .tcn{color:var(--mu)}
+.tile .tv{background:#fff;box-shadow:inset 0 0 0 1px var(--bd)}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -253,7 +259,7 @@ function chips(){if(STORES.length<2)return "";return '<div class="chips">'+["Tod
 function list(){var q=S.q.toLowerCase();return P.filter(function(p){return(S.store==="Todos"||p.s===S.store)&&(!S.cat||p.c===S.cat)&&p.n.toLowerCase().indexOf(q)>-1})}
 function recent(c){return P.filter(function(p){return p.c===c}).map(function(p,i){return{p:p,i:i}}).sort(function(a,b){var x=Date.parse(a.p.upd)||0,y=Date.parse(b.p.upd)||0;return y-x||a.i-b.i}).map(function(o){return o.p})}
 function catList(){var seen={},l=[];CATL.concat(P.map(function(p){return p.c})).forEach(function(c){if(c&&!seen[c]&&P.some(function(p){return p.c===c})){seen[c]=1;l.push(c)}});return l}
-function tiles(){return catList().map(function(c){var r=recent(c),sl=r.slice(0,4);return '<button class="tile" style="background:'+(CATBG[c]||"#e0f2fe")+'" onclick="S.cat=\''+c+'\';S.q=\'\';home()"><div class="thd"><b>'+c+'</b><span class="tgo">›</span></div><div class="tcn">'+r.length+(r.length===1?' producto':' productos')+'</div><div class="tv">'+sl.map(function(p,i){return '<div class="tsl'+(i?'':' on')+'">'+pic(p)+'</div>'}).join("")+(sl.length>1?'<div class="tdots">'+sl.map(function(p,i){return '<i'+(i?'':' class="on"')+'></i>'}).join("")+'</div>':'')+'</div></button>'}).join("")}
+function tiles(){return catList().map(function(c){var r=recent(c),sl=r.slice(0,4);return '<button class="tile" onclick="S.cat=\''+c+'\';S.q=\'\';home()"><div class="thd"><b>'+c+'</b></div><div class="tcn">'+r.length+(r.length===1?' producto':' productos')+'</div><div class="tv">'+sl.map(function(p,i){return '<div class="tsl'+(i?'':' on')+'">'+pic(p)+'</div>'}).join("")+(sl.length>1?'<div class="tdots">'+sl.map(function(p,i){return '<i'+(i?'':' class="on"')+'></i>'}).join("")+'</div>':'')+'</div></button>'}).join("")}
 var TT=null;
 function tileCar(){clearInterval(TT);if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
  TT=setInterval(function(){var ts=document.querySelectorAll(".tile");if(!ts.length){clearInterval(TT);return}
@@ -261,7 +267,7 @@ function tileCar(){clearInterval(TT);if(window.matchMedia&&matchMedia("(prefers-
 function brandStrip(){
  var it=[["amazon","m-amz"],["VICTORIA'S SECRET","m-vs"],["ebay","m-eb"],["SHEIN","m-sh"],["TEMU","m-te"],["","m-lg"]],
  g=function(){return"<div class='mqg'>"+it.map(function(x){return"<span class='mqi "+x[1]+"'>"+(x[1]==="m-lg"?"<img alt='' src='"+LOGO_URI+"'>":x[0])+"</span>"}).join("")+"</div>"};
- return"<div class='mq' aria-hidden='true'><div class='mql'>Compra en tus tiendas favoritas</div><div class='mqw'><div class='mqt'>"+g()+g()+"</div></div></div>"}
+ return"<div class='mq' aria-hidden='true'><div class='mql'>Productos de tus tiendas favoritas</div><div class='mqw'><div class='mqt'>"+g()+g()+"</div></div></div>"}
 function home(keep){
  var l=list(),filt=S.q||S.cat||S.store!=="Todos";
  var body=(filt?'':'<div class="bnr"><img src="banner-1200.webp" srcset="banner-800.webp 800w,banner-1200.webp 1200w" sizes="(max-width:560px) 100vw,560px" fetchpriority="high" decoding="async" onerror="this.parentNode.style.display=\'none\'" width="1200" height="450" alt="EncarGo: compra en Estados Unidos y recibe en Managua. Pide desde Amazon y paga por transferencia bancaria, sin tarjeta internacional."></div>'+brandStrip()+''

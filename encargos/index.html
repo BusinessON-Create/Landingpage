@@ -136,6 +136,19 @@ details summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none}de
 .amsw{margin-top:14px;text-align:center;font-size:14px;color:var(--mu)}.amsw button{border:0;background:none;padding:2px 4px;font-weight:800;color:var(--ac)}
 .ams{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin-top:14px;font-size:12px;color:var(--mu)}.ams span{display:flex;align-items:center;gap:5px}
 @media(prefers-reduced-motion:reduce){.amo,.amc{animation:none}}
+/* ===== Tarjeta de tarifas ===== */
+.rto{position:fixed;inset:0;z-index:120;background:rgba(10,18,40,.55);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center;overflow:auto;animation:amf .2s ease}
+.rtc{position:relative;width:100%;max-width:440px;max-height:100%;overflow-y:auto;background:var(--bg);color:var(--tx);border-radius:26px 26px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);padding:22px 20px calc(20px + env(safe-area-inset-bottom,0px));animation:amu .32s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:560px){.rto{align-items:center;padding:20px}.rtc{border-radius:26px;animation-name:amz}}
+.rtx{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:0;background:var(--sf);color:var(--mu);font-size:15px}
+.rtc h3{margin:0 40px 4px 0;font-size:22px;letter-spacing:-.4px}.rtc>p{margin:0 0 16px;font-size:14px;line-height:1.4;color:var(--mu)}
+.rtr{display:flex;align-items:center;gap:14px;padding:14px;margin-top:10px;border:1.5px solid var(--bd);border-radius:18px;background:var(--sf)}
+.rtr.ex{border-color:var(--ac);background:var(--acs)}
+.rti{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:22px;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8)}.rtr:not(.ex) .rti{background:linear-gradient(135deg,#0ea5a4,#0f766e)}
+.rtm{flex:1;min-width:0}.rtm b{display:block;font-size:16px}.rtm span{display:block;margin-top:2px;font-size:13px;color:var(--mu)}
+.rtp{text-align:right;flex:none}.rtp b{display:block;font-size:20px;font-weight:800;letter-spacing:-.5px}.rtp span{font-size:12px;color:var(--mu)}
+.rtn{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;line-height:1.45;color:var(--mu)}.rtn i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800;color:var(--ac);background:var(--acs)}
+.rtg{width:100%;margin-top:18px;border:0;border-radius:14px;padding:14px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 8px 20px rgba(37,99,235,.3)}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -202,7 +215,7 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.for
  +'<div class="rt"><span>'+(p.r?'<b>'+p.r+'</b> <span style="color:var(--gd)">'+stars(p.r)+'</span> <a>'+p.k.toLocaleString("en-US")+' valoraciones</a>':'<span class="mu">Sin reseñas cargadas</span>')+'</span><a onclick="navigator.share&&navigator.share({title:\''+esc(p.n).replace(/'/g,"")+'\',url:location.href})">Compartir</a></div></div>'
  +'<div class="box"><div class="mu">Precio del producto</div><div style="display:flex;justify-content:space-between;align-items:center"><div class="big">'+(p.x?'Se cotiza':fmt(sub))+'</div>'+(p.x?'':'<div class="qty"><button onclick="S.qty=Math.max(1,S.qty-1);prod('+p.id+')">−</button><b>'+S.qty+'</b><button onclick="S.qty++;prod('+p.id+')">+</button></div>')+'</div>'
  +(p.x?'<div class="mu">Este producto se cotiza: te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma, se cobra por peso al entregar.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
- +'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="alert(\'Envío de Miami a Nicaragua, por libra y según el peso real al recibir. Express US$'+CFG.air+' ('+CFG.t.air+') · Regular US$'+CFG.sea+' ('+CFG.t.sea+'). Los días hábiles se cuentan desde que tu paquete llega a Miami.\')">Ver tarifas ›</button></div>'
+ +'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="ratesOpen()">Ver tarifas ›</button></div>'
  +(p.dims&&p.dims.length?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar según la opción elegida. ¿Dudas con el precio? <button style="background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ac);text-decoration:underline;cursor:pointer" onclick="cotAsk('+p.id+')">Pídenos una cotización</button>.</div>':'')
  +(p.x?cotBox(p):'<button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
  +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p><p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p></details></div>'
@@ -579,6 +592,22 @@ function profBox(){
   +'<div style="height:10px"></div>'+row("WhatsApp",fmtPh(FB.phone))+(FB.addr?row("Entrega",esc(FB.addr)):'')+row("Pedidos",String(getOrders().length));
  h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o" onclick="FB.logout()">Cerrar sesión</button></div></div>';
  return h}
+/* ===== Tarjeta de tarifas ===== */
+function ratesOpen(){
+ var o=$("rt_o");if(o)o.remove();
+ o=document.createElement("div");o.id="rt_o";o.className="rto";
+ o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Tarifas de envío");
+ o.onclick=function(e){if(e.target===o)ratesClose()};
+ var row=function(cls,icn,nm,days,k){return"<div class='rtr "+cls+"'><div class='rti'>"+ic(icn)+"</div><div class='rtm'><b>"+nm+"</b><span>"+days+"</span></div><div class='rtp'><b>US$ "+CFG[k].toFixed(2)+"</b><span>C$ "+Math.round(CFG[k]*CFG.rate).toLocaleString("en-US")+" por libra</span></div></div>"};
+ o.innerHTML="<div class='rtc'><button class='rtx' onclick='ratesClose()' aria-label='Cerrar'>✕</button><h3>Tarifas de envío</h3><p>De Miami a Nicaragua, por libra y según el peso real al recibir tu paquete.</p>"
+ +row("ex","plane","Express",CFG.t.air,"air")+row("","ship","Regular",CFG.t.sea,"sea")
+ +"<div class='rtn'><i>i</i><span>Los días hábiles se cuentan desde que tu paquete llega a Miami.</span></div>"
+ +"<div class='rtn'><i>2</i><span>El envío se cobra en la segunda factura, al recibir tu paquete.</span></div>"
+ +"<button class='rtg' onclick='ratesClose()'>Entendido</button></div>";
+ document.body.appendChild(o);document.body.style.overflow="hidden";
+ document.addEventListener("keydown",ratesKey)}
+function ratesKey(e){if(e.key==="Escape")ratesClose()}
+function ratesClose(){var o=$("rt_o");if(o)o.remove();document.body.style.overflow="";document.removeEventListener("keydown",ratesKey)}
 /* ===== Ventana de entrar / crear cuenta ===== */
 var AMP=null,AMV={p:"",n:"",d:""};
 function buyNow(id){

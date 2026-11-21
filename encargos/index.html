@@ -422,7 +422,7 @@ function cotCard(c){var st=cotSt(c),col=CTC[st],its=c.items||[],pr=c.pr||[],q=c.
  +(q&&c.tot>0?'<div style="display:flex;justify-content:space-between;margin-top:10px"><b>Total de productos</b><b>'+usd(+c.tot)+'</b></div><div class="mu">La importación se cobra por peso al entregar.</div>':'')
  +(st===1&&cotMs(c)?'<div class="mu" style="margin-top:6px">Vigente hasta '+new Date(cotMs(c)).toLocaleString("es",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+'</div>':'')
  +(q&&c.anota?'<div class="mu" style="margin-top:6px">'+esc(c.anota)+'</div>':'')+b+'</div>'}
-function cotSec(){var L=(window.COT||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});return L.length?'<h2>Mis cotizaciones</h2>'+L.map(cotCard).join(""):""}
+function cotSec(){var L=(window.COT||[]).filter(function(c){return!(c.st===2&&getOrders().some(function(o){return o.no===c.no}))}).sort(function(a,b){return a.date<b.date?1:-1});return L.length?'<h2>Mis cotizaciones</h2>'+L.map(cotCard).join(""):""}
 function route(){var h=location.hash.slice(1)||"inicio";window.scrollTo(0,0);
  if(/^p\d+$/.test(h))prod(+h.slice(1));else if(h==="carrito")cartV();
  else if(h==="pedidos")ordersV();else if(/^o-/.test(h))orderV(h.slice(2));else if(h==="admin")admV();

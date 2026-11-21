@@ -263,6 +263,12 @@ nav div,.sbar div{max-width:640px}
 .stm{position:fixed;inset:0;z-index:2000;background:rgba(15,23,42,.6);display:flex;justify-content:center;overflow-y:auto;padding:16px}
 .stc{width:100%;max-width:480px;background:var(--bg);border-radius:16px;margin:auto 0}
 .stc .box{margin:0}
+.stq{z-index:3000;align-items:center}
+.stqc{max-width:360px;padding:20px;margin:0}
+.stqt{font-size:18px;font-weight:800;margin-bottom:8px}
+.stqm{font-size:14px;line-height:1.45;color:var(--mu);white-space:pre-line;margin-bottom:16px}
+.stqc .btn{width:100%;margin:0 0 8px}
+.stqc .btn.dgr{background:#dc2626;border-color:#dc2626;color:#fff}
 .adbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;padding:8px 10px;border:1px dashed #94a3b8;border-radius:12px;font-size:13px}
 .adbar .btn{width:auto;flex:none;margin:0;padding:8px 14px}
 </style></head><body>
@@ -337,7 +343,7 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.for
  +(p.ni?'<div class="mu" style="margin-top:8px">Entrega: '+esc(CFG.niT)+'</div>':'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="ratesOpen()">Ver tarifas ›</button></div>')
  +(hasV(p)?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar según la opción elegida. ¿Dudas con el precio? <button style="background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ac);text-decoration:underline;cursor:pointer" onclick="cotAsk('+p.id+')">Pídenos una cotización</button>.</div>':lkTxt(p))
  +(p.x?cotBox(p):p.so?'<button class="btn" disabled>Agotado</button>':'<button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
- +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p>'+(p.l?'<p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p>':'')+'</details></div>'
+ +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p>'+(p.l&&window.FB&&FB.isAdmin?'<p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p>':'')+'</details></div>'
  +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
  +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button></div></div>')}
@@ -858,17 +864,22 @@ if(!n||!(pr>0)){m.textContent="Pon nombre y un precio mayor que 0.";return}
 var p={id:Date.now(),n:n,p:pr,d:g("en_d"),img:im,s:"EncarGo",c:"EncarGo",b:"Precio final",bg:"#fee2e2",w:0,l:"",man:1,stock:parseInt(g("en_s"))||0,ni:$("en_x").checked?1:0,upd:new Date().toISOString()};
 FB.approve(p,null).then(function(){setTimeout(admV,600)},function(){m.textContent="No se pudo guardar el producto."})}
 function admNi(id,v){FB.editProd(id,{ni:v}).then(function(){setTimeout(admV,600)},function(){alert("No se pudo cambiar la etiqueta.")})}
-function admEnDel(id){if(!confirm("¿Eliminar este producto?"))return;FB.delLink("man-"+id,id).then(function(){setTimeout(admV,600)},function(){alert("No se pudo eliminar.")})}
+function admEnDel(id){ask("¿Eliminar este producto?",function(){FB.delLink("man-"+id,id).then(function(){setTimeout(admV,600)},function(){alert("No se pudo eliminar.")})},{title:"Eliminar producto",ok:"Eliminar",danger:1})}
 /* ===== Admin en la tienda: editar / eliminar desde el producto (usa el editor y el borrado del panel) ===== */
 function admLk(pid){return((window.ADM&&ADM.links)||[]).filter(function(l){return String(l.pid)===String(pid)})[0]}
 function admOn(p){return!!(window.FB&&FB.isAdmin&&p&&hasProd(p.id))}
 function admBtns(p){if(!admOn(p))return'';return'<span class="adb"><button type="button" aria-label="Editar producto" title="Editar" onclick="event.stopPropagation();stEdit(\''+p.id+'\')">\u270E</button><button type="button" aria-label="Eliminar producto" title="Eliminar" onclick="event.stopPropagation();stDel(\''+p.id+'\')">\uD83D\uDDD1</button></span>'}
 function admBar(p){if(!admOn(p))return'';return'<div class="adbar"><b>Administrador</b><button class="btn o" onclick="stEdit(\''+p.id+'\')">Editar producto</button><button class="btn o" style="color:#dc2626;border-color:#dc2626" onclick="stDel(\''+p.id+'\')">Eliminar</button></div>'}
 function stEdit(pid){var l=admLk(pid);if(!l){alert("Este producto no tiene link asociado, así que no se puede editar desde aquí.");return}admEdit(l._id,1)}
-function stDel(pid){var l=admLk(pid);if(!l){alert("Este producto no tiene link asociado, así que no se puede eliminar desde aquí.");return}if(!confirm("¿Eliminar este producto de la tienda y su link? No se puede deshacer."))return;FB.delLink(l._id,l.pid).then(function(){if(/^p\d+$/.test(location.hash.slice(1)))go("inicio")},function(){alert("No se pudo eliminar.")})}
+function stDel(pid){var l=admLk(pid);if(!l){alert("Este producto no tiene link asociado, así que no se puede eliminar desde aquí.");return}ask("¿Eliminar este producto de la tienda y su link? No se puede deshacer.",function(){FB.delLink(l._id,l.pid).then(function(){if(/^p\d+$/.test(location.hash.slice(1)))go("inicio")},function(){alert("No se pudo eliminar.")})},{title:"Eliminar producto",ok:"Eliminar",danger:1})}
 function stOpen(id){var p=EDP[id];if(!p)return;var o=document.getElementById("stm");if(o)o.remove();o=document.createElement("div");o.id="stm";o.className="stm";o.innerHTML='<div class="stc">'+apForm(p,true)+'</div>';document.body.appendChild(o)}
 function admDone(){var o=document.getElementById("stm");if(o){o.remove();route()}else admV()}
 function admRef(){if(admRef.d||!FB.isAdmin)return;admRef.d=1;var h=location.hash.slice(1);if(!h||h==="inicio"||/^p\d+$/.test(h))route()}
+/* ===== Tarjetas propias (reemplazan los cuadros del navegador) ===== */
+function stCard(t,m,btns){var e=document.getElementById("stq");if(e)e.remove();e=document.createElement("div");e.id="stq";e.className="stm stq";e.innerHTML='<div class="stc stqc"><div class="stqt">'+esc(t)+'</div><div class="stqm">'+esc(m)+'</div>'+btns+'</div>';document.body.appendChild(e);return e}
+function ask(m,cb,o){o=o||{};var e=stCard(o.title||"Confirmar",m,'<button class="btn'+(o.danger?' dgr':'')+'" id="stq_ok">'+esc(o.ok||"Aceptar")+'</button><button class="btn o" id="stq_no">'+esc(o.no||"Cancelar")+'</button>');
+ document.getElementById("stq_ok").onclick=function(){e.remove();cb()};document.getElementById("stq_no").onclick=function(){e.remove()};document.getElementById("stq_ok").focus()}
+window.alert=function(m){var e=stCard("Aviso",String(m),'<button class="btn" id="stq_ok">Entendido</button>');document.getElementById("stq_ok").onclick=function(){e.remove()};document.getElementById("stq_ok").focus()};
 /* ===== Panel admin ===== */
 var AT="links",LC={pendiente:["#fef3c7","#92400e"],disponible:["#d1fae5","#065f46"],agotado:["#ffedd5","#9a3412"],error:["#fee2e2","#991b1b"]};
 function admV(){
@@ -892,7 +903,7 @@ function admAdd(){var u=($("ad_l").value||"").split(/\s+/).filter(function(x){re
  if(!u.length){$("am").textContent="Pega al menos un link que empiece con https://";return}
  if(!confirm("¿Agregar "+u.length+(u.length===1?" link":" links")+" a la lista?"))return;
  FB.addLinks(u).then(function(){},function(){$("am").textContent="No se pudieron guardar los links."})}
-function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l)return;var dup=!!l.dup&&(!l.st||l.st==="pendiente");if(!confirm(dup?"¿Quitar este link repetido de la lista? El producto original NO se borra.":"¿Eliminar este link y su producto de la tienda?"))return;if(ED===id){ED=null;EDP={}}FB.delLink(id,dup?null:l.pid).catch(function(){alert("No se pudo eliminar.")})}
+function admDel(id){var l=ADM.links.filter(function(x){return x._id===id})[0];if(!l)return;var dup=!!l.dup&&(!l.st||l.st==="pendiente");ask(dup?"¿Quitar este link repetido de la lista? El producto original NO se borra.":"¿Eliminar este link y su producto de la tienda?",function(){if(ED===id){ED=null;EDP={}}FB.delLink(id,dup?null:l.pid).catch(function(){alert("No se pudo eliminar.")})},{title:dup?"Quitar link":"Eliminar link",ok:dup?"Quitar":"Eliminar",danger:1})}
 function admTask(t){if(!confirm(t==="revisar"?"¿Enviar «Revisar ahora» al robot?":"¿Enviar esta solicitud al robot?"))return;FB.task({type:t}).then(function(){alert("Solicitud enviada. El robot la tomará cuando esté abierto.")},function(){alert("No se pudo enviar.")})}
 var OQ="",OF=-1;
 function ordNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
@@ -1089,27 +1100,27 @@ function admEdit(id,inl){var l=ADM.links.filter(function(x){return x._id===id})[
  var q=(window.FBP||[]).filter(function(x){return String(x.id)===String(l.pid)})[0];
  if(!q){alert("Este link todavía no tiene un producto publicado, así que no hay nada que editar.");return}
  if(q.cotizar){alert("Este producto se cotiza y no tiene precio que editar. Si algo cambió, elimina el link y vuelve a agregarlo.");return}
- if(ED&&ED!==id&&!confirm("Ya estás editando otro producto. ¿Descartar esos cambios y editar este?"))return;
+ if(ED&&ED!==id){ask("Ya estás editando otro producto. ¿Descartar esos cambios y editar este?",function(){ED=null;admEdit(id,inl)},{title:"Cambios sin guardar",ok:"Descartar y editar"});return}
  EDP={};ED=id;
  var est=q.pAmazon==null,imp=q.imp==null?0.1025:q.imp,pct=q.pct==null?COM_DEF:q.pct,ex=q.extra||0,ev=q.envio||0,pa=q.pAmazon;
  if(est)pa=Math.max(0,Math.round((q.p-ex)/(1+pct/100)/(1+imp)*100)/100);
  EDP[q.id]={id:q.id,n:q.n,img:q.img,c:q.c,edit:1,est:est,linkId:id};
  AP_E[q.id]={imp:Math.round(imp*10000)/100,pct:pct,extra:ex,cat:q.c||"Hogar",pAmazon:pa,envio:ev};
  if(inl)stOpen(q.id);else admV()}
-function admEditCancel(id){if(!confirm("¿Cancelar la edición? Se perderán los cambios sin guardar."))return;delete EDP[id];delete AP_E[id];ED=null;admDone()}
+function admEditCancel(id){ask("¿Cancelar la edición? Se perderán los cambios sin guardar.",function(){delete EDP[id];delete AP_E[id];ED=null;admDone()},{title:"Cancelar edición",ok:"Sí, cancelar",no:"Seguir editando",danger:1})}
 function admEditSave(id){var p=EDP[id];if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
  var n=($("edn_"+id).value||"").trim();if(!n){alert("El nombre no puede estar vacío.");return}
- if(!confirm("¿Guardar los cambios y publicarlos en la tienda por "+apMoney(r.fin)+"?"))return;
+ ask("¿Guardar los cambios y publicarlos en la tienda por "+apMoney(r.fin)+"?",function(){
  var d=JSON.parse(JSON.stringify({n:n,c:e.cat,p:r.fin,pAmazon:parseFloat(e.pAmazon)||0,envio:parseFloat(e.envio)||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,ni:(e.ni==null?(p.ni?1:0):(e.ni?1:0)),edited:new Date().toISOString()}));
- FB.editProd(id,d,p.linkId,n!==p.n?n:null).then(function(){delete EDP[id];delete AP_E[id];ED=null;admDone()},function(){alert("No se pudo guardar.")})}
+ FB.editProd(id,d,p.linkId,n!==p.n?n:null).then(function(){delete EDP[id];delete AP_E[id];ED=null;admDone()},function(){alert("No se pudo guardar.")})},{title:"Guardar cambios",ok:"Guardar"})}
 function admRetry(id){if(!confirm("¿Reintentar leer este link?"))return;FB.retry(id).catch(function(){alert("No se pudo reintentar.")})}
 function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el pedido ":"¿Cambiar el pedido ")+no+(i===6?"? El cliente verá que fue cancelado.":" a «"+STP[i][0]+"»?"))){sel.value=prev;return}FB.setStatus(no,i).catch(function(){alert("No se pudo cambiar el estado.")})}
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
- if(!confirm("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?"))return;
+ ask("¿Aprobar y publicar en la tienda por "+apMoney(r.fin)+"?",function(){
  var pub=JSON.parse(JSON.stringify({id:p.id,asin:p.asin,n:p.n,s:p.s,b:p.b,c:e.cat,p:r.fin,pAmazon:p.pAmazon,envio:parseFloat(e.envio!=null?e.envio:p.envio)||0,envioEstado:p.envioEstado||"",envioOk:1,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,ni:e.ni?1:0,w:p.w,r:p.r,k:p.k,bg:p.bg,d:p.d,l:p.l,v:p.v,dims:p.dims||[],vl:p.vl||[],agot:p.agot||[],tienda:p.tienda||"",img:p.img,x:0,auto:1,upd:new Date().toISOString()}));
- FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})}
-function admNo(id){var p=apFind(id);if(!p||!confirm("¿Descartar este producto y su link?"))return;FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})}
+ FB.approve(pub,p.linkId).then(function(){delete AP_E[id]},function(){alert("No se pudo aprobar.")})},{title:"Aprobar producto",ok:"Aprobar y publicar"})}
+function admNo(id){var p=apFind(id);if(!p)return;ask("¿Descartar este producto y su link?",function(){FB.discard(p.id,p.linkId).catch(function(){alert("No se pudo descartar.")})},{title:"Descartar producto",ok:"Descartar",danger:1})}
 
 /* Vitrina automática: lee productos.json (lo genera el robot) y lo suma al catálogo. */
 fetch("productos.json?"+Date.now()).then(function(r){return r.ok?r.json():[]}).catch(function(){return []}).then(function(a){if(a&&a.length){var ids={};a.forEach(function(x){ids[x.id]=1});P=a.concat(P.filter(function(x){return!ids[x.id]}))}PB=P.slice();applyFBP();window.addEventListener("hashchange",route);route()});

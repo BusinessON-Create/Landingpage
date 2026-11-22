@@ -340,14 +340,14 @@ function prod(id){var p=find(id);if(!p){go("inicio");return}if(p.dims)p.dims.for
  $("app").innerHTML=hdr(true)+'<button class="back" onclick="history.back()">'+ic("arrowl")+' Volver</button>'
  +'<div class="gal"><div class="slides" onscroll="var i=Math.round(this.scrollLeft/this.clientWidth);$(\'cn\').textContent=(i+1)+\' de '+N+'\';[].forEach.call(document.querySelectorAll(\'.dots i\'),function(d,j){d.className=j===i?\'on\':\'\'})">'+(p.img&&p.img.length?p.img:[0,1,2]).map(function(u,i){return '<div style="background:'+p.bg+'">'+pic(p,i)+'</div>'}).join("")+'</div><span class="cnt" id="cn">1 de '+N+'</span>'+(N>1?'<button class="gnav l" onclick="gnav(-1)" aria-label="Anterior">‹</button><button class="gnav r" onclick="gnav(1)" aria-label="Siguiente">›</button>':'')+'</div><div class="dots"><i class="on"></i>'+'<i></i>'.repeat(N-1)+'</div>'
  +'<div class="px"><div class="badges"><b style="background:#0f172a;color:#fff">'+p.s+'</b><b style="background:#fef3c7;color:#92400e">'+esc(p.b)+'</b></div><h1 class="ttl">'+esc(p.n)+'</h1>'+admBar(p)
- +'<div class="rt"><span>'+(p.r?'<b>'+p.r+'</b> <span style="color:var(--gd)">'+stars(p.r)+'</span> <a>'+p.k.toLocaleString("en-US")+' valoraciones</a>':'<span class="mu">Sin reseñas cargadas</span>')+'</span><a onclick="navigator.share&&navigator.share({title:\''+esc(p.n).replace(/'/g,"")+'\',url:location.href})">Compartir</a></div></div>'
+ +'<div class="rt"><span>'+(p.r?'<b>'+p.r+'</b> <span style="color:var(--gd)">'+stars(p.r)+'</span> <span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones</span>':'<span class="mu">Sin reseñas cargadas</span>')+'</span><a onclick="navigator.share&&navigator.share({title:\''+esc(p.n).replace(/'/g,"")+'\',url:location.href})">Compartir</a></div></div>'
  +'<div class="box"><div class="mu">Precio del producto</div><div style="display:flex;justify-content:space-between;align-items:center"><div class="big">'+(p.x?'Se cotiza':fmt(sub))+'</div>'+(p.x||p.so?'':'<div class="qty"><button onclick="S.qty=Math.max(1,S.qty-1);prod('+p.id+')">−</button><b>'+S.qty+'</b><button onclick="S.qty=Math.min(S.qty+1,'+(p.stock>0?p.stock:99)+');prod('+p.id+')">+</button></div>')+'</div>'
  +(p.ni?'<div class="mu" style="color:#dc2626;font-weight:700">Precio final puesto en Nicaragua. Envío incluido, no pagas nada más.</div>':p.x?'<div class="mu">Este producto se cotiza: te enviamos el precio por WhatsApp. El envío a Nicaragua no se suma, se cobra por peso al entregar.</div>':'<div class="mu">El envío de Miami a Nicaragua se cobra al recibir, por peso real: Express <b style="color:var(--tx)">'+fmt(CFG.air)+'/lb</b> · Regular <b style="color:var(--tx)">'+fmt(CFG.sea)+'/lb</b></div>')
  +(p.ni?'<div class="mu" style="margin-top:8px">Entrega: '+esc(CFG.niT)+'</div>':'<div class="eta"><div><span class="mu">Tiempo de entrega, desde que llega a Miami</span><span>'+ic("plane")+' <b>Express</b> '+CFG.t.air+'</span><span>'+ic("ship")+' <b>Regular</b> '+CFG.t.sea+'</span></div><button class="chip" style="color:var(--ac)" onclick="ratesOpen()">Ver tarifas ›</button></div>')
  +(hasV(p)?'<div id="vrb" style="margin-top:12px">'+vrHtml(p)+'</div><div class="mu" style="margin-bottom:8px">El precio es de referencia y puede variar según la opción elegida. ¿Dudas con el precio? <button style="background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ac);text-decoration:underline;cursor:pointer" onclick="cotAsk('+p.id+')">Pídenos una cotización</button>.</div>':lkTxt(p))
  +(p.x?cotBox(p):p.so?'<button class="btn" disabled>Agotado</button>':'<button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button><button class="btn o" onclick="addC('+p.id+',S.qty)">'+ic("cart")+' Agregar al carrito</button>')+'</div>'
- +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p>'+(p.l&&window.FB&&FB.isAdmin?'<p><a href="'+esc(p.l)+'" target="_blank" rel="noopener" style="color:var(--ac);font-weight:700">Ver fotos y reseñas en '+p.s+'</a></p>':'')+'</details></div>'
- +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>')+'</div>':'')
+ +'<div class="box"><details><summary>Detalles del producto <span class="mu" style="font-weight:400;display:block;font-size:14px">Descripción y especificaciones</span></summary><p>'+esc(p.d)+'</p>'+'</details></div>'
+ +(p.r?'<div class="box"><b style="font-size:18px">Valoraciones de clientes</b><div style="display:flex;gap:14px;align-items:center;margin:10px 0"><span class="big">'+p.r+'</span><div><div style="color:var(--gd);font-size:20px">'+stars(p.r)+'</div><span class="mu">'+p.k.toLocaleString("en-US")+' valoraciones en '+(p.src||p.s)+'</span></div></div>'+dist.map(function(d,i){return '<div class="bar"><span>'+(5-i)+' ★</span><i><b style="width:'+d+'%"></b></i><span style="text-align:right">'+d+'%</span></div>'}).join("")+''+(p.src?'<div class="demo">Calificaciones reales publicadas en '+p.src+'.</div>':(FB.isAdmin?'<div class="demo">Calificación y desglose de ejemplo. Se cargarán reales al conectar la importación.</div>':''))+'</div>':'')
  +'<h2>Productos similares</h2><div class="row">'+P.filter(function(x){return x.id!==p.id&&x.c===p.c||x.s===p.s&&x.id!==p.id}).slice(0,5).map(card).join("")+'</div>'
  +(p.x?'':'<div class="sbar"><div><b>'+fmt(sub*S.qty)+'</b><button class="cb" onclick="addC('+p.id+',S.qty)" aria-label="Agregar al carrito">'+ic("cart")+'</button><button class="btn" onclick="buyNow('+p.id+')">'+ic("zap")+' Comprar ahora</button></div></div>')}
 /* Opciones (aroma, talla, color) ocultas: la tienda vende la variante del enlace. Pon false para volver a mostrarlas. */
@@ -425,7 +425,12 @@ function rcDraw(x,o){
 function rcCanvas(o){
  var H=rcDraw(document.createElement("canvas").getContext("2d"),o),c=document.createElement("canvas");
  c.width=1600;c.height=H*2;var x=c.getContext("2d");x.scale(2,2);rcDraw(x,o);return c}
+function firstBox(){return'<div class="box"><b>Tu primera compra</b><div class="mu" style="margin:8px 0">Tu cuenta aún no está verificada. Para tu primera compra, escríbenos por WhatsApp: armamos tu pedido contigo y tu cuenta queda verificada. Después podrás comprar directo desde la app.</div><button class="btn" style="background:#25d366;color:#fff;border:0" onclick="waFirst()">'+ic("msg")+' Escribir por WhatsApp para mi primera compra</button><div class="mu" style="margin-top:8px">Tus productos se quedan guardados en tu carrito.</div></div>'}
+function waFirst(){var L=cSel().map(function(c){var p=find(c.id);return p?"• "+p.n+" x"+c.q:""}).filter(Boolean),t="Hola, creé mi cuenta en Encargos Managua y quiero hacer mi primera compra.\nWhatsApp: "+fmtPh(FB.phone)+(L.length?"\nProductos:\n"+L.join("\n"):""),u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(t),w=window.open(u,"_blank");if(!w)location.href=u}
+function cotWaAcc(no){var c=cotFind(no);if(!c)return;var t="Hola, quiero aceptar mi cotización.\nSolicitud: "+no+"\nNombre: "+(c.name||FB.name||"")+"\nWhatsApp: "+fmtPh(FB.phone)+"\n(Mi cuenta aún no está verificada y esta sería mi primera compra)",u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(t),w=window.open(u,"_blank");if(!w)location.href=u}
 function orderBox(){
+ if(FB.user&&!FB.isAdmin&&!FB.prof)return'<div class="box"><b>Datos del pedido</b><div class="mu" style="margin-top:8px">Cargando tu cuenta…</div></div>';
+ if(FB.user&&!FB.verified)return firstBox();
  var i=function(ph,k,t){return'<input type="'+(t||"text")+'"'+(t==="tel"?' inputmode="numeric"':'')+' placeholder="'+ph+'" value="'+esc(S[k]||"")+'" oninput="S.'+k+'=this.value" style="margin-top:8px">'};
  var warn=(FB.user&&!FB.verified)?'<div class="mu" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:#fef3c7;color:#92400e">Tu cuenta aún no está verificada. Tu pedido se enviará directo por WhatsApp y te atendemos por ahí.</div>':'';
  return'<div class="box"><b>Datos del pedido</b>'+warn+i("Tu nombre (obligatorio)","cn")+i("Tu WhatsApp, 8 dígitos (obligatorio)","cp","tel")+i("Dirección de entrega (opcional)","cm")+i("Notas para este pedido (opcional)","cno")+'<div class="mu" style="margin-top:6px">Tu dirección se guarda en tu cuenta para tus próximas compras.</div>'
@@ -434,15 +439,16 @@ function orderBox(){
 function dataBlob(u){var p=u.split(","),bin=atob(p[1]),a=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)a[k]=bin.charCodeAt(k);return new Blob([a],{type:"image/png"})}
 function sendOrder(){
  var m=$("om");if(!FB.user){m.innerHTML='Para solicitar tu pedido, <a style="color:var(--ac);font-weight:700" onclick="amOpen()">entra o crea tu cuenta</a>.';return}
+ if(!FB.isAdmin&&!FB.prof){m.textContent="Estamos cargando tu cuenta. Inténtalo de nuevo en un momento.";return}
+ if(!FB.verified){m.textContent="Tu cuenta aún no está verificada. Para tu primera compra escríbenos por WhatsApp.";return}
  var nm=(S.cn||"").trim(),ph=nicaPhone(S.cp);
  if(!cSel().length){m.textContent="Marca al menos un producto para solicitar el pedido.";return}
  if(!nm){m.textContent="Escribe tu nombre para continuar.";return}
  if(!ph){m.textContent="Escribe tu WhatsApp de Nicaragua: 8 dígitos que empiecen con 5, 7 u 8.";return}
  m.textContent="";if(window.__sending)return;window.__sending=1;setTimeout(function(){window.__sending=0},4000);
  var ver=!!FB.verified;
- var fin=function(cod){
- var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")},
- no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));
+ var fin=function(cod,no){
+ var q=quote(),d=CFG.dom.filter(function(z){return z[0]===S.dom})[0],n=new Date(),pad=function(v){return String(v).padStart(2,"0")};
  var items=cSel().map(function(c){var p=find(c.id),mm=c.m||"sea";var va=c.vk?vAsin(p,c.vk):"";return{n:p.n,q:c.q,m:mm,l:va&&p.s==="Amazon"?"https://www.amazon.com/dp/"+va:p.l,p:sale(p)*c.q,s:p.ni?0:CFG[mm],ni:p.ni?1:0,vr:c.vk?vLabel(p,c.vk):""}});
  var o={no:no,date:n.toLocaleDateString("es",{day:"numeric",month:"long",year:"numeric"}),name:nm,phone:ph,notes:(S.cno||"").trim().slice(0,300),addr:(S.cm||"").trim().slice(0,200),
   items:items,sub:q.sub,fee:q.fee,dom:q.dom,domN:d[1],tot:q.sub+q.fee,cod:cod};
@@ -457,7 +463,7 @@ function sendOrder(){
  if(o.addr&&o.addr!==FB.addr&&FB.saveAddr)FB.saveAddr(o.addr).catch(function(){});S.cno="";
  cartClear(RC.snap);rcShow();
  if(ver)FB.saveOrder(rec).then(function(){RC.saved=true;rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})};
- if(ver&&FB.custCode){m.textContent="Preparando tu pedido…";(FB.cod?Promise.resolve(FB.cod):FB.custCode(FB.user.uid)).then(function(c){m.textContent="";fin(c)},function(){window.__sending=0;m.textContent="No se pudo generar tu código de cliente. Revisa tu conexión e inténtalo otra vez."})}else fin("")}
+ if(ver&&FB.custCode){m.textContent="Preparando tu pedido…";(FB.cod?Promise.resolve(FB.cod):FB.custCode(FB.user.uid)).then(function(c){return FB.nextNo("EN").then(function(no){return[c,no]})}).then(function(a){m.textContent="";fin(a[0],a[1])},function(){window.__sending=0;m.textContent="No se pudo preparar tu pedido (código o número de factura). Revisa tu conexión e inténtalo otra vez."})}else window.__sending=0}
 function rcRetry(){var bt=$("rcr");if(bt){bt.disabled=true;bt.textContent="Guardando…"}FB.saveOrder(RC.rec).then(function(){RC.saved=true;RC.err="";rcShow()},function(e){RC.err=(e&&e.code)||"";rcShow()})}
 function rcShow(){
  var r=window.RC,old=$("rc");if(old)old.remove();var v=document.createElement("div");v.id="rc";
@@ -480,7 +486,7 @@ function rcShare(){var r=window.RC;if(!r)return;
  rcFallback()}
 function rcDl(){var a=document.createElement("a");a.href=RC.url;a.download="Pedido-"+RC.no+".png";document.body.appendChild(a);a.click();a.remove()}
 function theme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("enc_theme",t)}catch(e){}}
-function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<div style="height:8px"></div>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+'<i class="sw sw-'+x[0]+'"></i>'+x[1]+'</button>'}).join("")+'</div></div><div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>'}
+function acct(){var t=document.documentElement.dataset.theme;$("app").innerHTML=hdr(false)+'<div style="height:8px"></div>'+authBox()+'<div class="box"><b>Apariencia</b><div class="th">'+[["light","Claro"],["sand","Arena"],["dark","Medianoche"]].map(function(x){return '<button class="'+(t===x[0]?'on':'')+'" onclick="theme(\''+x[0]+'\');acct()">'+'<i class="sw sw-'+x[0]+'"></i>'+x[1]+'</button>'}).join("")+'</div></div>'+(FB.isAdmin?'<div class="box"><b>Herramientas de prueba</b><button class="btn o" onclick="go(\'o-demo\')">Ver ejemplo de seguimiento</button></div>':'')}
 function cartV(){S.cart=S.cart.filter(function(c){return find(c.id)});if(!S.cart.length){$("app").innerHTML=hdr(false)+'<div class="empty"><div style="font-size:48px">'+ic("cart")+'</div><b>Tu carrito está vacío</b>Agrega productos para verlos aquí.<br><br><button class="btn" onclick="go(\'inicio\')">Explorar productos</button></div>';return}
  var gm=cartNorm(),sel=cSel().length,allOn=sel===S.cart.length,q=quote(),now=q.sub+q.fee,dn=CFG.dom.filter(function(x){return x[0]===S.dom})[0],row=function(r){return '<div style="display:flex;justify-content:space-between;margin:8px 0"><span class="mu">'+r[0]+'</span><b>'+(r[1]?fmt(r[1]):"Gratis")+'</b></div>'};
  $("app").innerHTML=hdr(false)+'<h2>Carrito</h2><div class="csel"><label><input type="checkbox" class="cbx" '+(allOn?'checked ':'')+'onchange="togAll()"> Seleccionar todo</label><span class="mu">'+sel+' de '+S.cart.length+' para comprar ahora</span></div>'+S.cart.map(function(c,i){var p=find(c.id);return '<div class="box'+(c.off?' coff':'')+'"><div style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" class="cbx" '+(c.off?'':'checked ')+'onchange="togC('+i+')" aria-label="Comprar este producto ahora"><div style="position:relative;overflow:hidden;width:64px;height:64px;border-radius:12px;font-size:32px;flex:none;background:'+p.bg+'">'+pic(p)+'</div><div style="flex:1;min-width:0;font-size:14px"><div class="cl2">'+esc(p.n)+'</div>'+(c.vk?'<div class="mu cl1">'+esc(vLabel(p,c.vk))+'</div>':'')+'<div class="mu">Producto <b style="color:var(--tx)">'+fmt(sale(p))+'</b> × '+c.q+'</div></div><button class="del" onclick="delC('+i+')" aria-label="Quitar del carrito">'+ic("trash")+'</button></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><div class="qty"><button onclick="qtyC('+i+',-1)">−</button><b>'+c.q+'</b><button onclick="qtyC('+i+',1)">+</button></div><b>'+fmt(sale(p)*c.q)+'</b></div></div>'}).join("")
@@ -566,18 +572,18 @@ function cotMsg(no,nm,ph,items,nota,upd,domN){var t=(upd?"Hola, actualicé mi so
 function cotWa(no,nm,ph,items,nota,upd,domN){var u="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(cotMsg(no,nm,ph,items,nota,upd,domN)),w=window.open(u,"_blank");if(!w)location.href=u}
 function cotSend(){var m=$("ct_e"),L=cotList(),ed=!!S.ce;m.textContent="";
  if(!FB.user){m.textContent="Entra a tu cuenta para enviar tu solicitud.";return}
- if(!FB.verified){m.textContent="Tu cuenta aún no está verificada. Escríbenos por WhatsApp para verificarla y poder cotizar.";return}
  if(!L.length||window.__csending)return;window.__csending=1;setTimeout(function(){window.__csending=0},4000);
  var nota=(ed?S.ce.nota||"":S.cg||"").trim().slice(0,300),nm=(S.cn||FB.name||"Cliente").trim().slice(0,60)||"Cliente",ph=FB.phone,
  dom=cotDomV(),domN=cotDomN(dom),gm=cotMode(),items=L.map(function(c){return{id:c.id,n:c.n,s:c.s||"",l:c.l||"",img:c.img||"",t:c.t||"",c:c.c||"",nt:c.nt||"",m:gm}}),fail=function(){window.__csending=0;m.textContent="No se pudo enviar la solicitud. Revisa tu conexión e inténtalo de nuevo."};
  if(ed){var no=S.ce.no;FB.cotEdit(no,items,nota,dom,domN).then(function(){S.ce=null;go("pedidos");cotWa(no,nm,ph,items,nota,true,domN)},fail);return}
- var n=new Date(),pad=function(v){return String(v).padStart(2,"0")},no2="CT-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000)),iso=n.toISOString();
- FB.cotCreate(no2,{uid:FB.user.uid,name:nm,phone:ph,items:items,nota:nota,dom:dom,domN:domN,st:0,h:{0:iso},date:iso}).then(function(){S.cot=[];S.cg="";cotPersistDraft();go("pedidos");cotWa(no2,nm,ph,items,nota,false,domN)},fail)}
+ var iso=new Date().toISOString();
+ FB.nextNo("CT").then(function(no2){return FB.cotCreate(no2,{uid:FB.user.uid,name:nm,phone:ph,items:items,nota:nota,dom:dom,domN:domN,st:0,h:{0:iso},date:iso}).then(function(){S.cot=[];S.cg="";cotPersistDraft();go("pedidos");cotWa(no2,nm,ph,items,nota,false,domN)})}).catch(fail)}
 function cotFind(no){return(window.COT||[]).filter(function(c){return c.no===no})[0]}
 function cotEditStart(no){var c=cotFind(no);if(!c||c.st!==0)return;S.ce={no:no,items:JSON.parse(JSON.stringify(c.items||[])),nota:c.nota||"",dom:c.dom||"mgua"};go("cotizar")}
 function cotAgain(no){var c=cotFind(no);if(!c||S.ce)return;if(c.dom)S.cd=c.dom;(c.items||[]).forEach(function(it){if(S.cot.length<20)S.cot.push(JSON.parse(JSON.stringify(it)))});cotPersistDraft();go("cotizar")}
 function cotAct(no,st){var c=cotFind(no);if(!c)return;
  if(st===2&&cotSt(c)!==1){alert("Esta cotización ya venció. Puedes pedir una nueva con «Volver a cotizar».");route();return}
+ if(st===2&&!FB.verified){alert("Tu cuenta aún no está verificada. Para tu primera compra escríbenos por WhatsApp y te ayudamos a completar el pedido.");return}
  if(!confirm(st===2?"¿Aceptar esta cotización?":"¿Cancelar esta solicitud?"))return;
  var fail=function(){window.__cacc=0;alert("No se pudo actualizar. Inténtalo de nuevo.")};
  if(st!==2){FB.cotSet(no,st).catch(fail);return}
@@ -594,7 +600,7 @@ function cotPedido(c,iso){var its=c.items||[];if(!c.no||!c.uid||!(c.tot>0)||!its
 function cotCard(c){var st=cotSt(c),col=CTC[st],its=c.items||[],pr=c.pr||[],q=c.st>=1,b="";
  var rows=its.map(function(it,i){return'<div style="display:flex;justify-content:space-between;gap:8px;margin-top:6px"><span class="mu" style="flex:1;min-width:0">'+esc(it.n)+(it.t||it.c?" · "+esc([it.t,it.c].filter(Boolean).join(" / ")):"")+'</span>'+(q&&pr[i]!=null?'<b>'+usd(+pr[i])+'</b>':'')+'</div>'}).join("");
  if(st===0)b='<button class="btn o" style="margin-top:10px" onclick="cotEditStart(\''+esc(c.no)+'\')">Editar productos</button><button class="btn o" onclick="cotAct(\''+esc(c.no)+'\',3)">Cancelar solicitud</button>';
- else if(st===1)b='<button class="btn" style="margin-top:10px" onclick="cotAct(\''+esc(c.no)+'\',2)">Aceptar cotización</button><button class="btn o" onclick="cotAct(\''+esc(c.no)+'\',3)">Cancelar</button>';
+ else if(st===1)b=(FB.verified?'<button class="btn" style="margin-top:10px" onclick="cotAct(\''+esc(c.no)+'\',2)">Aceptar cotización</button>':'<button class="btn" style="margin-top:10px" onclick="cotWaAcc(\''+esc(c.no)+'\')">Aceptar por WhatsApp</button>')+'<button class="btn o" onclick="cotAct(\''+esc(c.no)+'\',3)">Cancelar</button>';
  else if(st>=3)b='<button class="btn o" style="margin-top:10px" onclick="cotAgain(\''+esc(c.no)+'\')">Volver a cotizar</button>';
  return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(c.no)+'</b><span class="st" style="background:'+col[0]+';color:'+col[1]+'">'+CTL[st]+'</span></div>'+rows
  +(q&&c.tot>0?'<div style="display:flex;justify-content:space-between;margin-top:10px"><b>Total de productos</b><b>'+usd(+c.tot)+'</b></div><div class="mu">La importación se cobra por peso al entregar.</div>':'')
@@ -651,9 +657,13 @@ function avItems(){var L=[];
  if(FB.isAdmin){
   (ADM.cots||[]).filter(function(c){return c.st===0}).forEach(function(c){L.push({t:"Solicitud nueva",s:(c.name||"Cliente")+" · "+(c._id||c.no||""),x:c.date||"",tab:"cotizaciones"})});
   (ADM.orders||[]).filter(function(o){return !o.st&&!o.man}).forEach(function(o){L.push({t:"Pedido nuevo",s:(o.name||"Cliente")+" · "+o.no,x:o.date||"",tab:"pedidos"})});
+  (ADM.users||[]).forEach(function(u){if(u.verified===true||!u.phone)return;var c=u.createdAt,ms=c&&c.toMillis?c.toMillis():(c===null?Date.now():0);if(!ms||Date.now()-ms>2592e6)return;L.push({t:"Cuenta nueva sin verificar",s:(u.name||"Sin nombre")+" · "+fmtPh(u.phone),x:new Date(ms).toISOString(),tab:"clientes"})});
  }else if(FB.user){
   var oc=FB.avOc||[];
-  (window.ORD||[]).forEach(function(o){var st=o.st||0,k=o.no+":"+st,x=(o.h&&o.h[st])||o.date||"",tm=Date.parse(x);if(!STP[st]||oc.indexOf(k)>-1||(tm&&Date.now()-tm>2592e6))return;L.push({k:k,no:o.no,t:STP[st][0],s:STP[st][1],x:x})});
+  (window.ORD||[]).forEach(function(o){var st=o.st||0,k=o.no+":"+st,x=(o.h&&o.h[st])||o.date||"",tm=Date.parse(x);if(!st||!STP[st]||oc.indexOf(k)>-1||(tm&&Date.now()-tm>2592e6))return;L.push({k:k,no:o.no,t:STP[st][0],s:STP[st][1],x:x})});
+  (window.COT||[]).forEach(function(c){if(cotSt(c)!==1)return;var ms=cotMs(c),left=ms?ms-Date.now():0,soon=ms&&left>0&&left<864e5,k="cot:"+c.no+(soon?":v":":1");if(oc.indexOf(k)>-1)return;
+   var vd=ms?ordDate(new Date(ms).toISOString()):"";
+   L.push({k:k,t:soon?"Tu cotización vence pronto":"Cotización lista",s:"Solicitud "+c.no+(vd?" · vence el "+vd:""),x:soon?new Date(ms-864e5).toISOString():((c.h&&c.h[1])||c.date||""),go:"pedidos"})});
  }
  L.sort(function(a,b){return String(a.x)<String(b.x)?1:-1});return L}
 function avBdg(){try{var n=avItems().length;return n?'<i class="bdg">'+(n>9?"9+":n)+'</i>':''}catch(e){return''}}
@@ -663,15 +673,20 @@ function avOpen(){var o=document.getElementById("avp");if(o){o.remove();return}
  d.onclick=function(e){if(e.target===d)d.remove()};document.body.appendChild(d);avDraw()}
 function avDraw(){var d=document.getElementById("avp");if(!d)return;AVL=avItems();
  var h='<div style="position:absolute;top:calc(env(safe-area-inset-top,0px) + 58px);left:12px;right:12px;max-width:480px;margin:0 auto;max-height:70vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:16px;padding:6px 14px;box-shadow:0 12px 32px rgba(0,0,0,.25)">';
- h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0"><b>Avisos</b><button class="ib" aria-label="Cerrar" onclick="avOpen()">×</button></div>';
+ h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0"><b>Avisos</b><span style="display:flex;align-items:center;gap:8px">'+(!FB.isAdmin&&FB.user&&AVL.some(function(a){return a.k})?'<button class="chip" style="color:var(--ac)" onclick="avHideAll()">Ocultar todos</button>':'')+'<button class="ib" aria-label="Cerrar" onclick="avOpen()">×</button></span></div>';
  if(!FB.user)h+='<div class="mu" style="padding:12px 0">Inicia sesión para ver tus avisos.</div>';
  else if(!AVL.length)h+='<div class="mu" style="padding:12px 0">No tienes avisos nuevos.</div>';
  else AVL.forEach(function(a,i){var dt=a.x&&!isNaN(new Date(a.x))?ordDate(a.x):"";
   h+='<div style="display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd)"><div style="flex:1;cursor:pointer" onclick="avGo('+i+')"><b>'+esc(a.t)+'</b><div class="mu" style="margin-top:2px">'+esc(a.no?"Pedido "+a.no:a.s)+(dt?" · "+dt:"")+'</div>'+(a.no?'<div style="margin-top:4px;font-size:14px">'+esc(a.s)+'</div>':'')+'</div>'+(a.k?'<button class="ib" aria-label="Ocultar aviso" onclick="avHide('+i+')">×</button>':'')+'</div>'});
  d.innerHTML=h+'</div>'}
 function avGo(i){var a=AVL[i];if(!a)return;var d=document.getElementById("avp");if(d)d.remove();
- if(FB.isAdmin){AT=a.tab;if(location.hash==="#admin")admV();else go("admin")}else go("o-"+a.no)}
-function avHide(i){var a=AVL[i];if(!a||!a.k||!FB.user||!FB.avSave)return;var cur={};(window.ORD||[]).forEach(function(o){cur[o.no+":"+(o.st||0)]=1});
+ if(FB.isAdmin){AT=a.tab;if(location.hash==="#admin")admV();else go("admin")}else if(a.go)go(a.go);else go("o-"+a.no)}
+function avCur(){var cur={};(window.ORD||[]).forEach(function(o){cur[o.no+":"+(o.st||0)]=1});(window.COT||[]).forEach(function(c){cur["cot:"+c.no+":1"]=1;cur["cot:"+c.no+":v"]=1});return cur}
+function avHideAll(){if(!FB.user||FB.isAdmin||!FB.avSave)return;var ks=avItems().filter(function(a){return a.k}).map(function(a){return a.k});if(!ks.length)return;
+ var cur=avCur(),prev=FB.avOc||[],l=prev.filter(function(k){return cur[k]});ks.forEach(function(k){if(l.indexOf(k)<0)l.push(k)});l=l.slice(-200);
+ FB.avOc=l;avRef();
+ FB.avSave(l).catch(function(){FB.avOc=prev;avRef();alert("No se pudieron ocultar los avisos.")})}
+function avHide(i){var a=AVL[i];if(!a||!a.k||!FB.user||!FB.avSave)return;var cur=avCur();
  var prev=FB.avOc||[],l=prev.filter(function(k){return cur[k]});if(l.indexOf(a.k)<0)l.push(a.k);l=l.slice(-200);
  FB.avOc=l;avRef();
  FB.avSave(l).catch(function(){FB.avOc=prev;avRef();alert("No se pudo ocultar el aviso.")})}
@@ -706,7 +721,7 @@ function orderV(id){var demo=id==="demo",o;
 
 
 /* ===== Firebase: cuenta con número de WhatsApp (Nicaragua) ===== */
-var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})},claimCode:function(){return Promise.reject({})},custCode:function(){return Promise.reject({})},cod:""};
+var FB={ready:false,verified:false,avatar:"",mustChange:false,tempExp:0,addr:"",user:null,phone:"",name:"",fail:false,register:function(){return Promise.reject({})},login:function(){return Promise.reject({})},logout:function(){},saveOrder:function(){return Promise.reject({})},claimCode:function(){return Promise.reject({})},custCode:function(){return Promise.reject({})},nextNo:function(){return Promise.reject({})},cod:""};
 window.ORD=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};FB.isAdmin=false;setTimeout(function(){if(!FB.ready)FB.fail=true},9000);
 var AM="in",PB=null;
 function nicaPhone(v){var d=String(v||"").replace(/\D/g,"");if(d.length===11&&d.slice(0,3)==="505")d=d.slice(3);return/^[578]\d{7}$/.test(d)?d:""}
@@ -728,7 +743,7 @@ function profBox(){
  info=function(icn,a,b){return'<div class="pf-r"><i class="pf-i">'+ic(icn)+'</i><span>'+a+'</span><span>'+b+'</span></div>'};
  var h='<div class="box pf pfx"><div class="pf-h"><div class="pf-av'+(ao?' em':'')+'"'+(ao?' style="background:'+ao[2]+'"':'')+(adm?'':' onclick="avPick()"')+'>'+av+'</div><div class="pf-id"><div class="pf-n"><span>'+esc(nm||(adm?"Administrador":"Mi cuenta"))+'</span>'+(adm?'':(v?SEAL_OK:SEAL_WAIT))+'</div>'
  +(adm?'<div class="pf-pill pf-ok">Administrador</div>':v?'<div class="pf-pill pf-ok">Cuenta verificada</div>':'<div class="pf-pill pf-wait">Pendiente de verificación</div>')+(adm?'':'<div><span class="pf-lk" onclick="avPick()">Cambiar avatar</span></div>')+'</div></div>';
- if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'"><div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Estamos verificando tu cuenta.</b> Mientras tanto, tus pedidos se envían directo por WhatsApp y te atendemos por ahí.')+'</div></div>'
+ if(!adm)h+='<div class="pf-b '+(v?'pf-ok':'pf-wait')+'"><div>'+(v?'<b>Todo listo.</b> Puedes hacer tus pedidos desde la app y seguirlos en «Pedidos».':'<b>Tu cuenta aún no está verificada.</b> Puedes pedir cotizaciones desde la app. Para tu primera compra escríbenos por WhatsApp: al crear tu primer pedido tu cuenta queda verificada y recibes tu código de cliente.')+'</div></div>'
   +'<div class="pf-st"><div><b>'+getOrders().length+'</b><span>Pedidos</span></div><div><b>'+(v?"Verificada":"En revisión")+'</b><span>Estado</span></div></div>'
   +'<div class="pf-ls">'+info("phone","WhatsApp",fmtPh(FB.phone))+(FB.addr?info("home","Entrega",esc(FB.addr)):'')+'</div>';
  h+='<div class="pf-a">'+(adm?'':'<button class="btn o" onclick="pwBox(false)">Cambiar contraseña</button>')+'<button class="btn o pf-out" onclick="FB.logout()">Cerrar sesión</button></div></div>';
@@ -936,7 +951,16 @@ function admOQ(v){OQ=v;var e=$("ordL");if(e)e.innerHTML=admOrdList()}
 function admOF(i){OF=i;admV()}
 function admInvOk(o){return!!(o&&o.man&&Array.isArray(o.lines)&&o.lines.length&&o.lines.every(function(l){return l&&+l.p>0}))}
 function admInv(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!admInvOk(o)){alert("Esta orden no tiene los precios guardados.");return}try{cqDl(moInv({rec:o,prices:o.lines.map(function(l){return+l.p})}),"Pedido-"+o.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
-function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent("Hola "+(o.name||"")+", tu pedido "+no+(o.cod?" (código de cliente "+o.cod+")":"")+" ahora está: "+STP[o.st||0][0]+"."),"_blank")}
+function admMsg(o,i){return"Hola "+(o.name||"")+", tu pedido "+o.no+(o.cod?" (código de cliente "+o.cod+")":"")+" ahora está: "+STP[i][0]+". "+STP[i][1]}
+function admWa(no){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o)return;if(!confirm("¿Abrir WhatsApp para avisar a "+(o.name||"el cliente")+"?"))return;window.open("https://wa.me/505"+o.phone+"?text="+encodeURIComponent(admMsg(o,o.st||0)),"_blank")}
+function admAvisar(no,i){var o=ADM.orders.filter(function(x){return x.no===no})[0];if(!o||!o.phone||!i||!STP[i])return;
+ var old=$("avz");if(old)old.remove();var t=document.createElement("div");t.id="avz";t.className="toast";
+ var nm=String(o.name||"cliente").trim().split(/\s+/)[0];
+ t.innerHTML='<span class="tx"><b>Estado cambiado</b><small>'+esc(STP[i][0])+' · '+esc(no)+'</small></span><button onclick="admAvisarGo(\''+esc(no)+'\','+i+')">Avisar a '+esc(nm)+' por WhatsApp</button><button aria-label="Cerrar" onclick="$(\'avz\').remove()">×</button>';
+ document.body.appendChild(t);requestAnimationFrame(function(){requestAnimationFrame(function(){t.classList.add("on")})});
+ clearTimeout(window.__avz);window.__avz=setTimeout(function(){var e=$("avz");if(e){e.classList.remove("on");setTimeout(function(){e.remove()},320)}},15000)}
+function admAvisarGo(no,i){var o=ADM.orders.filter(function(x){return x.no===no})[0];var e=$("avz");if(e)e.remove();if(!o||!o.phone||!STP[i])return;
+ var u="https://wa.me/505"+o.phone+"?text="+encodeURIComponent(admMsg(o,i)),w=window.open(u,"_blank");if(!w)location.href=u}
 /* ===== Orden manual (admin) ===== */
 var MO=null;
 function moNew(){return{n:"",l:"",q:"1",t:"",c:"",p:""}}
@@ -976,8 +1000,6 @@ function moForm(){var d=MO.done;
  +'<div class="mu" style="margin-top:6px">La importación no se suma: se cobra por peso al entregar.</div>'
  +'<button class="btn" onclick="moSave()">Guardar orden y crear factura</button><button class="btn o" onclick="moClose()">Cancelar</button></div>'}
 function moBox(){return MO?moForm():'<div class="box"><button class="btn" style="margin-top:0" onclick="moOpen()">Nueva orden</button></div>'}
-function moNo(){var n=new Date(),pad=function(v){return String(v).padStart(2,"0")},ex={};ADM.orders.forEach(function(o){ex[o.no]=1});
- for(var k=0;k<20;k++){var no="EN-"+String(n.getFullYear()).slice(2)+pad(n.getMonth()+1)+pad(n.getDate())+"-"+String(Math.floor(1000+Math.random()*9000));if(!ex[no])return no}return""}
 /* Arma el pedido (st:0) con la forma del checkout normal. Devuelve {rec}, o {err} si algo falta. */
 function moBuild(M,no,iso){if(!M.u)return{err:"Elige un cliente."};var lines=[],tot=0;
  for(var i=0;i<M.its.length;i++){var it=M.its[i],n=String(it.n||"").trim(),l=String(it.l||"").trim(),q=moQty(it.q),p=moP(it.p),k=" (producto "+(i+1)+")";
@@ -991,12 +1013,13 @@ function moBuild(M,no,iso){if(!M.u)return{err:"Elige un cliente."};var lines=[],
 function moInv(d){var r=d.rec,its=r.lines.map(function(x,i){return{n:x.n,vr:x.vr,q:x.q,p:d.prices[i],sub:lnNi(x)?"Envío incluido · puesto en Nicaragua":x.m==="air"?"Envío Express":"Envío Regular"}});
  return rcCanvas({cot:1,ord:1,no:r.no,cod:r.cod,name:r.name,phone:fmtPh(r.phone||"00000000"),date:ordDate(r.date),items:its,sub:r.tot,fee:0,tot:r.tot,notes:r.notes,domN:r.domN,
   bx:[r.lines.length&&r.lines.every(lnNi)?"Envío incluido: estos productos tienen precio puesto en Nicaragua, no hay cobro de flete por peso.":"La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Entrega en Nicaragua: "+r.domN+". El precio se confirma al retirar, porque varía según el paquete.","Los días hábiles se cuentan desde que tu paquete llega a Miami, no desde la compra."]})}
-function moSave(){if(!MO||window.__mosv)return;var no=moNo();if(!no){alert("No se pudo crear un número de orden. Inténtalo de nuevo.");return}
- var iso=new Date().toISOString(),r=moBuild(MO,no,iso);if(r.err){alert(r.err);return}
- if(!confirm("¿Crear la orden "+no+" para "+(r.rec.name||"el cliente")+" por "+usd(r.rec.tot)+"?"))return;
+function moSave(){if(!MO||window.__mosv)return;
+ var iso=new Date().toISOString(),r=moBuild(MO,"EN-000000-0000",iso);if(r.err){alert(r.err);return}
+ var uv=ADM.users.filter(function(x){return x._id===MO.u.id})[0]||{};
+ if(!confirm("¿Crear la orden para "+(r.rec.name||"el cliente")+" por "+usd(r.rec.tot)+"?"+(uv.verified?"":"\n\nEsta cuenta aún no está verificada: al crear la orden quedará verificada y recibirá su código de cliente.")))return;
  window.__mosv=1;
  var sv=function(){FB.saveOrder(r.rec).then(function(){window.__mosv=0;MO.done=r;try{moDl()}catch(e){alert("La orden se guardó, pero no se pudo generar la imagen. Usa «Descargar factura».")}admV()},function(){window.__mosv=0;alert("No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.")})};
- (function(){var uu=ADM.users.filter(function(x){return x._id===MO.u.id})[0]||{};return uu.cod?Promise.resolve(uu.cod):uu.verified?FB.custCode(MO.u.id):Promise.resolve("")})().then(function(c){if(c)r.rec.cod=c;sv()},function(){if(confirm("No se pudo generar el código de cliente (revisa la conexión o las reglas de Firebase). ¿Guardar la orden sin código?"))sv();else window.__mosv=0})}
+ FB.nextNo("EN").then(function(no){r=moBuild(MO,no,iso);return (function(){var uu=ADM.users.filter(function(x){return x._id===MO.u.id})[0]||{};return uu.cod?Promise.resolve(uu.cod):uu.verified?FB.custCode(MO.u.id):FB.verify(MO.u.id,true).then(function(){return FB.custCode(MO.u.id)},function(){var e=new Error("ver");e.ver=1;throw e})})().then(function(c){if(c)r.rec.cod=c;sv()},function(e){if(e&&e.ver){alert("No se pudo verificar la cuenta. Revisa tu conexión o las reglas de Firebase e inténtalo de nuevo.");window.__mosv=0;return}if(confirm("No se pudo generar el código de cliente (revisa la conexión o las reglas de Firebase). ¿Guardar la orden sin código?"))sv();else window.__mosv=0})},function(){window.__mosv=0;alert("No se pudo crear el número de orden. Revisa tu conexión o las reglas de Firebase e inténtalo de nuevo.")})}
 function moDl(){if(!MO||!MO.done)return;try{cqDl(moInv(MO.done),"Pedido-"+MO.done.rec.no+".png")}catch(e){alert("No se pudo generar la imagen.")}}
 function moWa(){if(!MO||!MO.done)return;var r=MO.done.rec;if(!r.phone)return;var u="https://wa.me/505"+r.phone+"?text="+encodeURIComponent("Hola "+(r.name||"")+", registramos tu pedido "+r.no+(r.cod?" (código de cliente "+r.cod+")":"")+" por "+usd(r.tot)+". Te envío la factura.");var w=window.open(u,"_blank");if(!w)location.href=u}
 /* ===== Cotizaciones (admin) ===== */
@@ -1012,10 +1035,10 @@ function admCotIn(id,i,v){var c=cqFind(id);if(!c)return;cqDraft(c).pr[i]=v;var e
 function admCotAn(id,v){var c=cqFind(id);if(!c)return;cqDraft(c).an=v.slice(0,300)}
 function cqFmt(d){return d.toLocaleString("es",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}
 function cqCod(c){var u=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];return u&&u.cod?u.cod:""}
-function cqEns(c){if(cqCod(c))return Promise.resolve();return FB.custCode(c.uid).then(function(cd){var u=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];if(u)u.cod=cd})}
+function cqEns(c){if(cqCod(c))return Promise.resolve();var uv=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];if(!uv||!uv.verified)return Promise.resolve();return FB.custCode(c.uid).then(function(cd){var u=(ADM.users||[]).filter(function(x){return x._id===c.uid})[0];if(u)u.cod=cd})}
 function cqInv(c,pr,tot,vence,an,iso){var its=(c.items||[]).map(function(x,i){return{n:x.n||"",vr:"",q:1,p:pr[i],sub:[x.s,x.t?"Talla "+x.t:"",x.c?"Color "+x.c:"",x.m==="air"?"Envío Express":x.m==="sea"?"Envío Regular":""].filter(Boolean).join(" · ")}}),vig=cqFmt(vence);
  return rcCanvas({cot:1,no:c._id,cod:cqCod(c),name:c.name||"",phone:c.phone?fmtPh(c.phone):"",date:ordDate(iso),vig:vig,items:its,sub:tot,fee:0,tot:tot,notes:an||"",domN:c.domN||"",
-  bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Esta cotización es válida hasta "+vig.replace(/\.$/,"")+". Después de esa fecha debes pedir una nueva.","Para aceptarla, entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización»."].concat(c.domN?["Entrega en Nicaragua: "+c.domN+". El precio se confirma al retirar, porque varía según el paquete."]:[])})}
+  bx:["La importación a Nicaragua no está incluida en este total: se cobra por peso al entregar tu pedido. Envío de Miami a Nicaragua: Express "+usd(CFG.air)+" por libra ("+CFG.t.air+") y Regular "+usd(CFG.sea)+" por libra ("+CFG.t.sea+"), según el peso real al recibir tu paquete en Miami.","Esta cotización es válida hasta "+vig.replace(/\.$/,"")+". Después de esa fecha debes pedir una nueva.",(cqCod(c)?"Para aceptarla, entra a tu cuenta, ve a Pedidos y toca «Aceptar cotización».":"Para aceptarla, escríbenos por WhatsApp. Si es tu primera compra, nosotros creamos tu pedido y tu cuenta queda verificada.")].concat(c.domN?["Entrega en Nicaragua: "+c.domN+". El precio se confirma al retirar, porque varía según el paquete."]:[])})}
 function cqDl(cv,name){var b=dataBlob(cv.toDataURL("image/png")),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}
 function admCots(){var U={};ADM.users.forEach(function(u){U[u._id]=u});var L=(ADM.cots||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});
  return'<h2>Cotizaciones ('+L.length+')</h2>'+(L.length?L.map(function(c){
@@ -1125,7 +1148,7 @@ function admEditSave(id){var p=EDP[id];if(!p)return;var r=apCalc(p),e=apE(p);if(
  var d=JSON.parse(JSON.stringify({n:n,c:e.cat,p:r.fin,pAmazon:parseFloat(e.pAmazon)||0,envio:parseFloat(e.envio)||0,imp:parseFloat(e.imp)/100,pct:parseFloat(e.pct),extra:parseFloat(e.extra)||0,ni:(e.ni==null?(p.ni?1:0):(e.ni?1:0)),edited:new Date().toISOString()}));
  FB.editProd(id,d,p.linkId,n!==p.n?n:null).then(function(){delete EDP[id];delete AP_E[id];ED=null;admDone()},function(){alert("No se pudo guardar.")})},{title:"Guardar cambios",ok:"Guardar"})}
 function admRetry(id){if(!confirm("¿Reintentar leer este link?"))return;FB.retry(id).catch(function(){alert("No se pudo reintentar.")})}
-function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el pedido ":"¿Cambiar el pedido ")+no+(i===6?"? El cliente verá que fue cancelado.":" a «"+STP[i][0]+"»?"))){sel.value=prev;return}FB.setStatus(no,i).catch(function(){alert("No se pudo cambiar el estado.")})}
+function admSt(no,sel,prev){var i=+sel.value;if(!confirm((i===6?"¿CANCELAR el pedido ":"¿Cambiar el pedido ")+no+(i===6?"? El cliente verá que fue cancelado.":" a «"+STP[i][0]+"»?"))){sel.value=prev;return}FB.setStatus(no,i).then(function(){admAvisar(no,i)},function(){alert("No se pudo cambiar el estado.")})}
 function admCod(id){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u||u.cod)return;FB.custCode(id).then(function(c){alert("Código asignado: "+c)},function(){alert("No se pudo asignar el código. Revisa las reglas de Firebase.")})}
 function admVer(id,v){var u=ADM.users.filter(function(x){return x._id===id})[0];if(!u)return;var n=u.name||fmtPh(u.phone);if(!confirm(v?"¿Marcar a "+n+" como verificado?":"¿Quitar la verificación a "+n+"?"))return;FB.verify(id,v).catch(function(){alert("No se pudo cambiar.")})}
 function admOk(id){var p=apFind(id);if(!p)return;var r=apCalc(p),e=apE(p);if(r.err)return;
@@ -1153,6 +1176,7 @@ Object.assign(window.FB,{
  cleanTasks:async()=>{try{const s=await getDocs(query(collection(db,"tareas"),where("type","==","reset")));const now=Date.now();for(const d of s.docs){const x=d.data(),t=x.createdAt&&x.createdAt.toMillis?x.createdAt.toMillis():0;if(x.done===true||(t&&now-t>864e5))await deleteDoc(d.ref)}}catch(e){}},
  saveOrder:o=>setDoc(doc(db,"pedidos",o.no),o),
  custCode:async(uid)=>{const c=await FB.claimCode(uid);return await runTransaction(db,async tx=>{const ref=doc(db,"usuarios",uid),sn=await tx.get(ref);const x=sn.exists()?sn.data().cod:"";if(x)return x;tx.update(ref,{cod:c});return c})},
+ nextNo:async(pfx)=>{const n=new Date(),p=v=>String(v).padStart(2,"0"),day=pfx+"-"+String(n.getFullYear()).slice(2)+p(n.getMonth()+1)+p(n.getDate());const k=await runTransaction(db,async tx=>{const ref=doc(db,"contadores",day),sn=await tx.get(ref);if(sn.exists()){const v=(sn.data().n||0)+1;tx.update(ref,{n:v});return v}tx.set(ref,{n:1});return 1});return day+"-"+String(k).padStart(4,"0")},
  claimCode:async(own)=>{const A="23456789ABCDEFGHJKLMNPQRSTUVWXYZ";for(let L=2;L<=5;L++){for(let t=0;t<(L===5?12:6);t++){const r=crypto.getRandomValues(new Uint8Array(L));let c="";for(let i=0;i<L;i++)c+=A[r[i]%32];const ok=await runTransaction(db,async tx=>{const ref=doc(db,"codigos",c),sn=await tx.get(ref);if(sn.exists())return false;tx.set(ref,{uid:own||auth.currentUser.uid,at:serverTimestamp()});return true});if(ok)return c}}throw new Error("cod")},
  adminLogin:(e,pw)=>signInWithEmailAndPassword(auth,e,pw),
  addLinks:async us=>{for(const u of us)await addDoc(collection(db,"links"),{url:u,st:"pendiente",createdAt:serverTimestamp()})},
@@ -1176,11 +1200,11 @@ Object.assign(window.FB,{
 onAuthStateChanged(auth,u=>{FB.ready=true;FB.user=u;FB.phone=u&&/^505\d{8}@encargos\.app$/.test(u.email)?u.email.slice(3,11):"";FB.isAdmin=!!u&&u.uid===ADMIN;unA.forEach(f=>f());unA=[];window.ADM={links:[],orders:[],users:[],pend:[],cots:[]};
  if(FB.isAdmin)[["links","links"],["pedidos","orders"],["usuarios","users"],["porAprobar","pend"],["cotizaciones","cots"],["solicitudes_ps","shop"]].forEach(([c,k])=>unA.push(onSnapshot(collection(db,c),s=>{window.ADM[k]=s.docs.map(d=>({...d.data(),_id:d.id}));if(window.avRef)avRef();if(location.hash==="#admin")route();else if(k==="links"&&window.admRef)admRef()},()=>{})));FB.name=u?(u.displayName||""):"";
  if(FB.isAdmin)FB.cleanTasks();if(!u&&window.PWF){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
- if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";FB.avOc=[];
- if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
+ if(unU){unU();unU=null}FB.verified=FB.isAdmin;FB.prof=FB.isAdmin;FB.mustChange=false;FB.avatar="";FB.addr="";FB.avOc=[];
+ if(u&&!FB.isAdmin)unU=onSnapshot(doc(db,"usuarios",u.uid),s=>{if(!s.exists()){if(!FB.prof){FB.prof=true;if(/^(carrito|cuenta|pedidos)/.test(location.hash.slice(1)))route()}if(FB.phone)setDoc(doc(db,"usuarios",u.uid),{phone:FB.phone,name:u.displayName||"",addr:"",createdAt:serverTimestamp()}).catch(()=>{});return}
   const d=s.data(),v=d.verified===true;FB.mustChange=d.mustChange===true;FB.tempExp=d.tempExp||0;
   if(FB.mustChange){if(FB.tempExp&&Date.now()>FB.tempExp){alert("Tu clave temporal venció. Pídenos una nueva por WhatsApp.");signOut(auth);return}pwBox(true)}else if(window.PWF===1){const o=document.getElementById("pw");if(o)o.remove();window.PWF=0}
-  FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified;FB.verified=v;FB.cod=d.cod||"";if(v&&!d.cod&&!FB._cb){FB._cb=1;FB.custCode(u.uid).catch(function(){FB._cb=0})}const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(h==="carrito"||h==="cuenta")route()}},()=>{});
+  FB.avOc=Array.isArray(d.avOc)?d.avOc:[];if(window.avRef)avRef();FB.addr=d.addr||"";const fill=!S.cm&&FB.addr;if(fill)S.cm=FB.addr;if(!S.cn&&d.name)S.cn=d.name;if(!S.cp&&d.phone)S.cp=d.phone;const ch=v!==FB.verified||!FB.prof;FB.prof=true;FB.verified=v;FB.cod=d.cod||"";if(v&&!d.cod&&!FB._cb){FB._cb=1;FB.custCode(u.uid).catch(function(){FB._cb=0})}const av=d.avatar||"",ach=av!==FB.avatar;FB.avatar=av;if(ch||fill||ach){const h=location.hash.slice(1);if(/^(carrito|cuenta|pedidos)/.test(h))route()}},()=>{});
  if(unO){unO();unO=null}window.ORD=[];window.COT=[];
  if(window.PUID!==(u?u.uid:null)){window.PUID=u?u.uid:null;S.cn="";S.cp="";S.cm="";S.cno=""}
  if(u){if(!S.cn)S.cn=FB.name;if(!S.cp)S.cp=FB.phone;

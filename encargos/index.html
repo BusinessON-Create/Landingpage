@@ -333,20 +333,16 @@ nav div,.sbar div{max-width:640px}
 .hb-ct{font-size:10.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:rgba(255,255,255,.72)}
 .hb-trk{--d:38px;position:relative;display:grid;grid-template-columns:repeat(5,1fr);margin-top:34px}
 .hb-ln{position:absolute;left:10%;right:10%;top:calc(var(--d)/2 - 2px);height:4px;border-radius:4px;background:rgba(255,255,255,.18)}
-.hb-fill{position:absolute;left:0;top:0;height:100%;width:calc(var(--p)*100%);border-radius:4px;background:linear-gradient(90deg,#f58220,#ffc489);box-shadow:0 0 14px rgba(245,130,32,.8);transition:width 1.1s cubic-bezier(.4,0,.2,1),opacity .35s}
+.hb-fill{position:absolute;left:0;top:0;height:100%;width:calc(var(--p)*100%);border-radius:4px;background:#f58220;transition:width 1.1s cubic-bezier(.4,0,.2,1),opacity .35s}
 .hb.fd .hb-fill{opacity:0;transition:opacity .35s}
-.hb-pl{position:absolute;right:-14px;top:50%;width:28px;height:28px;transform:translateY(calc(-50% - var(--d)/2 - 15px));filter:drop-shadow(0 0 8px rgba(255,255,255,.75));animation:hbb 2s ease-in-out infinite}
-@keyframes hbb{50%{translate:0 -4px}}
-.hb-pl svg{display:block;width:100%;height:100%;fill:#fff}
 .hb-s{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .hb-d{width:var(--d);height:var(--d);border-radius:50%;display:grid;place-items:center;background:#0a3a8f;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7);transition:all .5s}
 .hb-d svg{width:55%;height:55%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .hb-s b{font-size:10.5px;line-height:1.15;font-weight:700;color:rgba(255,255,255,.58);transition:color .5s}
-.hb-s.on .hb-d{background:linear-gradient(135deg,#f58220,#ff9d42);border-color:#ffc489;color:#fff;transform:scale(1.1);box-shadow:0 0 0 5px rgba(245,130,32,.22),0 6px 16px rgba(245,130,32,.55)}
+.hb-s.on .hb-d{background:#f58220;border-color:#f58220;color:#fff;transform:scale(1.1)}
 .hb-s.on b{color:#fff}
-.hb.ok .hb-s:last-child .hb-d{animation:hbk 1.2s ease-in-out infinite}@keyframes hbk{50%{box-shadow:0 0 0 9px rgba(245,130,32,0),0 6px 16px rgba(245,130,32,.55)}}
 @media(prefers-reduced-motion:reduce){.hb *,.hb::before,.hb::after{animation:none!important}.hb-fill,.hb-d,.hb-s b{transition:none}}
-@media(min-width:900px){.hb{border-radius:0 0 34px 34px}.hb-map{top:0;right:2%;height:100%;width:auto;aspect-ratio:360/386}.hb-in{gap:22px;padding:38px 56px 36px}.hb-txt{max-width:52%}.hb-chip{padding:8px 16px;border-radius:14px}.hb-logo{height:40px}.hb-h{margin-top:18px;font-size:50px;letter-spacing:-1.5px}.hb-pill{font-size:20px;padding:9px 24px;margin-top:16px}.hb-f{margin-top:20px;gap:10px}.hb-f li{font-size:14px;padding:8px 15px;gap:9px}.hb-f li svg{width:21px;height:21px}.hb-xl{display:inline}.hb-card{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:26px;width:62%;padding:26px 28px 22px;border-radius:24px}.hb-ct{font-size:13px;line-height:1.4}.hb-cs{display:block;margin-top:6px;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.62)}.hb-trk{--d:48px;margin-top:34px}.hb-pl{width:34px;height:34px;right:-17px;transform:translateY(calc(-50% - var(--d)/2 - 19px))}.hb-s{gap:8px}.hb-s b{font-size:13.5px}}
+@media(min-width:900px){.hb{border-radius:0 0 34px 34px}.hb-map{top:0;right:2%;height:100%;width:auto;aspect-ratio:360/386}.hb-in{gap:22px;padding:38px 56px 36px}.hb-txt{max-width:52%}.hb-chip{padding:8px 16px;border-radius:14px}.hb-logo{height:40px}.hb-h{margin-top:18px;font-size:50px;letter-spacing:-1.5px}.hb-pill{font-size:20px;padding:9px 24px;margin-top:16px}.hb-f{margin-top:20px;gap:10px}.hb-f li{font-size:14px;padding:8px 15px;gap:9px}.hb-f li svg{width:21px;height:21px}.hb-xl{display:inline}.hb-card{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:26px;width:62%;padding:26px 28px 22px;border-radius:24px}.hb-ct{font-size:13px;line-height:1.4}.hb-cs{display:block;margin-top:6px;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.62)}.hb-trk{--d:48px;margin-top:34px}.hb-s{gap:8px}.hb-s b{font-size:13.5px}}
 /* Categorías: espacio arriba y abajo para que no se corten las tarjetas ni su sombra */
 .tiles{padding-top:14px;padding-bottom:20px}
 @media(min-width:900px){#app:has(#hm) .tiles{padding:14px 24px 20px}}
@@ -983,7 +979,7 @@ function hbBanner(){var P_='<svg viewBox="0 0 24 24" aria-hidden="true"><g trans
  return'<section class="hb" data-n="0" aria-label="EncarGo: compra en Estados Unidos y recibe en Managua. Paga por transferencia bancaria, sin tarjeta internacional. Sigue tu pedido paso a paso.">'+HBMAP+''
  +'<div class="hb-in"><div class="hb-txt"><span class="hb-chip"><img class="hb-logo" alt="EncarGo" src="'+LOGO_URI+'"></span><div class="hb-h">Compra en<br><em>Estados Unidos</em></div><span class="hb-pill">y recibe en Managua</span>'
  +'<ul class="hb-f"><li>'+HBPH+'<span>Pide desde <b>tu celular</b></span></li><li>'+HBBK+'<span>Transferencia, <b>sin tarjeta<span class="hb-xl"> internacional</span></b></span></li><li class="hb-bk">LAFISE</li><li class="hb-bk">Banpro</li></ul></div>'
- +'<div class="hb-card"><div class="hb-ct">Sigue tu pedido paso a paso<span class="hb-cs">Así avanza tu compra, desde que la pides hasta que la recibes.</span></div><div class="hb-trk"><div class="hb-ln"><div class="hb-fill"><span class="hb-pl">'+P_+'</span></div></div>'
+ +'<div class="hb-card"><div class="hb-ct">Sigue tu pedido paso a paso<span class="hb-cs">Así avanza tu compra, desde que la pides hasta que la recibes.</span></div><div class="hb-trk"><div class="hb-ln"><div class="hb-fill"></div></div>'
  +st.map(function(x,i){return'<div class="hb-s'+(i?'':' on')+'"><span class="hb-d"><svg viewBox="0 0 24 24" aria-hidden="true">'+x[1]+'</svg></span><b>'+x[0]+'</b></div>'}).join("")+'</div></div></div></section>'}
 function hbTick(){var e=document.querySelector(".hb");if(!e||document.hidden)return;var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches,n=rm?5:((+e.dataset.n||0)+1)%7,k=Math.min(n,4);e.dataset.n=n;if(rm&&!e.dataset.rm){e.dataset.rm=1;var m=e.querySelector(".hb-map");if(m&&m.pauseAnimations){m.setCurrentTime(4.6);m.pauseAnimations()}}e.classList.toggle("fd",n===6);e.classList.toggle("ok",n===5);e.style.setProperty("--p",n===6?0:k/4);[].forEach.call(e.querySelectorAll(".hb-s"),function(c,i){c.classList.toggle("on",n<6&&i<=k)})}
 setInterval(hbTick,1300);

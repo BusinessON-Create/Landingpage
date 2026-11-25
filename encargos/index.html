@@ -1105,6 +1105,7 @@ function ordNorm(x){return String(x||"").toLowerCase().normalize("NFD").replace(
 function ordMatch(o,q){if(!q)return true;var t=ordNorm(q),d=t.replace(/\D/g,"");
  if(ordNorm(o.no).indexOf(t)>-1||ordNorm(o.name).indexOf(t)>-1||ordNorm(o.cot).indexOf(t)>-1||ordNorm(o.cod).indexOf(t)>-1)return true;
  return d.length>=2&&String(o.phone||"").indexOf(d)>-1}
+function admLines(o){var a=Array.isArray(o&&o.lines)?o.lines:[];if(!a.length)return"";return'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)"><div class="mu">Productos del pedido</div>'+a.map(function(l){l=l||{};var lk=/^https?:\/\//.test(l.l||"")?' · <a href="'+esc(l.l)+'" target="_blank" rel="noopener">enlace</a>':"";return'<div style="margin-top:6px;font-size:14px"><b>'+esc(String(l.n||"").slice(0,90))+'</b> ×'+esc(l.q||1)+(l.vr?'<div style="color:var(--ac);font-weight:600">'+esc(l.vr)+'</div>':'')+(lk?'<div class="mu">'+lk.slice(3)+'</div>':'')+'</div>'}).join("")+'</div>'}
 function admOrdList(){var U={};ADM.users.forEach(function(u){U[u._id]=u});
  var all=ADM.orders.slice().sort(function(a,b){return a.date<b.date?1:-1}),q=OQ.trim();
  var F=all.filter(function(o){return(OF<0||(o.st||0)===OF)&&ordMatch(o,q)});
@@ -1113,7 +1114,7 @@ function admOrdList(){var U={};ADM.users.forEach(function(u){U[u._id]=u});
  return note+(L.length?L.map(function(o){var u=U[o.uid]||{};
   return'<div class="box"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+esc(o.no)+'</b>'+stBadge(o)+'</div>'+codTag(o)+'<div style="margin-top:6px;font-size:14px">'+esc(o.name||"")+(u.verified?' <span class="mu">(verificado)</span>':'')+'</div><div class="mu">'+(o.phone?fmtPh(o.phone)+", ":"")+ud(o.tot)+", "+ordDate(o.date)+'</div>'
   +(o.addr?'<div style="margin-top:4px;font-size:14px"><b>Dirección:</b> '+esc(o.addr)+'</div>':'')+(o.notes?'<div style="margin-top:2px;font-size:14px"><b>Notas:</b> '+esc(o.notes)+'</div>':'')
-  +'<select onchange="admSt(\''+escJ(o.no)+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
+  +admLines(o)+'<select onchange="admSt(\''+escJ(o.no)+'\',this,'+(o.st||0)+')">'+stIdx(o).concat([6]).map(function(i){return'<option value="'+i+'"'+(i===(o.st||0)?' selected':'')+'>'+STP[i][0]+'</option>'}).join("")+'</select>'
   +'<button class="btn o" onclick="admWa(\''+escJ(o.no)+'\')">Avisar por WhatsApp</button>'+(admInvOk(o)?'<button class="btn o" onclick="admInv(\''+escJ(o.no)+'\')">Descargar factura</button>':'')+'</div>'}).join(""):'<div class="empty">'+(all.length?"No hay pedidos con esa búsqueda o estado.":"Aún no hay pedidos.")+'</div>')}
 function admOrders(){var C={};ADM.orders.forEach(function(o){var k=o.st||0;C[k]=(C[k]||0)+1});
  var chips='<div class="chips"><button class="chip'+(OF<0?' on':'')+'" onclick="admOF(-1)">Todos ('+ADM.orders.length+')</button>'+STP.map(function(s,i){return'<button class="chip'+(OF===i?' on':'')+'" onclick="admOF('+i+')">'+esc(s[0])+' ('+(C[i]||0)+')</button>'}).join("")+'</div>';

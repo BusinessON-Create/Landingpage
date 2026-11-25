@@ -375,6 +375,15 @@ nav div,.sbar div{max-width:640px}
 .hb-drift{position:absolute;left:0;right:0;bottom:0;height:12px;z-index:2;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='12' viewBox='0 0 80 12'%3E%3Cpath d='M0 12V7Q10 2 20 6T40 6T60 6T80 7V12Z' fill='white'/%3E%3C/svg%3E") repeat-x left bottom/80px 12px}
 @media(min-width:900px){.xm .hb-in{padding-bottom:44px}}
 @media(prefers-reduced-motion:reduce){.hb-snow{display:none}}
+/* Tema navideño en toda la app: botones y detalles en rojo, cabeceras azules en verde pino */
+:root[data-xm]{--ac:#c8102e;--acs:#fdecee}
+:root[data-xm][data-theme="dark"]{--ac:#ef4a5f;--acs:#2a1519}
+:root[data-xm][data-theme="sand"]{--ac:#b91c1c;--acs:#f8e4dc}
+[data-xm] .amh,[data-xm] .ban{background:radial-gradient(130% 140% at 0 0,#166534 0,#062b20 72%)}
+[data-xm] .ban{box-shadow:0 12px 28px rgba(6,43,32,.3)}
+[data-xm] .pfx .pf-h{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='48' viewBox='0 0 160 48'%3E%3Cpath d='M0 8Q40 -4 80 8T160 8M0 24Q40 12 80 24T160 24M0 40Q40 28 80 40T160 40' fill='none' stroke='white' stroke-opacity='.11' stroke-width='1.2'/%3E%3C/svg%3E") center top/160px 48px,radial-gradient(130% 120% at 50% 0,#166534 0,#062b20 72%)}
+[data-xm] .ban .banks span,[data-xm] .bcta{color:#0b3d2e}
+[data-xm] .amg{box-shadow:0 8px 20px rgba(200,16,46,.35)}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
@@ -1012,8 +1021,9 @@ var HBMAP='<svg class="hb-map" viewBox="0 0 360 386" aria-hidden="true"><defs><p
 /* ===== Tema navideño: lo activa el admin (Panel > Tema) y lo ven todos. Se guarda en Firestore: config/tema ===== */
 var XM={on:false,art:'<path d="M1 18.5Q1 20 3.5 20H17Q19.5 20 19.5 16.5" fill="none" stroke="#f5c542" stroke-width="1.3" stroke-linecap="round"/><path d="M5 20V14.5M14 20V14.5" stroke="#f5c542" stroke-width="1.1"/><path d="M2 7.5H19.5Q19.5 15.5 12.5 15.5H7Q2 15.5 2 7.5Z" fill="#c8102e"/><rect x="2" y="7.5" width="17.5" height="1.7" rx=".8" fill="#f5c542"/><ellipse cx="5.2" cy="4.6" rx="3.4" ry="3.1" fill="#d9a441"/><path d="M3.3 2.2L5.2 1.6L7.2 2.4" stroke="#8a5a14" stroke-width=".7" fill="none"/><rect x="9" y="4.4" width="6.5" height="3.4" rx="1.4" fill="#c8102e"/><circle cx="12.2" cy="3" r="2.1" fill="#ffd9b3"/><path d="M10 2.6Q12.2 -2 15.4 1.6L15.6 2.8Z" fill="#c8102e"/><circle cx="15.8" cy="1.6" r=".95" fill="#fff"/><path d="M10.4 3.6Q12.2 7 14 3.6Z" fill="#fff"/><path d="M19.5 9L28 10.6" stroke="#f5c542" stroke-width=".6"/><ellipse cx="34" cy="11" rx="5.6" ry="2.8" fill="#8b5a2b"/><path d="M37.5 9.5L40 6.2" stroke="#8b5a2b" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="41" cy="5.8" rx="2.4" ry="1.7" fill="#8b5a2b"/><circle cx="43" cy="6.2" r=".85" fill="#ff2d2d"/><path d="M40 4.2L39 1.2M39.3 2.6L37.9 2.1M41.3 4.2L42.4 1.4M42 2.8L43.4 2.4" stroke="#d2b07a" stroke-width=".6" stroke-linecap="round" fill="none"/><path d="M30.5 13L29.2 17.6M33 13.6L32.6 18M36 13.6L37.4 17.6M38 13L39.8 17" stroke="#6b4423" stroke-width="1.1" stroke-linecap="round"/><path d="M28.4 10L26.6 8.8" stroke="#8b5a2b" stroke-width="1.2" stroke-linecap="round"/>'};
 try{XM.on=localStorage.getItem("xm")==="1"}catch(e){}
+if(XM.on)document.documentElement.setAttribute("data-xm","");
 XM.set=function(v){v=!!v;try{localStorage.setItem("xm",v?"1":"0")}catch(e){}
- var ch=v!==XM.on;XM.on=v;
+ var ch=v!==XM.on;XM.on=v;if(v)document.documentElement.setAttribute("data-xm","");else document.documentElement.removeAttribute("data-xm");
  if(ch){var w=document.getElementById("hbw");if(w&&w.firstChild)w.innerHTML=hbBanner()}
  var b=document.getElementById("xm_b");if(b)b.textContent=v?"Desactivar tema navideño":"Activar tema navideño";
  var t=document.getElementById("xm_s");if(t)t.innerHTML="Estado: <b>"+(v?"Activado":"Desactivado")+"</b>"};
@@ -1027,7 +1037,7 @@ XM.map=function(){var m=HBMAP,i=m.indexOf('<g opacity="0" style="filter:drop-sha
 XM.snow=function(){var h='<div class="hb-snow" aria-hidden="true">';
  for(var i=0;i<28;i++){var z=2+Math.random()*4;h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;width:'+z.toFixed(1)+'px;height:'+z.toFixed(1)+'px;opacity:'+(.5+Math.random()*.5).toFixed(2)+';animation-duration:'+(6+Math.random()*7).toFixed(1)+'s,'+(2.5+Math.random()*2.5).toFixed(1)+'s;animation-delay:-'+(Math.random()*12).toFixed(1)+'s,-'+(Math.random()*5).toFixed(1)+'s"></i>'}
  return h+'</div><div class="hb-drift" aria-hidden="true"></div>'};
-function admTema(){return'<h2>Tema</h2><div class="box"><b>Tema navideño</b><div class="mu" style="margin:6px 0 12px">Nieve en el banner del inicio, nieve sobre las letras y el trineo de Santa en lugar del avión. Lo ven todos los clientes.</div><div id="xm_s" class="mu" style="margin-bottom:8px">Estado: <b>'+(XM.on?'Activado':'Desactivado')+'</b></div><button id="xm_b" class="btn" onclick="xmToggle()">'+(XM.on?'Desactivar tema navideño':'Activar tema navideño')+'</button><button class="btn o" onclick="go(\'inicio\')">Ver cómo se ve</button><div id="xm_e" class="mu" style="margin-top:6px;color:#dc2626"></div></div>'}
+function admTema(){return'<h2>Tema</h2><div class="box"><b>Tema navideño</b><div class="mu" style="margin:6px 0 12px">Botones y detalles de toda la app en rojo y verde, nieve en el banner del inicio, nieve sobre las letras y el trineo de Santa en lugar del avión. Lo ven todos los clientes.</div><div id="xm_s" class="mu" style="margin-bottom:8px">Estado: <b>'+(XM.on?'Activado':'Desactivado')+'</b></div><button id="xm_b" class="btn" onclick="xmToggle()">'+(XM.on?'Desactivar tema navideño':'Activar tema navideño')+'</button><button class="btn o" onclick="go(\'inicio\')">Ver cómo se ve</button><div id="xm_e" class="mu" style="margin-top:6px;color:#dc2626"></div></div>'}
 function xmToggle(){var b=$("xm_b"),e=$("xm_e");if(e)e.textContent="";if(b)b.disabled=true;
  FB.temaSet(!XM.on).then(function(){if(b)b.disabled=false},function(){if(b)b.disabled=false;if(e)e.textContent="No se pudo cambiar. Revisa que publicaste la regla nueva en Firebase."})}
 function hbBanner(){var P_='<svg viewBox="0 0 24 24" aria-hidden="true"><g transform="rotate(45 12 12)"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></g></svg>',

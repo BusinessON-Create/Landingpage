@@ -285,6 +285,18 @@ nav div,.sbar div{max-width:640px}
 @media(max-width:700px){.row.sim{display:none}}@media(min-width:701px){.simf,#simS{display:none}}
 #app:has(.sbar){padding-bottom:84px}
 .row{padding-bottom:20px}
+/* Inicio: tarjetas de EncarGo redondeadas y más grandes; categorías con foto grande arriba y nombre abajo */
+.sec .row{gap:14px;padding-bottom:20px}
+.sec .row .pc{width:204px;border-radius:24px!important;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.24)!important}
+.sec .pc .im{margin:10px 10px 0!important;border-radius:18px!important}
+.sec .pc .tag{border-radius:999px;top:8px;left:8px}
+.sec .pc .nm{font-size:14px;padding:0 14px;margin-top:12px}
+.sec .pc .rtg,.sec .pc .pr,.sec .pc .sb{padding-left:14px!important;padding-right:14px!important}
+.tiles{gap:12px;padding-bottom:12px}
+.tiles .tile{width:172px;padding:10px!important;gap:12px;border-radius:24px!important;background:var(--bg)!important;box-shadow:0 2px 14px rgba(15,23,42,.12),0 0 0 1px var(--bd)!important}
+.tiles .tile .tv{order:-1;height:150px;border-radius:18px!important;box-shadow:none!important}
+.tiles .tile .thd{padding:0 4px 4px}.tiles .tile .thd b{font-size:16px}
+@media(min-width:900px){#app:has(#hm) .sec .row .pc{width:236px}#app:has(#hm) .tiles .tile{width:216px}#app:has(#hm) .tiles .tile .tv{height:180px}}
 </style></head><body>
 <div id="app"></div>
 <nav><div id="nv"></div></nav>
